@@ -188,10 +188,10 @@ export async function getHomePage(): Promise<HomePageData> {
 
 // --- Clienti con logo
 
-/** Clienti con `showInLogoStrip = true`, in ordine alfabetico. */
+/** Clienti con `showInLogoStrip = true`, in ordine alfabetico (senza distinguere maiuscole). */
 export async function getLogoClients(): Promise<LogoClient[]> {
   const rows = await sanityClient.fetch<Array<{ name: string; logoUrl?: string | null }>>(
-    `*[_type == "client" && showInLogoStrip == true] | order(name asc){ name, "logoUrl": logo.asset->url }`,
+    `*[_type == "client" && showInLogoStrip == true] | order(lower(name) asc){ name, "logoUrl": logo.asset->url }`,
   );
   return rows.map((row) => (row.logoUrl ? { name: row.name, logoUrl: row.logoUrl } : { name: row.name }));
 }

@@ -169,6 +169,9 @@ async function main(): Promise<void> {
   }
   if (foreign.length && flag('prune')) {
     section('Pulizia');
+    // I progetti prima dei clienti: un documento citato da altri non si può cancellare
+    const ORDER = ['project', 'homePage', 'studioPage', 'servicesPage', 'contactPage', 'siteSettings', 'client'];
+    foreign.sort((a, b) => ORDER.indexOf(a._type) - ORDER.indexOf(b._type));
     for (const doc of foreign) {
       await client.delete(doc._id);
       line(`   ✗ cancellato ${doc._type}: ${doc.label} (${doc._id})`);
