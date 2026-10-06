@@ -1,0 +1,36 @@
+/* Tony Pignatelli Studio — design tokens (fonte: design/tokens.json)
+   Copiare in src/styles/tokens.css e importare per primo. */
+:root {
+  /* colore */
+  --surface-100: #FEFEFF;       /* sfondo pagina */
+  --surface-200: #E7E9EA;       /* segnaposto foto, pannello form */
+  --ink: #071013;               /* testo principale */
+  --ink-soft: #4B5458;          /* testo secondario, meta */
+  --line: #D3D6D7;              /* linee, bordi */
+  --accent: #23B5D3;            /* unico colore di richiamo */
+  --accent-ink: #071013;        /* testo sopra accent (scuro: il ciano è chiaro) */
+  --surface-inverse: #071013;   /* CTA e footer */
+  --ink-inverse: #FEFEFF;
+  --ink-soft-inverse: #9AA3A6;
+  --line-inverse: #2B3538;
+
+  /* tipografia */
+  --font: "Hanken Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --fs-display: clamp(41px, calc(5.5vw + 1px), 81px);
+  --fs-h2: clamp(31px, calc(3.2vw + 1px), 49px);
+  --fs-h3: clamp(23px, calc(2vw + 1px), 33px);
+  --fs-filter: 46px;
+  --fs-body: 19px;
+  --fs-link: 17px;
+  --fs-small: 15px;
+  --fs-meta: 14px;
+
+  /* spaziatura: 8 12 16 24 32 48 64 96 128 */
+  --space-1: 8px;  --space-2: 12px; --space-3: 16px;
+  --space-4: 24px; --space-5: 32px; --space-6: 48px;
+  --space-7: 64px; --space-8: 96px; --space-9: 128px;
+
+  --page-pad: 32px;             /* margine laterale (24px su mobile, vedi HANDOFF §12) */
+  --page-max: 1440px;
+  --radius: 0;                  /* nessun angolo arrotondato, tranne i puntini del carousel */
+}

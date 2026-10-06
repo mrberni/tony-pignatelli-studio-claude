@@ -1,0 +1,12 @@
+﻿node_modules
+dist
+.astro
+.env
+.env.local
+.env.*.local
+.wrangler
+.DS_Store
+# materiale di consegna duplicato (il file di riferimento e' in radice)
+tps-handoff/
+/tony-pignatelli-progetti_v5.xlsx
+.claude/

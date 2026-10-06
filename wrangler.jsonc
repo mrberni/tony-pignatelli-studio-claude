@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tps-claude",
+  "compatibility_date": "2026-10-01",
+  "build": {
+    "command": "pnpm build"
+  },
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  "previews": {
+    "vars": {
+      "NODE_VERSION": "24"
+    }
+  }
+}

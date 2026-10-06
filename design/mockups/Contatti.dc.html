@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Contatti — Tony Pignatelli Studio</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --font: "Hanken Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  body { margin: 0; font-family: var(--font); font-size: 19px; line-height: 1.45; font-weight: 400; }
+  a { color: inherit; text-decoration: none; }
+  .disp { font-family: var(--font); font-weight: 400; }
+  .brand { font-size: 17px; font-weight: 700; line-height: 1.2; }
+  .nav { font-size: 15px; font-weight: 400; line-height: 1.2; }
+  .nav-on { font-weight: 700; color: var(--ink, #071013); }
+  .label { font-size: 15px; font-weight: 500; line-height: 1.3; color: var(--ink-soft, #4B5458); }
+  .h2, .sec { font-size: clamp(31px, calc(3.2vw + 1px), 49px); line-height: 1.05; font-weight: 400; letter-spacing: -0.015em; margin: 0; }
+  .tlink { display: inline-block; font-size: 17px; font-weight: 500; line-height: 1.2; border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+  .meta { font-size: 14px; font-weight: 500; line-height: 1.3; color: var(--ink-soft, #4B5458); }
+  .ph { font-size: 14px; font-weight: 500; color: var(--ink-soft, #4B5458); text-align: center; padding: 0 12px; }
+  .card-photo { background: var(--surface-200, #E7E9EA); border: 1px solid var(--line, #D3D6D7); display: flex; align-items: center; justify-content: center; }
+  .field { border: 1px solid var(--line, #D3D6D7); background: var(--surface-100, #FEFEFF); padding: 16px; font-size: 17px; font-family: inherit; color: var(--ink, #071013); width: 100%; box-sizing: border-box; border-radius: 0; }
+  label { display: block; font-size: 15px; font-weight: 500; margin-bottom: 8px; }
+  .btn { display: inline-block; background: var(--accent, #23B5D3); color: var(--accent-ink, #071013); font-family: var(--font); font-size: 17px; font-weight: 500; padding: 16px 32px; border: none; border-radius: 0; cursor: pointer; }
+  .ftab { font-family: var(--font); font-size: 46px; font-weight: 400; line-height: 1.1; letter-spacing: -0.01em; background: none; border: none; padding: 0; color: var(--ink, #071013); cursor: pointer; }
+  .fsep { font-family: var(--font); font-size: 46px; font-weight: 700; line-height: 1.1; color: var(--accent, #23B5D3); }
+  .zone { position: absolute; top: 0; bottom: 0; width: 30%; z-index: 1; padding: 0; border: none; background: transparent; }
+  .zone-l { left: 0; cursor: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27 viewBox=%270 0 48 48%27><circle cx=%2724%27 cy=%2724%27 r=%2723%27 fill=%27white%27 stroke=%27black%27/><path d=%27M30 24H18M23 18l-6 6 6 6%27 fill=%27none%27 stroke=%27black%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/></svg>") 24 24, w-resize; }
+  .zone-r { right: 0; cursor: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27 viewBox=%270 0 48 48%27><circle cx=%2724%27 cy=%2724%27 r=%2723%27 fill=%27white%27 stroke=%27black%27/><path d=%27M18 24h12M25 18l6 6-6 6%27 fill=%27none%27 stroke=%27black%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/></svg>") 24 24, e-resize; }
+</style>
+</helmet>
+
+<div style="width: 100%; min-height: 100vh; background: var(--surface-100, #FEFEFF); color: var(--ink, #071013);">
+<div style="max-width: 1440px; margin: 0 auto;">
+  <!-- HEADER -->
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 28px 32px;">
+    <a href="Main.dc.html" class="brand">Tony Pignatelli Studio</a>
+    <nav style="display: flex; align-items: center; gap: 32px;">
+      <a href="Progetti.dc.html" class="nav">Progetti</a>
+      <a href="Studio.dc.html" class="nav">Studio</a>
+      <a href="Servizi.dc.html" class="nav">Servizi</a>
+      <a href="Contatti.dc.html" class="nav nav-on">Contatti</a>
+    </nav>
+  </div>
+
+
+  <!-- INTESTAZIONE + FORM -->
+  <div style="padding: 96px 32px 128px 32px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 96px; align-items: start;">
+
+    <div>
+      <h1 class="disp" style="margin: 0 0 24px 0; font-weight: 400; font-size: clamp(41px, calc(5.5vw + 1px), 81px); line-height: 1;">Contatti</h1>
+      <p style="margin: 0 0 48px 0; font-size: 19px; line-height: 1.5; color: var(--ink-soft, #4B5458);">Raccontaci il tuo progetto: tipo di lavoro, tempi e budget indicativo. Rispondiamo entro un giorno lavorativo.</p>
+
+      <div style="border-top: 1px solid var(--line, #D3D6D7); padding-top: 32px; margin-bottom: 32px;">
+        <div class="disp" style="font-weight: 500; font-size: 14px; color: var(--ink-soft, #4B5458); margin-bottom: 12px;">Studio</div>
+        <div style="font-size: 19px; line-height: 1.6;">Via Ludovico Ariosto, 123<br>20099 Sesto San Giovanni (MI)</div>
+      </div>
+
+      <div style="border-top: 1px solid var(--line, #D3D6D7); padding-top: 32px; margin-bottom: 32px;">
+        <div class="disp" style="font-weight: 500; font-size: 14px; color: var(--ink-soft, #4B5458); margin-bottom: 12px;">Scrivi o chiama</div>
+        <div style="font-size: 19px; line-height: 1.7;">tony@tonypignatellistudio.com<br>+39 339 469 5709</div>
+      </div>
+
+      <div style="border-top: 1px solid var(--line, #D3D6D7); padding-top: 32px;">
+        <div class="disp" style="font-weight: 500; font-size: 14px; color: var(--ink-soft, #4B5458); margin-bottom: 12px;">Seguici</div>
+        <div style="display: flex; gap: 32px; font-size: 19px; font-weight: 500;">
+          <a href="https://instagram.com/tonypignatellistudio/">Instagram</a>
+          <a href="https://www.linkedin.com/in/tony-pignatelli-studio-27238436/">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: var(--surface-200, #E7E9EA); padding: 48px;">
+      <h2 class="disp" style="margin: 0 0 32px 0; font-weight: 500; font-size: 19px;">Parlaci del progetto</h2>
+
+      <div style="display: flex; flex-direction: column; gap: 24px;">
+        <div>
+          <label for="nome">Nome</label>
+          <input id="nome" class="field" type="text" placeholder="Il tuo nome">
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" class="field" type="email" placeholder="nome@azienda.com">
+        </div>
+        <div>
+          <label for="messaggio">Messaggio</label>
+          <textarea id="messaggio" class="field" rows="5" placeholder="Raccontaci in due righe cosa hai in mente."></textarea>
+        </div>
+        <button class="btn" style="align-self: flex-start;">Invia richiesta</button>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: var(--ink-soft, #4B5458);">Inviando accetti che i tuoi dati siano usati per rispondere alla richiesta. [LINK PRIVACY POLICY]</p>
+      </div>
+    </div>
+
+  </div>
+    
+  
+  <!-- FOOTER (sfondo nero, testi bianchi) -->
+  <div style="background: var(--surface-inverse, #071013); color: var(--ink-inverse, #FEFEFF);">
+    <div style="border-top: 1px solid var(--line-inverse, #2B3538); padding: 48px 32px 24px 32px; display: flex; justify-content: space-between; gap: 32px; flex-wrap: wrap; align-items: flex-start;">
+      <a href="Main.dc.html" style="font-size: 17px; font-weight: 500;">Tony Pignatelli Studio</a>
+      <nav style="display: flex; gap: 32px;">
+        <a href="Progetti.dc.html" class="nav">Progetti</a>
+        <a href="Studio.dc.html" class="nav">Studio</a>
+        <a href="Servizi.dc.html" class="nav">Servizi</a>
+        <a href="Contatti.dc.html" class="nav">Contatti</a>
+      </nav>
+      <div style="display: flex; gap: 32px;">
+        <a href="https://instagram.com/tonypignatellistudio/" class="nav">Instagram</a>
+        <a href="https://www.linkedin.com/in/tony-pignatelli-studio-27238436/" class="nav">LinkedIn</a>
+        <span class="nav" style="color: var(--ink-soft-inverse, #9AA3A6);">Milano · Italia</span>
+      </div>
+    </div>
+    <div style="padding: 0 32px 32px 32px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px;">
+      <span class="meta" style="color: var(--ink-soft-inverse, #9AA3A6);">© 2026 Tony Pignatelli Studio</span>
+      <span></span>
+      <div style="display: flex; gap: 24px; justify-self: end;">
+        <a href="#" class="meta" style="color: var(--ink-soft-inverse, #9AA3A6);">Privacy</a>
+        <a href="#" class="meta" style="color: var(--ink-soft-inverse, #9AA3A6);">Cookie</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

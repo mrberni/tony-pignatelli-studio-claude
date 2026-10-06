@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Servizi — Tony Pignatelli Studio</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --font: "Hanken Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  body { margin: 0; font-family: var(--font); font-size: 19px; line-height: 1.45; font-weight: 400; }
+  a { color: inherit; text-decoration: none; }
+  .disp { font-family: var(--font); font-weight: 400; }
+  .brand { font-size: 17px; font-weight: 700; line-height: 1.2; }
+  .nav { font-size: 15px; font-weight: 400; line-height: 1.2; }
+  .nav-on { font-weight: 700; color: var(--ink, #071013); }
+  .label { font-size: 15px; font-weight: 500; line-height: 1.3; color: var(--ink-soft, #4B5458); }
+  .h2, .sec { font-size: clamp(31px, calc(3.2vw + 1px), 49px); line-height: 1.05; font-weight: 400; letter-spacing: -0.015em; margin: 0; }
+  .tlink { display: inline-block; font-size: 17px; font-weight: 500; line-height: 1.2; border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+  .meta { font-size: 14px; font-weight: 500; line-height: 1.3; color: var(--ink-soft, #4B5458); }
+  .ph { font-size: 14px; font-weight: 500; color: var(--ink-soft, #4B5458); text-align: center; padding: 0 12px; }
+  .card-photo { background: var(--surface-200, #E7E9EA); border: 1px solid var(--line, #D3D6D7); display: flex; align-items: center; justify-content: center; }
+  .field { border: 1px solid var(--line, #D3D6D7); background: var(--surface-100, #FEFEFF); padding: 16px; font-size: 17px; font-family: inherit; color: var(--ink, #071013); width: 100%; box-sizing: border-box; border-radius: 0; }
+  label { display: block; font-size: 15px; font-weight: 500; margin-bottom: 8px; }
+  .btn { display: inline-block; background: var(--accent, #23B5D3); color: var(--accent-ink, #071013); font-family: var(--font); font-size: 17px; font-weight: 500; padding: 16px 32px; border: none; border-radius: 0; cursor: pointer; }
+  .ftab { font-family: var(--font); font-size: 46px; font-weight: 400; line-height: 1.1; letter-spacing: -0.01em; background: none; border: none; padding: 0; color: var(--ink, #071013); cursor: pointer; }
+  .fsep { font-family: var(--font); font-size: 46px; font-weight: 700; line-height: 1.1; color: var(--accent, #23B5D3); }
+  .zone { position: absolute; top: 0; bottom: 0; width: 30%; z-index: 1; padding: 0; border: none; background: transparent; }
+  .zone-l { left: 0; cursor: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27 viewBox=%270 0 48 48%27><circle cx=%2724%27 cy=%2724%27 r=%2723%27 fill=%27white%27 stroke=%27black%27/><path d=%27M30 24H18M23 18l-6 6 6 6%27 fill=%27none%27 stroke=%27black%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/></svg>") 24 24, w-resize; }
+  .zone-r { right: 0; cursor: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27 viewBox=%270 0 48 48%27><circle cx=%2724%27 cy=%2724%27 r=%2723%27 fill=%27white%27 stroke=%27black%27/><path d=%27M18 24h12M25 18l6 6-6 6%27 fill=%27none%27 stroke=%27black%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/></svg>") 24 24, e-resize; }
+</style>
+</helmet>
+
+<div id="top" style="width: 100%; min-height: 100vh; background: var(--surface-100, #FEFEFF); color: var(--ink, #071013);">
+<div style="max-width: 1440px; margin: 0 auto;">
+  <!-- HEADER -->
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 28px 32px;">
+    <a href="Main.dc.html" class="brand">Tony Pignatelli Studio</a>
+    <nav style="display: flex; align-items: center; gap: 32px;">
+      <a href="Progetti.dc.html" class="nav">Progetti</a>
+      <a href="Studio.dc.html" class="nav">Studio</a>
+      <a href="Servizi.dc.html" class="nav nav-on">Servizi</a>
+      <a href="Contatti.dc.html" class="nav">Contatti</a>
+    </nav>
+  </div>
+
+  <!-- INTRO (dal sito di riferimento) -->
+  <div style="padding: 64px 32px 96px 32px; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px;">
+    <div class="label" style="grid-column: 1 / 4;">Servizi</div>
+    <h1 class="h2" style="grid-column: 4 / 13; max-width: 22ch;">Progettiamo spazi, set e scenografie attraverso un approccio diretto e contemporaneo.</h1>
+  </div>
+
+  <div style="padding: 0 32px 0 32px;">
+    <div style="border-top: 1px solid var(--line, #D3D6D7); padding: 32px 0 48px 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: start;">
+      <div class="label" style="grid-column: 1 / 3;">01</div>
+      <h2 class="h2" style="grid-column: 3 / 8; font-size: clamp(23px, calc(2vw + 1px), 33px);">Set design</h2>
+      <p style="grid-column: 8 / 13; margin: 0; color: var(--ink-soft, #4B5458);">Ideazione e sviluppo di ambienti, set e sistemi spaziali per eventi e produzioni.</p>
+    </div>
+
+    <div style="border-top: 1px solid var(--line, #D3D6D7); padding: 32px 0 48px 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: start;">
+      <div class="label" style="grid-column: 1 / 3;">02</div>
+      <h2 class="h2" style="grid-column: 3 / 8; font-size: clamp(23px, calc(2vw + 1px), 33px);">Scenografia</h2>
+      <p style="grid-column: 8 / 13; margin: 0; color: var(--ink-soft, #4B5458);">Progettazione scenografica, dalla direzione creativa alla definizione degli elementi nello spazio.</p>
+    </div>
+
+    <div style="border-top: 1px solid var(--line, #D3D6D7); padding: 32px 0 48px 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: start;">
+      <div class="label" style="grid-column: 1 / 3;">03</div>
+      <h2 class="h2" style="grid-column: 3 / 8; font-size: clamp(23px, calc(2vw + 1px), 33px);">Spatial design</h2>
+      <p style="grid-column: 8 / 13; margin: 0; color: var(--ink-soft, #4B5458);">Progettazione di spazi e percorsi, con attenzione a proporzioni, materiali, atmosfera e fruizione.</p>
+    </div>
+
+    <div style="border-top: 1px solid var(--line, #D3D6D7); padding: 32px 0 48px 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: start;">
+      <div class="label" style="grid-column: 1 / 3;">04</div>
+      <h2 class="h2" style="grid-column: 3 / 8; font-size: clamp(23px, calc(2vw + 1px), 33px);">Art direction</h2>
+      <p style="grid-column: 8 / 13; margin: 0; color: var(--ink-soft, #4B5458);">Sviluppo del linguaggio visivo e coordinamento delle scelte che costruiscono l’identità dello spazio.</p>
+    </div>
+
+    <div style="border-top: 1px solid var(--line, #D3D6D7);"></div>
+  </div>
+
+  <!-- COME LAVORIAMO INSIEME -->
+  <div style="padding: 96px 32px;">
+    <h2 class="sec" style="margin: 0 0 24px 0;">Come possiamo lavorare insieme</h2>
+    <p style="margin: 0 0 64px 0; font-size: 19px; color: var(--ink-soft, #4B5458); max-width: 620px;">Entriamo nel progetto nel momento in cui serve, con il ruolo che serve.</p>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0;">
+      <div style="padding-right: 32px;">
+        <div class="disp" style="font-weight: 500; font-size: 19px; margin-bottom: 12px;">Creative partner</div>
+        <p style="margin: 0; font-size: 19px; line-height: 1.6; color: var(--ink-soft, #4B5458);">Sviluppiamo l'idea con te, dalla prima ricerca al concept.</p>
+      </div>
+      <div style="padding: 0 32px; border-left: 1px solid var(--line, #D3D6D7);">
+        <div class="disp" style="font-weight: 500; font-size: 19px; margin-bottom: 12px;">Set designer</div>
+        <p style="margin: 0; font-size: 19px; line-height: 1.6; color: var(--ink-soft, #4B5458);">Progettiamo lo spazio: layout, materiali, disegni tecnici.</p>
+      </div>
+      <div style="padding: 0 32px; border-left: 1px solid var(--line, #D3D6D7);">
+        <div class="disp" style="font-weight: 500; font-size: 19px; margin-bottom: 12px;">Art direction</div>
+        <p style="margin: 0; font-size: 19px; line-height: 1.6; color: var(--ink-soft, #4B5458);">Definiamo e manteniamo la coerenza visiva del progetto.</p>
+      </div>
+      <div style="padding-left: 32px; border-left: 1px solid var(--line, #D3D6D7);">
+        <div class="disp" style="font-weight: 500; font-size: 19px; margin-bottom: 12px;">Partner operativo</div>
+        <p style="margin: 0; font-size: 19px; line-height: 1.6; color: var(--ink-soft, #4B5458);">Coordiniamo produzione, logistica e installazione in cantiere.</p>
+      </div>
+    </div>
+  </div>
+
+  
+
+  
+
+  <!-- CTA (sfondo nero, testi bianchi): domanda allineata al testo centrale, link a destra con contatti sotto -->
+  <div style="background: var(--surface-inverse, #071013); color: var(--ink-inverse, #FEFEFF); padding: 128px 32px; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px;">
+    <div class="label" style="grid-column: 1 / 4; color: var(--ink-soft-inverse, #9AA3A6);">Parliamo del tuo progetto</div>
+    <h2 class="h2" style="grid-column: 4 / 10; max-width: 18ch;">Hai un brief da condividere con noi?</h2>
+    <div style="grid-column: 10 / 13; justify-self: end; align-self: start; text-align: right;">
+      <a href="Contatti.dc.html" class="tlink">Contatti &#8599;</a>
+      <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 4px;">
+        <a href="mailto:tony@tonypignatellistudio.com" style="font-size: 17px; color: var(--ink-soft-inverse, #9AA3A6);">tony@tonypignatellistudio.com</a>
+        <a href="tel:+393394695709" style="font-size: 17px; color: var(--ink-soft-inverse, #9AA3A6);">+39 339 469 5709</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER (sfondo nero, testi bianchi) -->
+  <div style="background: var(--surface-inverse, #071013); color: var(--ink-inverse, #FEFEFF);">
+    <div style="border-top: 1px solid var(--line-inverse, #2B3538); padding: 48px 32px 24px 32px; display: flex; justify-content: space-between; gap: 32px; flex-wrap: wrap; align-items: flex-start;">
+      <a href="Main.dc.html" style="font-size: 17px; font-weight: 500;">Tony Pignatelli Studio</a>
+      <nav style="display: flex; gap: 32px;">
+        <a href="Progetti.dc.html" class="nav">Progetti</a>
+        <a href="Studio.dc.html" class="nav">Studio</a>
+        <a href="Servizi.dc.html" class="nav">Servizi</a>
+        <a href="Contatti.dc.html" class="nav">Contatti</a>
+      </nav>
+      <div style="display: flex; gap: 32px;">
+        <a href="https://instagram.com/tonypignatellistudio/" class="nav">Instagram</a>
+        <a href="https://www.linkedin.com/in/tony-pignatelli-studio-27238436/" class="nav">LinkedIn</a>
+        <span class="nav" style="color: var(--ink-soft-inverse, #9AA3A6);">Milano · Italia</span>
+      </div>
+    </div>
+    <div style="padding: 0 32px 32px 32px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px;">
+      <span class="meta" style="color: var(--ink-soft-inverse, #9AA3A6);">© 2026 Tony Pignatelli Studio</span>
+      <a href="#top" class="meta" style="color: var(--ink-inverse, #FEFEFF);">Torna su &#8593;</a>
+      <div style="display: flex; gap: 24px; justify-self: end;">
+        <a href="#" class="meta" style="color: var(--ink-soft-inverse, #9AA3A6);">Privacy</a>
+        <a href="#" class="meta" style="color: var(--ink-soft-inverse, #9AA3A6);">Cookie</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3600}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
