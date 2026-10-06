@@ -8,7 +8,8 @@ import type { LogoClient } from '../lib/types';
 interface Props { clients: LogoClient[] }
 const { clients } = Astro.props;
 ---
-<section class="container section section--bordered">
+<section class="section section--bordered">
+  <div class="container">
   <h2 class="label logos__label">Brand &amp; partner</h2>
   <ul class="logos">
     {clients.map((client) => (
@@ -26,6 +27,7 @@ const { clients } = Astro.props;
       </li>
     ))}
   </ul>
+  </div>
 </section>
 
 <style>

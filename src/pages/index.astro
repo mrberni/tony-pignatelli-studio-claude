@@ -38,7 +38,8 @@ const organization = {
     linkLabel="Conosci lo studio"
   />
 
-  <section class="container section section--bordered featured">
+  <section class="section section--bordered featured">
+   <div class="container">
     <div class="featured__head">
       <h2 class="label">Progetti selezionati</h2>
       <TextLink href="/progetti">Tutti i progetti</TextLink>
@@ -48,6 +49,7 @@ const organization = {
         <ProjectCard project={project} position={(i % 8) + 1} loading="lazy" />
       ))}
     </div>
+   </div>
   </section>
 
   <SectionTLC

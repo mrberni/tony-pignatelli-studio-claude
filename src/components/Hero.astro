@@ -59,7 +59,6 @@ const { slides } = Astro.props;
               ></button>
             ))}
           </div>
-          <button type="button" class="hero__toggle meta" data-toggle>Pausa</button>
         </div>
       </div>
     </>
@@ -151,7 +150,8 @@ const { slides } = Astro.props;
   }
 
   /* Puntini (8px, tondi: unica eccezione al "nessun angolo arrotondato") e pausa */
-  .hero__controls { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; }
+  /* 7px di aria sotto i puntini, oltre all'area di tocco */
+  .hero__controls { position: absolute; left: 0; right: 0; bottom: 7px; z-index: 3; }
   .hero__controls-inner {
     width: 100%;
     display: flex;
@@ -180,15 +180,6 @@ const { slides } = Astro.props;
     background: rgba(254, 254, 255, 0.35);
   }
   .hero__dot[aria-current='true']::after { background: #fefeff; }
-  .hero__toggle {
-    min-height: 28px;
-    padding: 0 var(--space-1);
-    border: 0;
-    background: transparent;
-    color: #fefeff;
-    cursor: pointer;
-  }
-  .hero__toggle:hover { text-decoration: underline; }
 
   @media (prefers-reduced-motion: reduce) {
     .hero__slide { transition: none; }
@@ -205,6 +196,5 @@ const { slides } = Astro.props;
     .hero__dot { width: 44px; height: 44px; }
     .hero__dot::after { left: 18px; top: 18px; }
     .hero__dots { margin-left: -18px; }
-    .hero__toggle { min-height: 44px; padding: 0 var(--space-3); }
   }
 </style>

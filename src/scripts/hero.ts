@@ -3,26 +3,25 @@ const SWIPE_MIN_PX = 40;
 
 /**
  * Carousel della home. L'autoplay (5 s) si ferma con prefers-reduced-motion, al passaggio
- * del mouse, al focus da tastiera, al primo tocco e con il pulsante "Pausa".
+ * del mouse, al focus da tastiera e al primo tocco.
  */
 export function initHero(root: HTMLElement): void {
   const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-slide]'));
   const dots = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-dot]'));
   const prev = root.querySelector<HTMLButtonElement>('[data-prev]');
   const next = root.querySelector<HTMLButtonElement>('[data-next]');
-  const toggle = root.querySelector<HTMLButtonElement>('[data-toggle]');
   const live = root.querySelector<HTMLElement>('[data-live]');
   if (slides.length < 2) return;
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let index = 0;
   let timer: number | undefined;
-  let userPaused = reducedMotion.matches;
+  let reduced = reducedMotion.matches;
   let touched = false;
   let hovering = false;
   let focused = false;
 
-  const running = (): boolean => !userPaused && !touched && !hovering && !focused;
+  const running = (): boolean => !reduced && !touched && !hovering && !focused;
 
   function render(): void {
     slides.forEach((slide, i) => slide.setAttribute('data-active', String(i === index)));
@@ -45,20 +44,9 @@ export function initHero(root: HTMLElement): void {
     if (manual) schedule();
   }
 
-  function syncToggle(): void {
-    if (!toggle) return;
-    toggle.hidden = reducedMotion.matches;
-    toggle.textContent = userPaused ? 'Riprendi' : 'Pausa';
-  }
-
   prev?.addEventListener('click', () => goTo(index - 1, true));
   next?.addEventListener('click', () => goTo(index + 1, true));
   dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i, true)));
-  toggle?.addEventListener('click', () => {
-    userPaused = !userPaused;
-    syncToggle();
-    schedule();
-  });
 
   root.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowLeft') goTo(index - 1, true);
@@ -116,12 +104,10 @@ export function initHero(root: HTMLElement): void {
   });
 
   reducedMotion.addEventListener('change', () => {
-    userPaused = reducedMotion.matches;
-    syncToggle();
+    reduced = reducedMotion.matches;
     schedule();
   });
 
   render();
-  syncToggle();
   schedule();
 }

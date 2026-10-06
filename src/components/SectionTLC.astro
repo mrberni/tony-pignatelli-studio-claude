@@ -12,8 +12,8 @@ interface Props {
 }
 const { label, title, text, href, linkLabel, bordered = false } = Astro.props;
 ---
-<section class:list={['container', 'section', { 'section--bordered': bordered }]}>
-  <div class="grid12 tlc">
+<section class:list={['section', { 'section--bordered': bordered }]}>
+  <div class="container grid12 tlc">
     <p class="label tlc__label">{label}</p>
     <div class="tlc__body">
       <h2 class="h2 tlc__title">{title}</h2>
