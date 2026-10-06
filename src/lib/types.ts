@@ -45,6 +45,7 @@ export interface Project extends ProjectSummary {
   intro?: string;
   description?: string;
   services: string[];
+  seo?: { title?: string; description?: string; imageUrl?: string };
 }
 
 export interface LogoClient {

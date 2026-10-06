@@ -99,6 +99,24 @@ const CAROUSEL_TITLES = [
   'VANS - TNT Advanced Prototype',
 ];
 
+/** Foto di prova con proporzioni diverse, per provare l'impaginazione della galleria. */
+const GALLERY_SIZES = [
+  [1600, 900],
+  [1600, 1200],
+  [1200, 1600],
+  [1600, 1067],
+  [1200, 1500],
+  [1600, 1600],
+  [1067, 1600],
+  [1600, 1200],
+] as const;
+
+const placeholderGallery = (title: string, count: number) =>
+  Array.from({ length: count }, (_, i) => {
+    const [width, height] = GALLERY_SIZES[(i * 3 + 1) % GALLERY_SIZES.length] ?? [1600, 1200];
+    return { width, height, alt: `${title} — foto ${i + 1} di ${count}` };
+  });
+
 export const projectFixtures: Project[] = projectRows.map(([title, category, sector], index) => ({
   slug: slugify(title),
   title,
@@ -109,8 +127,13 @@ export const projectFixtures: Project[] = projectRows.map(([title, category, sec
   client: title.split(' - ')[0] ?? title,
   featured: FEATURED_TITLES.has(title),
   cover: { width: 1600, height: 1200 },
-  gallery: [],
-  services: [],
+  // Testi segnaposto dei mockup (tra parentesi quadre: non sono contenuti veri)
+  intro: "[Frase di apertura: l'idea del progetto in due righe.]",
+  description:
+    '[Descrizione: brief, idea e realizzazione, in 3-4 righe. Il testo si modifica da Sanity.]\n\n[Un secondo paragrafo, separato da una riga vuota.]',
+  services: ['Concept', 'Progettazione', 'Produzione', 'Allestimento'],
+  ...(index === 1 ? { city: 'Roma' } : {}),
+  gallery: placeholderGallery(title, index === 1 ? 19 : 5 + (index % 8)),
 }));
 
 export const siteSettingsFixture: SiteSettings = {
