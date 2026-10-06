@@ -1,0 +1,44 @@
+---
+import { getSiteSettings } from '../lib/content';
+import { telHref } from '../lib/site';
+import TextLink from './TextLink.astro';
+
+/** CTA di fine pagina: fascia nera a tutta larghezza, contenuto centrato a 1440px. */
+interface Props { question: string }
+const { question } = Astro.props;
+const settings = await getSiteSettings();
+---
+<section class="cta on-dark">
+  <div class="container grid12 cta__grid">
+    <p class="label cta__label">Parliamo del tuo progetto</p>
+    <h2 class="h2 cta__question">{question}</h2>
+    <div class="cta__side">
+      <TextLink href="/contatti">Contatti</TextLink>
+      <div class="cta__contacts">
+        <a href={`mailto:${settings.email}`}>{settings.email}</a>
+        <a href={telHref(settings.phone)}>{settings.phone}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta { background: var(--surface-inverse); color: var(--ink-inverse); }
+  .cta__grid { padding-block: var(--space-9); }
+  .cta__label { grid-column: 1 / 4; color: var(--ink-soft-inverse); }
+  .cta__question { grid-column: 4 / 10; max-width: 18ch; }
+  .cta__side { grid-column: 10 / 13; justify-self: end; align-self: start; text-align: right; }
+  .cta__contacts { margin-top: var(--space-4); display: flex; flex-direction: column; gap: 4px; }
+  .cta__contacts a { font-size: var(--fs-link); color: var(--ink-soft-inverse); }
+
+  @media (max-width: 1023px) {
+    .cta__label, .cta__question, .cta__side { grid-column: 1 / -1; }
+    .cta__label { margin-bottom: var(--space-3); }
+    .cta__side { justify-self: start; text-align: left; margin-top: var(--space-5); }
+  }
+  @media (max-width: 640px) {
+    .cta__grid { padding-block: var(--space-8); }
+    .cta__contacts a { display: inline-flex; align-items: center; min-height: 44px; }
+    .cta__contacts { margin-top: var(--space-2); gap: 0; align-items: flex-start; }
+  }
+</style>

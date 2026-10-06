@@ -1,0 +1,52 @@
+/*
+ * Griglia sfalsata (HANDOFF §4.5, §11.3).
+ * Ogni figlio porta `data-slot="1".."8"` (indice a ciclo di 8): lo schema è qui,
+ * così lo stesso CSS vale per la home e per /progetti, anche quando i filtri
+ * rinumerano gli elementi visibili.
+ *
+ * Desktop: 12 colonne, max 3 per riga.   Tablet (641–1023px): 2 colonne.
+ * Mobile (≤640px): 1 colonna, nessuno scarto verticale.
+ */
+.stagger {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--space-4);
+  row-gap: var(--space-6);
+  align-items: start;
+}
+
+.stagger > [data-slot] { grid-column: 1 / -1; margin-top: 0; --ratio: 4 / 3; }
+
+/* Desktop: schema di 8 slot. Righe: (1,2,3) · (4,5) · (6,7,8) */
+.stagger > [data-slot='1'] { grid-column: 1 / 6;  --ratio: 4 / 3; margin-top: 0; }
+.stagger > [data-slot='2'] { grid-column: 6 / 9;  --ratio: 3 / 4; margin-top: 96px; }
+.stagger > [data-slot='3'] { grid-column: 9 / 13; --ratio: 4 / 3; margin-top: 32px; }
+.stagger > [data-slot='4'] { grid-column: 2 / 7;  --ratio: 4 / 3; margin-top: 0; }
+.stagger > [data-slot='5'] { grid-column: 8 / 13; --ratio: 5 / 4; margin-top: 64px; }
+.stagger > [data-slot='6'] { grid-column: 1 / 4;  --ratio: 3 / 4; margin-top: 48px; }
+.stagger > [data-slot='7'] { grid-column: 4 / 9;  --ratio: 4 / 3; margin-top: 0; }
+.stagger > [data-slot='8'] { grid-column: 10 / 13; --ratio: 1 / 1; margin-top: 96px; }
+
+/* Tablet: 2 colonne, elementi larghi (2 colonne) e stretti (1) a rotazione */
+@media (max-width: 1023px) {
+  .stagger { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stagger > [data-slot='1'] { grid-column: 1 / 3; margin-top: 0; }
+  .stagger > [data-slot='2'] { grid-column: 1 / 2; margin-top: 0; }
+  .stagger > [data-slot='3'] { grid-column: 2 / 3; margin-top: 48px; }
+  .stagger > [data-slot='4'] { grid-column: 1 / 3; margin-top: 0; }
+  .stagger > [data-slot='5'] { grid-column: 1 / 2; margin-top: 0; }
+  .stagger > [data-slot='6'] { grid-column: 2 / 3; margin-top: 48px; }
+  .stagger > [data-slot='7'] { grid-column: 1 / 3; margin-top: 0; }
+  .stagger > [data-slot='8'] { grid-column: 1 / 3; margin-top: 0; --ratio: 16 / 9; }
+}
+
+/* Mobile: 1 colonna; larghezza piena alternata a 88% (a destra / a sinistra) */
+@media (max-width: 640px) {
+  .stagger { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-5); }
+  .stagger > [data-slot] { grid-column: 1; margin-top: 0; width: 100%; }
+  .stagger > [data-slot='2'], .stagger > [data-slot='5'], .stagger > [data-slot='8'] { width: 88%; justify-self: end; }
+  .stagger > [data-slot='3'], .stagger > [data-slot='6'] { width: 88%; justify-self: start; }
+  /* le proporzioni verticali si limitano a 4:5 */
+  .stagger > [data-slot='2'], .stagger > [data-slot='6'] { --ratio: 4 / 5; }
+  .stagger > [data-slot='8'] { --ratio: 4 / 3; }
+}

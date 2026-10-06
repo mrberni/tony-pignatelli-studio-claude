@@ -1,11 +1,80 @@
 ---
+import Cta from '../components/Cta.astro';
+import Hero from '../components/Hero.astro';
+import LogoStrip from '../components/LogoStrip.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import SectionTLC from '../components/SectionTLC.astro';
+import TextLink from '../components/TextLink.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getFeaturedProjects, getHomePage, getLogoClients, getSiteSettings } from '../lib/content';
+import { telHref } from '../lib/site';
+
+const [settings, home, featured, clients] = await Promise.all([
+  getSiteSettings(),
+  getHomePage(),
+  getFeaturedProjects(),
+  getLogoClients(),
+]);
+
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: settings.studioName,
+  url: new URL('/', Astro.site).href,
+  email: settings.email,
+  telephone: telHref(settings.phone).replace('tel:', ''),
+  address: settings.address,
+  sameAs: [settings.instagramUrl, settings.linkedinUrl],
+};
 ---
-<BaseLayout title="Tony Pignatelli Studio | Scenografia, allestimenti e set design a Milano">
-  <h1 class="visually-hidden">Tony Pignatelli Studio</h1>
-  <div class="empty"></div>
+<BaseLayout jsonLd={organization}>
+  <Hero slides={home.carousel} />
+
+  <SectionTLC
+    label="Lo studio"
+    title={home.studioSection.title}
+    text={home.studioSection.text}
+    href="/studio"
+    linkLabel="Conosci lo studio"
+  />
+
+  <section class="container section section--bordered featured">
+    <div class="featured__head">
+      <h2 class="label">Progetti selezionati</h2>
+      <TextLink href="/progetti">Tutti i progetti</TextLink>
+    </div>
+    <div class="stagger">
+      {featured.map((project, i) => (
+        <ProjectCard project={project} position={(i % 8) + 1} loading="lazy" />
+      ))}
+    </div>
+  </section>
+
+  <SectionTLC
+    bordered
+    label="Servizi"
+    title={home.servicesSection.title}
+    text={home.servicesSection.text}
+    href="/servizi"
+    linkLabel="Scopri i servizi"
+  />
+
+  <LogoStrip clients={clients} />
+
+  <Cta question={home.ctaQuestion} />
 </BaseLayout>
 
 <style>
-  .empty { min-height: 50vh; }
+  .featured { padding-bottom: var(--space-9); }
+  .featured__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-7);
+  }
+  @media (max-width: 640px) {
+    .featured { padding-bottom: var(--space-8); }
+    .featured__head { margin-bottom: var(--space-6); }
+  }
 </style>

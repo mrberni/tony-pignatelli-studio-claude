@@ -1,0 +1,58 @@
+---
+import type { LogoClient } from '../lib/types';
+
+/**
+ * Striscia "Brand & partner": logo SVG monocromatico in `--ink` (mask-image) quando
+ * esiste il file, altrimenti il nome in testo.
+ */
+interface Props { clients: LogoClient[] }
+const { clients } = Astro.props;
+---
+<section class="container section section--bordered">
+  <h2 class="label logos__label">Brand &amp; partner</h2>
+  <ul class="logos">
+    {clients.map((client) => (
+      <li class="logos__item">
+        {client.logoUrl ? (
+          <span
+            class="logos__logo"
+            role="img"
+            aria-label={client.name}
+            style={`--logo: url("${client.logoUrl}")`}
+          ></span>
+        ) : (
+          <span class="logos__name">{client.name}</span>
+        )}
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .logos__label { margin-bottom: var(--space-6); }
+  .logos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--space-5) var(--space-4);
+  }
+  .logos__item { display: flex; align-items: center; min-height: 40px; }
+  .logos__name { font-size: var(--fs-body); font-weight: 500; line-height: 1.3; }
+  .logos__logo {
+    display: block;
+    width: 100%;
+    max-width: 140px;
+    height: 36px;
+    background: var(--ink);
+    -webkit-mask: var(--logo) left center / contain no-repeat;
+    mask: var(--logo) left center / contain no-repeat;
+  }
+  @media (max-width: 1023px) {
+    .logos { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .logos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+</style>

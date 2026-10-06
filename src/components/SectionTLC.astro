@@ -1,0 +1,38 @@
+---
+import TextLink from './TextLink.astro';
+
+/** Sezione "etichetta · contenuto · link" (HANDOFF §4.5): Lo studio, Servizi. */
+interface Props {
+  label: string;
+  title: string;
+  text: string;
+  href: string;
+  linkLabel: string;
+  bordered?: boolean;
+}
+const { label, title, text, href, linkLabel, bordered = false } = Astro.props;
+---
+<section class:list={['container', 'section', { 'section--bordered': bordered }]}>
+  <div class="grid12 tlc">
+    <p class="label tlc__label">{label}</p>
+    <div class="tlc__body">
+      <h2 class="h2 tlc__title">{title}</h2>
+      <p class="prose-soft tlc__text">{text}</p>
+    </div>
+    <div class="tlc__link"><TextLink href={href}>{linkLabel}</TextLink></div>
+  </div>
+</section>
+
+<style>
+  .tlc__label { grid-column: 1 / 4; }
+  .tlc__body { grid-column: 4 / 10; }
+  .tlc__title { max-width: 20ch; }
+  .tlc__text { margin-top: var(--space-5); }
+  .tlc__link { grid-column: 10 / 13; justify-self: end; align-self: start; text-align: right; }
+
+  @media (max-width: 1023px) {
+    .tlc__label { grid-column: 1 / -1; margin-bottom: var(--space-3); }
+    .tlc__body { grid-column: 1 / -1; }
+    .tlc__link { grid-column: 1 / -1; justify-self: start; text-align: left; margin-top: var(--space-4); }
+  }
+</style>
