@@ -26,5 +26,8 @@ Previsti nelle fasi successive: `pnpm studio` (Sanity Studio locale) · `pnpm im
 ## Hosting
 Il progetto Cloudflare `tps-claude` è di tipo **Workers** (Workers Builds), non Pages: gli asset statici di `dist/` sono dichiarati in `wrangler.jsonc`. Variabile di build `NODE_VERSION=24`.
 
+## Repository pubblico
+Il repository GitHub è **pubblico**. Mai committare token, `.env.local`, email personali o altri dati privati. `main` è protetta da un ruleset (solo pull request, nessun force-push).
+
 ## Modelli consigliati
 Opus: schema Sanity, architettura, revisione finale. Sonnet: implementazione di componenti, pagine, import, test.
