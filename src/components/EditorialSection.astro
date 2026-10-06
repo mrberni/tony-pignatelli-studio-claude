@@ -1,0 +1,35 @@
+---
+/**
+ * Sezione di testo editoriale (HANDOFF §4.5): titolo H2 a sinistra (colonne 1–5); a destra (6–12)
+ * un primo paragrafo in grande, poi paragrafi normali in `--ink-soft`.
+ */
+interface Props {
+  title: string;
+  lead: string;
+  paragraphs?: string[];
+  bordered?: boolean;
+}
+const { title, lead, paragraphs = [], bordered = true } = Astro.props;
+---
+<section class:list={['section', { 'section--bordered': bordered }]}>
+  <div class="container grid12 editorial">
+    <h2 class="h2 editorial__title">{title}</h2>
+    <div class="editorial__body">
+      <p class="lead">{lead}</p>
+      {paragraphs.map((text) => <p class="prose-soft editorial__text">{text}</p>)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .editorial { align-items: start; }
+  .editorial__title { grid-column: 1 / 6; }
+  .editorial__body { grid-column: 6 / 13; }
+  .editorial__text { margin-top: var(--space-4); line-height: 1.6; }
+  .lead + .editorial__text { margin-top: var(--space-5); }
+
+  @media (max-width: 1023px) {
+    .editorial__title { grid-column: 1 / -1; margin-bottom: var(--space-5); }
+    .editorial__body { grid-column: 1 / -1; }
+  }
+</style>

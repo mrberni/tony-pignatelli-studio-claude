@@ -3,8 +3,15 @@
  * sono quelli dei mockup; le foto sono segnaposto. Testi di sezione: HANDOFF, Appendice A.
  */
 // Testi dell'Appendice A: un'unica copia, la stessa che precompila i documenti nello Studio.
-import { servicesPageInitial } from '../../studio/schemaTypes/initialContent';
-import type { HomePageData, LogoClient, Project, ServicesPageData, SiteSettings } from './types';
+import { servicesPageInitial, studioPageInitial } from '../../studio/schemaTypes/initialContent';
+import type {
+  HomePageData,
+  LogoClient,
+  Project,
+  ServicesPageData,
+  SiteSettings,
+  StudioPageData,
+} from './types';
 
 const slugify = (title: string): string =>
   title
@@ -182,3 +189,15 @@ export const logoClientFixtures: LogoClient[] = [
 ].map((name) => ({ name }));
 
 export const servicesPageFixture: ServicesPageData = servicesPageInitial;
+
+export const studioPageFixture: StudioPageData = {
+  ...studioPageInitial,
+  intro: {
+    ...studioPageInitial.intro,
+    // Foto segnaposto: il ritratto vero arriva da Sanity
+    photo: { width: 1200, height: 1500, alt: 'Tony Pignatelli / lo studio al lavoro' },
+  },
+};
+
+/** URL dei loghi SVG per nome cliente. Vuoto finché non ci sono i file (HANDOFF §13.1). */
+export const clientLogoUrls: Record<string, string> = {};

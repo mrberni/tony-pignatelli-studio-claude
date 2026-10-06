@@ -91,3 +91,14 @@ export interface ServicesPageData {
   ctaQuestion: string;
   seo?: { title?: string; description?: string };
 }
+
+export interface StudioPageData {
+  intro: { text1: string; text2: string; photo?: PhotoData };
+  experience: { lead: string; text: string };
+  /** Elenco "Clienti" della pagina: contenuto separato dai clienti collegati ai progetti. */
+  clientNames: string[];
+  brandToSpace: { lead: string; text2: string; text3: string };
+  method: { intro: string; steps: Array<{ title: string; description: string }> };
+  ctaQuestion: string;
+  seo?: { title?: string; description?: string };
+}
