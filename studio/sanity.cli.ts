@@ -3,5 +3,6 @@ import { projectId } from './env';
 
 export default defineCliConfig({
   api: { projectId, dataset: 'staging' },
-  deployment: { autoUpdates: true },
+  studioHost: 'tps-claude',
+  deployment: { autoUpdates: true, appId: 've24ymmuk7n80a3nxm1oltzv' },
 });
