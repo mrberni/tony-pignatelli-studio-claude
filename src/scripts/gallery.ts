@@ -20,6 +20,7 @@ export function initGallery(gallery: HTMLElement): void {
   const ui = { img, placeholder, count, stage, prev, next, close };
 
   let index = 0;
+  let swiped = false;
 
   function show(target: number): void {
     index = Math.min(Math.max(target, 0), items.length - 1);
@@ -67,26 +68,32 @@ export function initGallery(gallery: HTMLElement): void {
 
   // Click sullo sfondo (non sulla foto) chiude il visore
   ui.stage.addEventListener('click', (event) => {
-    if (event.target === ui.stage) viewer.close();
+    if (event.target === ui.stage && !swiped) viewer.close();
+    swiped = false;
   });
 
-  // Swipe orizzontale
+  // Swipe orizzontale su tutto il visore (esclusi pulsanti): sinistra = foto successiva
   let startX = 0;
   let startY = 0;
   let tracking = false;
-  ui.stage.addEventListener('pointerdown', (event) => {
+  viewer.addEventListener('pointerdown', (event) => {
+    swiped = false;
+    if (event.target instanceof Element && event.target.closest('button')) return;
     tracking = true;
     startX = event.clientX;
     startY = event.clientY;
   });
-  ui.stage.addEventListener('pointerup', (event) => {
+  viewer.addEventListener('pointerup', (event) => {
     if (!tracking) return;
     tracking = false;
     const dx = event.clientX - startX;
     const dy = event.clientY - startY;
-    if (Math.abs(dx) >= SWIPE_MIN_PX && Math.abs(dx) > Math.abs(dy) * 1.5) show(dx < 0 ? index + 1 : index - 1);
+    if (Math.abs(dx) >= SWIPE_MIN_PX && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      swiped = true;
+      show(dx < 0 ? index + 1 : index - 1);
+    }
   });
-  ui.stage.addEventListener('pointercancel', () => {
+  viewer.addEventListener('pointercancel', () => {
     tracking = false;
   });
 }

@@ -110,6 +110,10 @@ const items = layoutGallery(photos);
     background: var(--surface-inverse);
     color: var(--ink-inverse);
     overflow: hidden;
+    /* Lo swipe orizzontale arriva alla pagina invece di essere assorbito dal browser */
+    touch-action: pan-y pinch-zoom;
+    -webkit-user-select: none;
+    user-select: none;
   }
   .viewer:not([open]) { display: none; }
   .viewer__bar {
@@ -138,7 +142,15 @@ const items = layoutGallery(photos);
     align-items: center;
     justify-content: center;
   }
-  .viewer__img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
+  .viewer__img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    -webkit-user-drag: none;
+    user-select: none;
+  }
   .viewer__placeholder { color: var(--ink-soft-inverse); text-align: center; }
   .viewer__nav {
     position: absolute;
