@@ -3,12 +3,21 @@
  * quando arrivano le query Sanity cambia solo questo file, non le pagine.
  */
 import {
+  clientLogoUrls,
   homePageFixture,
   logoClientFixtures,
   projectFixtures,
   siteSettingsFixture,
+  studioPageFixture,
 } from './fixtures';
-import type { HomePageData, LogoClient, Project, ProjectSummary, SiteSettings } from './types';
+import type {
+  HomePageData,
+  LogoClient,
+  Project,
+  ProjectSummary,
+  SiteSettings,
+  StudioPageData,
+} from './types';
 
 /** Il lavoro più recente è il primo (`order` crescente). */
 function byOrder<T extends { order: number }>(items: T[]): T[] {
@@ -74,4 +83,16 @@ export async function getHomePage(): Promise<HomePageData> {
 /** Clienti con `showInLogoStrip = true`. */
 export async function getLogoClients(): Promise<LogoClient[]> {
   return logoClientFixtures;
+}
+
+export async function getStudioPage(): Promise<StudioPageData> {
+  return studioPageFixture;
+}
+
+/** Elenco "Clienti" della pagina Studio: logo dove esiste l'SVG, altrimenti il nome in testo. */
+export async function getStudioClients(names: string[]): Promise<LogoClient[]> {
+  return names.map((name) => {
+    const logoUrl = clientLogoUrls[name];
+    return logoUrl ? { name, logoUrl } : { name };
+  });
 }

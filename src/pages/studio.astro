@@ -1,0 +1,110 @@
+---
+import ClientList from '../components/ClientList.astro';
+import Cta from '../components/Cta.astro';
+import EditorialSection from '../components/EditorialSection.astro';
+import Photo from '../components/Photo.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getSiteSettings, getStudioClients, getStudioPage } from '../lib/content';
+
+const [settings, page] = await Promise.all([getSiteSettings(), getStudioPage()]);
+const clients = await getStudioClients(page.clientNames);
+
+const title = `${page.seo?.title ?? 'Studio'} — ${settings.studioName}`;
+const description = page.seo?.description ?? page.intro.text1;
+---
+<BaseLayout title={title} description={description}>
+  <section class="container intro">
+    <div class="intro__text">
+      <h1 class="display">Studio</h1>
+      <p class="intro__first">{page.intro.text1}</p>
+      <p class="prose-soft intro__second">{page.intro.text2}</p>
+    </div>
+    {page.intro.photo && (
+      <Photo
+        photo={page.intro.photo}
+        fallbackAlt="Tony Pignatelli Studio"
+        ratio="4 / 5"
+        loading="eager"
+        fetchpriority="high"
+        sizes="(max-width: 1023px) 100vw, 50vw"
+      />
+    )}
+  </section>
+
+  <EditorialSection
+    title="Esperienza e network"
+    lead={page.experience.lead}
+    paragraphs={[page.experience.text]}
+  />
+
+  <section class="section section--bordered">
+    <div class="container">
+      <h2 class="h2 clients-title">Clienti</h2>
+      <ClientList clients={clients} />
+    </div>
+  </section>
+
+  <EditorialSection
+    title="Dal brand allo spazio"
+    lead={page.brandToSpace.lead}
+    paragraphs={[page.brandToSpace.text2, page.brandToSpace.text3]}
+  />
+
+  <section class="section section--bordered">
+    <div class="container">
+      <h2 class="h2 method-title">Il nostro metodo</h2>
+      <p class="prose-soft method-intro">{page.method.intro}</p>
+      <ol class="steps">
+        {page.method.steps.map((step, i) => (
+          <li class="steps__item">
+            <p class="steps__number">Fase {i + 1}</p>
+            <h3 class="steps__name">{step.title}</h3>
+            <p class="prose-soft steps__text">{step.description}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <Cta question={page.ctaQuestion} />
+</BaseLayout>
+
+<style>
+  .intro {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-7);
+    align-items: start;
+    padding-block: var(--space-8);
+  }
+  .intro__first { margin-top: var(--space-4); line-height: 1.5; }
+  .intro__second { margin-top: var(--space-4); line-height: 1.6; max-width: none; }
+  .intro h1 { max-width: none; }
+
+  .clients-title { margin-bottom: var(--space-6); }
+
+  .method-title { margin-bottom: var(--space-4); }
+  .method-intro { margin-bottom: var(--space-7); }
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+  .steps__item { border-top: 2px solid var(--ink); padding-top: var(--space-4); }
+  .steps__number { font-size: var(--fs-meta); font-weight: 500; line-height: 1.3; color: var(--ink-soft); margin-bottom: var(--space-2); }
+  .steps__name { font-size: var(--fs-body); font-weight: 500; line-height: 1.3; margin-bottom: var(--space-2); }
+  .steps__text { line-height: 1.6; max-width: none; }
+
+  @media (max-width: 1023px) {
+    .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    /* Testo poi foto, in una colonna */
+    .intro { grid-template-columns: minmax(0, 1fr); gap: var(--space-6); padding-block: var(--space-7); }
+    .steps { grid-template-columns: minmax(0, 1fr); }
+    .method-intro { margin-bottom: var(--space-6); }
+  }
+</style>
