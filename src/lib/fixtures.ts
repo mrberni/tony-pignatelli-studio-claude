@@ -3,8 +3,15 @@
  * sono quelli dei mockup; le foto sono segnaposto. Testi di sezione: HANDOFF, Appendice A.
  */
 // Testi dell'Appendice A: un'unica copia, la stessa che precompila i documenti nello Studio.
-import { studioPageInitial } from '../../studio/schemaTypes/initialContent';
-import type { HomePageData, LogoClient, Project, SiteSettings, StudioPageData } from './types';
+import { servicesPageInitial, studioPageInitial } from '../../studio/schemaTypes/initialContent';
+import type {
+  HomePageData,
+  LogoClient,
+  Project,
+  ServicesPageData,
+  SiteSettings,
+  StudioPageData,
+} from './types';
 
 const slugify = (title: string): string =>
   title
@@ -180,6 +187,8 @@ export const logoClientFixtures: LogoClient[] = [
   'Vans',
   'Xiaomi',
 ].map((name) => ({ name }));
+
+export const servicesPageFixture: ServicesPageData = servicesPageInitial;
 
 export const studioPageFixture: StudioPageData = {
   ...studioPageInitial,

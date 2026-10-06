@@ -77,6 +77,21 @@ export interface HomePageData {
   ctaQuestion: string;
 }
 
+export interface TitledItem {
+  title: string;
+  description: string;
+}
+
+export interface ServicesPageData {
+  /** Titolo grande in cima alla pagina (`<h1>`). */
+  intro: string;
+  /** Il numero (01, 02…) è automatico e segue l'ordine. */
+  services: TitledItem[];
+  collaboration: { title: string; intro: string; roles: TitledItem[] };
+  ctaQuestion: string;
+  seo?: { title?: string; description?: string };
+}
+
 export interface StudioPageData {
   intro: { text1: string; text2: string; photo?: PhotoData };
   experience: { lead: string; text: string };

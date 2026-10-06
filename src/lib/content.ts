@@ -7,6 +7,7 @@ import {
   homePageFixture,
   logoClientFixtures,
   projectFixtures,
+  servicesPageFixture,
   siteSettingsFixture,
   studioPageFixture,
 } from './fixtures';
@@ -15,6 +16,7 @@ import type {
   LogoClient,
   Project,
   ProjectSummary,
+  ServicesPageData,
   SiteSettings,
   StudioPageData,
 } from './types';
@@ -83,6 +85,10 @@ export async function getHomePage(): Promise<HomePageData> {
 /** Clienti con `showInLogoStrip = true`. */
 export async function getLogoClients(): Promise<LogoClient[]> {
   return logoClientFixtures;
+}
+
+export async function getServicesPage(): Promise<ServicesPageData> {
+  return servicesPageFixture;
 }
 
 export async function getStudioPage(): Promise<StudioPageData> {
