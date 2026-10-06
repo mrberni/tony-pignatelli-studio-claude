@@ -1,5 +1,7 @@
+import { itITLocale } from '@sanity/locale-it-it';
 import { defineConfig, type WorkspaceOptions } from 'sanity';
 import { structureTool } from 'sanity/structure';
+import { moveToTop } from './actions/moveToTop';
 import { projectId } from './env';
 import { schemaTypes } from './schemaTypes';
 import { SINGLETON_TYPES } from './schemaTypes/constants';
@@ -15,16 +17,18 @@ const workspace = (name: string, title: string, dataset: string): WorkspaceOptio
   basePath: `/${name}`,
   projectId,
   dataset,
-  plugins: [structureTool({ structure })],
+  plugins: [structureTool({ structure }), itITLocale()],
   schema: {
     types: schemaTypes,
     templates: (templates) => templates.filter(({ schemaType }) => !singletonTypes.has(schemaType)),
   },
   document: {
-    actions: (actions, { schemaType }) =>
-      singletonTypes.has(schemaType)
-        ? actions.filter(({ action }) => action && singletonActions.has(action))
-        : actions,
+    actions: (actions, { schemaType }) => {
+      if (singletonTypes.has(schemaType)) {
+        return actions.filter(({ action }) => action && singletonActions.has(action));
+      }
+      return schemaType === 'project' ? [...actions, moveToTop] : actions;
+    },
     newDocumentOptions: (items) => items.filter(({ templateId }) => !singletonTypes.has(templateId)),
   },
 });

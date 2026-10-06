@@ -10,6 +10,8 @@
     "check": "tsc --noEmit && sanity schema validate --workspace staging"
   },
   "dependencies": {
+    "@sanity/icons": "^5.2.3",
+    "@sanity/locale-it-it": "^1.1.36",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "sanity": "^6.17.0",
