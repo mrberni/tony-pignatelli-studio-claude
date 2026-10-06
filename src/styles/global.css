@@ -5,8 +5,8 @@
 
 html { -webkit-text-size-adjust: 100%; }
 
-/* Il pannello del menu mobile blocca lo scorrimento della pagina */
-html:has(dialog.menu-panel[open]) { overflow: hidden; }
+/* Menu mobile e visore foto (dialog modali) bloccano lo scorrimento della pagina */
+html:has(dialog[open]) { overflow: hidden; }
 
 body {
   margin: 0;
