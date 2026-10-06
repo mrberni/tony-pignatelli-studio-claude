@@ -14,7 +14,10 @@
     "studio:deploy": "pnpm --dir studio deploy",
     "import:dry": "node --env-file-if-exists=.env.local scripts/import.ts --dry",
     "import:run": "node --env-file-if-exists=.env.local scripts/import.ts --run",
-    "import:verify": "node --env-file-if-exists=.env.local scripts/import.ts --verify"
+    "import:verify": "node --env-file-if-exists=.env.local scripts/import.ts --verify",
+    "import:photos:dry": "node --env-file-if-exists=.env.local scripts/import-photos.ts --dry",
+    "import:photos:run": "node --env-file-if-exists=.env.local scripts/import-photos.ts --run",
+    "import:photos:verify": "node --env-file-if-exists=.env.local scripts/import-photos.ts --verify"
   },
   "dependencies": {
     "@fontsource/hanken-grotesk": "^5.3.0",
