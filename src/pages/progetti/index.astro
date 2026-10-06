@@ -1,0 +1,136 @@
+---
+import ProjectCard from '../../components/ProjectCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProjectSummaries } from '../../lib/content';
+import { CATEGORY_LABELS, SECTOR_LABELS } from '../../lib/labels';
+import type { CategoryValue, SectorValue } from '../../lib/types';
+
+const projects = await getProjectSummaries();
+const categories = Object.entries(CATEGORY_LABELS) as [CategoryValue, string][];
+const sectors = Object.entries(SECTOR_LABELS) as [SectorValue, string][];
+
+/** Quanti progetti compaiono subito: gli altri si rivelano scorrendo (stessa soglia nello script). */
+const PAGE_SIZE = 9;
+---
+<BaseLayout
+  title="Progetti — Tony Pignatelli Studio"
+  description="Eventi, vetrine e set design: i progetti dello studio per brand e agenzie."
+>
+  <h1 class="visually-hidden">Progetti — Tony Pignatelli Studio</h1>
+
+  <div data-project-list>
+    <div class="container filters">
+      <div class="filters__cats" role="group" aria-label="Categoria">
+        {categories.map(([value, label], i) => (
+          <span class="filters__item">
+            <button type="button" class="filters__tab" data-category-button={value} aria-pressed="false">{label}</button>
+            {i < categories.length - 1 && <span class="filters__sep" aria-hidden="true">|</span>}
+          </span>
+        ))}
+      </div>
+      <div class="filters__sector">
+        <label for="settore" class="filters__sector-label">Settore</label>
+        <select id="settore" class="filters__select" data-sector-select>
+          <option value="">Tutti i settori</option>
+          {sectors.map(([value, label]) => <option value={value}>{label}</option>)}
+        </select>
+      </div>
+    </div>
+
+    <div class="container">
+      <a href="#site-footer" class="skip-link">Vai al piè di pagina</a>
+      <div class="stagger" data-grid>
+        {projects.map((project, i) => (
+          <ProjectCard
+            project={project}
+            position={(i % 8) + 1}
+            size="large"
+            loading={i < PAGE_SIZE ? 'eager' : 'lazy'}
+          />
+        ))}
+      </div>
+
+      <div class="empty" data-empty hidden>
+        <p>Nessun progetto per questa combinazione.</p>
+        <button type="button" class="tlink" data-reset>Azzera i filtri</button>
+      </div>
+
+      <div class="status meta" data-sentinel aria-live="polite">
+        <span class="visually-hidden" data-count></span>
+        <span data-status></span>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { initProjectList } from '../../scripts/projects';
+  document.querySelectorAll<HTMLElement>('[data-project-list]').forEach(initProjectList);
+</script>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-6);
+    padding-top: var(--space-5);
+    padding-bottom: var(--space-7);
+  }
+  .filters__cats { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-4); }
+  .filters__item { display: inline-flex; align-items: center; gap: var(--space-4); }
+  .filters__tab {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-family: inherit;
+    font-size: var(--fs-filter);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+  .filters__sep {
+    font-size: var(--fs-filter);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--accent);
+  }
+  /* Con una categoria scelta le altre si attenuano */
+  [data-project-list].has-category .filters__tab[aria-pressed='false'] { opacity: 0.4; }
+
+  .filters__sector { margin-left: auto; display: flex; align-items: center; gap: var(--space-2); }
+  .filters__sector-label { font-size: var(--fs-small); font-weight: 500; white-space: nowrap; }
+  .filters__select {
+    appearance: none;
+    padding: var(--space-3) 40px var(--space-3) var(--space-3);
+    border: 1px solid var(--line);
+    background: var(--surface-100)
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1.5l5 5 5-5' fill='none' stroke='%23071013' stroke-width='1.5'/></svg>")
+      no-repeat right 16px center;
+    font-family: inherit;
+    font-size: var(--fs-link);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .stagger { padding-bottom: var(--space-5); }
+  .skip-link { position: fixed; }
+  .status { padding-block: var(--space-7) var(--space-8); text-align: center; }
+  .empty { padding-block: var(--space-7); text-align: center; }
+  .empty p { font-size: var(--fs-body); }
+  .empty .tlink { margin-top: var(--space-4); background: none; border-top: 0; border-left: 0; border-right: 0; font-family: inherit; cursor: pointer; }
+
+  @media (max-width: 640px) {
+    .filters { padding-top: var(--space-4); padding-bottom: var(--space-6); }
+    .filters__tab, .filters__sep { font-size: clamp(28px, 8.5vw, var(--fs-filter)); }
+    .filters__tab { padding-block: 6px; }
+    .filters__item { gap: var(--space-3); }
+    .filters__cats { gap: 0 var(--space-3); }
+    .filters__sector { margin-left: 0; width: 100%; }
+    .filters__select { flex: 1; min-height: 52px; }
+    .status { padding-block: var(--space-6) var(--space-7); }
+  }
+</style>
