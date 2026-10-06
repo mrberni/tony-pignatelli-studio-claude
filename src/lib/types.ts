@@ -102,3 +102,10 @@ export interface StudioPageData {
   ctaQuestion: string;
   seo?: { title?: string; description?: string };
 }
+
+export interface ContactPageData {
+  intro: string;
+  formTitle: string;
+  privacyNote: string;
+  seo?: { title?: string; description?: string };
+}

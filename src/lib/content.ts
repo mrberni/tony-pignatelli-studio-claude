@@ -4,6 +4,7 @@
  */
 import {
   clientLogoUrls,
+  contactPageFixture,
   homePageFixture,
   logoClientFixtures,
   projectFixtures,
@@ -12,6 +13,7 @@ import {
   studioPageFixture,
 } from './fixtures';
 import type {
+  ContactPageData,
   HomePageData,
   LogoClient,
   Project,
@@ -101,4 +103,8 @@ export async function getStudioClients(names: string[]): Promise<LogoClient[]> {
     const logoUrl = clientLogoUrls[name];
     return logoUrl ? { name, logoUrl } : { name };
   });
+}
+
+export async function getContactPage(): Promise<ContactPageData> {
+  return contactPageFixture;
 }

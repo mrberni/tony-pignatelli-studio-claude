@@ -3,8 +3,13 @@
  * sono quelli dei mockup; le foto sono segnaposto. Testi di sezione: HANDOFF, Appendice A.
  */
 // Testi dell'Appendice A: un'unica copia, la stessa che precompila i documenti nello Studio.
-import { servicesPageInitial, studioPageInitial } from '../../studio/schemaTypes/initialContent';
+import {
+  contactPageInitial,
+  servicesPageInitial,
+  studioPageInitial,
+} from '../../studio/schemaTypes/initialContent';
 import type {
+  ContactPageData,
   HomePageData,
   LogoClient,
   Project,
@@ -201,3 +206,5 @@ export const studioPageFixture: StudioPageData = {
 
 /** URL dei loghi SVG per nome cliente. Vuoto finché non ci sono i file (HANDOFF §13.1). */
 export const clientLogoUrls: Record<string, string> = {};
+
+export const contactPageFixture: ContactPageData = contactPageInitial;
