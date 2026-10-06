@@ -1,0 +1,200 @@
+---
+import { metaLine } from '../lib/labels';
+import type { ProjectSummary } from '../lib/types';
+import Photo from './Photo.astro';
+import TextLink from './TextLink.astro';
+
+/** Carousel a tutta larghezza in cima alla home (HANDOFF §6.1, §11.4). */
+interface Props { slides: ProjectSummary[] }
+const { slides } = Astro.props;
+---
+<section class="hero on-dark" aria-roledescription="carousel" aria-label="Progetti in evidenza" data-hero>
+  <h1 class="visually-hidden">Tony Pignatelli Studio</h1>
+
+  <div class="hero__slides" data-live aria-live="off">
+    {slides.map((slide, i) => (
+      <div
+        class="hero__slide"
+        role="group"
+        aria-roledescription="slide"
+        aria-label={`${i + 1} di ${slides.length}`}
+        data-slide
+        data-active={i === 0 ? 'true' : 'false'}
+      >
+        <Photo
+          photo={slide.cover}
+          fallbackAlt={slide.title}
+          class="hero__photo"
+          sizes="100vw"
+          loading={i === 0 ? 'eager' : 'lazy'}
+          fetchpriority={i === 0 ? 'high' : 'auto'}
+        />
+        <div class="hero__caption">
+          <div class="container hero__caption-inner">
+            <div class="hero__text">
+              <p class="meta hero__meta">{metaLine(slide)}</p>
+              <h2 class="h2 hero__title">{slide.title}</h2>
+            </div>
+            <TextLink href="/progetti" class="hero__link">Esplora i progetti</TextLink>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {slides.length > 1 && (
+    <>
+      <button type="button" class="hero__zone hero__zone--prev" data-prev aria-label="Lavoro precedente"></button>
+      <button type="button" class="hero__zone hero__zone--next" data-next aria-label="Lavoro successivo"></button>
+      <div class="hero__controls">
+        <div class="container hero__controls-inner">
+          <div class="hero__dots">
+            {slides.map((_, i) => (
+              <button
+                type="button"
+                class="hero__dot"
+                data-dot
+                aria-label={`Vai al lavoro ${i + 1}`}
+                aria-current={i === 0 ? 'true' : undefined}
+              ></button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  )}
+</section>
+
+<script>
+  import { initHero } from '../scripts/hero';
+  document.querySelectorAll<HTMLElement>('[data-hero]').forEach(initHero);
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    height: 620px;
+    overflow: hidden;
+    background: #16181a;
+    color: #fefeff;
+    touch-action: pan-y;
+  }
+  .hero__slides { position: absolute; inset: 0; }
+  .hero__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+  }
+  .hero__slide[data-active='true'] {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+  .hero__slide :global(.hero__photo) {
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+    height: 100%;
+    --photo-bg: #1c1f22;
+  }
+  .hero__slide :global(.photo__placeholder) { color: #7c8488; }
+
+  /* Testo in basso a sinistra, link a destra; il testo non intercetta i click */
+  .hero__caption {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    pointer-events: none;
+  }
+  .hero__caption-inner {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-5);
+    padding-bottom: 48px;
+  }
+  .hero__meta { color: #b9c0c3; margin-bottom: var(--space-2); }
+  .hero__title { color: #fefeff; max-width: 22ch; }
+  .hero__caption :global(.hero__link) { pointer-events: auto; color: #fefeff; white-space: nowrap; }
+
+  /* Aree laterali cliccabili: il cursore diventa un cerchio bianco con freccia */
+  .hero__zone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    width: 30%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  .hero__zone--prev { left: 0; }
+  .hero__zone--next { right: 0; }
+  .hero__zone:focus-visible { outline: 2px solid #fefeff; outline-offset: -6px; }
+  @media (hover: hover) and (pointer: fine) {
+    .hero__zone--prev {
+      cursor: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27 viewBox=%270 0 48 48%27><circle cx=%2724%27 cy=%2724%27 r=%2723%27 fill=%27white%27 stroke=%27black%27/><path d=%27M30 24H18M23 18l-6 6 6 6%27 fill=%27none%27 stroke=%27black%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/></svg>") 24 24, w-resize;
+    }
+    .hero__zone--next {
+      cursor: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%2748%27 height=%2748%27 viewBox=%270 0 48 48%27><circle cx=%2724%27 cy=%2724%27 r=%2723%27 fill=%27white%27 stroke=%27black%27/><path d=%27M18 24h12M25 18l6 6-6 6%27 fill=%27none%27 stroke=%27black%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/></svg>") 24 24, e-resize;
+    }
+  }
+  /* Su schermi tattili si cambia lavoro con lo swipe, non con le aree laterali */
+  @media (hover: none) {
+    .hero__zone { pointer-events: none; }
+  }
+
+  /* Puntini (8px, tondi: unica eccezione al "nessun angolo arrotondato") e pausa */
+  /* 7px di aria sotto i puntini, oltre all'area di tocco */
+  .hero__controls { position: absolute; left: 0; right: 0; bottom: 7px; z-index: 3; }
+  .hero__controls-inner {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0;
+  }
+  .hero__dots { display: flex; margin-left: -10px; }
+  .hero__dot {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+  .hero__dot::after {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(254, 254, 255, 0.35);
+  }
+  .hero__dot[aria-current='true']::after { background: #fefeff; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__slide { transition: none; }
+  }
+
+  @media (max-width: 640px) {
+    .hero { height: max(440px, min(70svh, 620px)); }
+    .hero__caption-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-3);
+      padding-bottom: 64px;
+    }
+    .hero__dot { width: 44px; height: 44px; }
+    .hero__dot::after { left: 18px; top: 18px; }
+    .hero__dots { margin-left: -18px; }
+  }
+</style>

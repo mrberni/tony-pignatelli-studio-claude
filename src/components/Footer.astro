@@ -1,24 +1,26 @@
 ---
-import { siteName, navItems, social } from '../lib/site';
+import { getSiteSettings } from '../lib/content';
+import { navItems } from '../lib/site';
 
 interface Props { showBackToTop?: boolean }
 const { showBackToTop = true } = Astro.props;
+const settings = await getSiteSettings();
 ---
 <footer class="site-footer on-dark">
-  <div class="container inner">
+  <div class="container">
     <div class="top">
-      <a href="/" class="brand">{siteName}</a>
+      <a href="/" class="brand">{settings.studioName}</a>
       <nav aria-label="Footer" class="group">
         {navItems.map((item) => <a href={item.href} class="link">{item.label}</a>)}
       </nav>
       <div class="group">
-        <a href={social.instagram} class="link" rel="noopener">Instagram</a>
-        <a href={social.linkedin} class="link" rel="noopener">LinkedIn</a>
+        <a href={settings.instagramUrl} class="link" rel="noopener">Instagram</a>
+        <a href={settings.linkedinUrl} class="link" rel="noopener">LinkedIn</a>
         <span class="link muted">Milano · Italia</span>
       </div>
     </div>
     <div class="bottom">
-      <span class="meta muted">© 2026 {siteName}</span>
+      <span class="meta muted">© 2026 {settings.studioName}</span>
       {showBackToTop ? <a href="#top" class="meta back">Torna su ↑</a> : <span></span>}
       <div class="legal">
         <a href="/privacy" class="meta muted">Privacy</a>
@@ -29,8 +31,12 @@ const { showBackToTop = true } = Astro.props;
 </footer>
 
 <style>
-  .site-footer { background: var(--surface-inverse); color: var(--ink-inverse); }
-  .inner { border-top: 1px solid var(--line-inverse); }
+  /* La linea che separa il footer dal CTA copre tutta la larghezza della finestra */
+  .site-footer {
+    background: var(--surface-inverse);
+    color: var(--ink-inverse);
+    border-top: 1px solid var(--line-inverse);
+  }
   .top {
     display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;
     gap: var(--space-5);
@@ -47,9 +53,14 @@ const { showBackToTop = true } = Astro.props;
     padding-bottom: var(--space-5);
   }
   .legal { display: flex; gap: var(--space-4); justify-self: end; }
+
   @media (max-width: 640px) {
-    .group { flex-direction: column; gap: var(--space-2); }
-    .bottom { grid-template-columns: 1fr; justify-items: start; }
+    .top { padding-top: var(--space-5); }
+    .group { flex-direction: column; gap: 0; }
+    .group .link, .back, .legal a { display: inline-flex; align-items: center; min-height: 44px; }
+    /* "Torna su ↑" centrato su una riga propria, poi copyright, Privacy, Cookie */
+    .bottom { grid-template-columns: 1fr; justify-items: start; gap: var(--space-1); }
     .back { justify-self: center; order: -1; }
+    .legal { justify-self: start; gap: var(--space-3); }
   }
 </style>

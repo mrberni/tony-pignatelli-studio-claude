@@ -32,6 +32,9 @@ I file di configurazione vanno salvati in UTF-8 **senza BOM** (con il BOM `sanit
 ## Hosting
 Il progetto Cloudflare `tps-claude` è di tipo **Workers** (Workers Builds), non Pages: gli asset statici di `dist/` sono dichiarati in `wrangler.jsonc`. Variabile di build `NODE_VERSION=24`.
 
+## Larghezza massima
+Decisione dell'utente che **sostituisce** i 1440px di HANDOFF §4.4: il contenuto si estende con la finestra (margine laterale 32px) fino a `--page-max: 2560px`; oltre resta centrato. Le linee di separazione e le fasce nere coprono sempre tutta la finestra. Il valore sta in `src/styles/tokens.css` (la copia in `design/` resta quella originale).
+
 ## Repository pubblico
 Il repository GitHub è **pubblico**. Mai committare token, `.env.local`, email personali o altri dati privati. `main` è protetta da un ruleset (solo pull request, nessun force-push).
 

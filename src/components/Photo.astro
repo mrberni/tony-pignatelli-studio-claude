@@ -1,0 +1,80 @@
+---
+import { buildSrcset, objectPosition } from '../lib/image';
+import type { PhotoData } from '../lib/types';
+
+interface Props {
+  photo: PhotoData;
+  /** Testo alternativo di riserva (titolo del progetto). */
+  fallbackAlt: string;
+  sizes?: string;
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  /** Proporzione fissata dal contenitore (es. "4 / 3"). Se manca, quella reale della foto. */
+  ratio?: string;
+  class?: string;
+}
+
+const {
+  photo,
+  fallbackAlt,
+  sizes = '100vw',
+  loading = 'lazy',
+  fetchpriority = 'auto',
+  ratio,
+  class: className,
+} = Astro.props;
+
+const image = buildSrcset(photo);
+const alt = photo.alt?.trim() || fallbackAlt;
+// `--ratio` può arrivare dal contenitore (slot della griglia); se manca vale la proporzione reale.
+const style = [
+  `--photo-ratio: ${photo.width} / ${photo.height}`,
+  ratio ? `--ratio: ${ratio}` : '',
+  photo.bg ? `--photo-bg: ${photo.bg}` : '',
+]
+  .filter(Boolean)
+  .join('; ');
+---
+<div class:list={['photo', className]} style={style}>
+  {image ? (
+    <img
+      src={image.src}
+      srcset={image.srcset}
+      sizes={sizes}
+      width={photo.width}
+      height={photo.height}
+      alt={alt}
+      loading={loading}
+      fetchpriority={fetchpriority}
+      decoding="async"
+      style={`object-position: ${objectPosition(photo)}`}
+    />
+  ) : (
+    <span class="photo__placeholder meta" role="img" aria-label={alt}>Foto — {alt}</span>
+  )}
+</div>
+
+<style is:global>
+  .photo {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: var(--ratio, var(--photo-ratio));
+    background: var(--photo-bg, var(--surface-200));
+  }
+  .photo > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .photo__placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--space-2);
+    text-align: center;
+  }
+</style>

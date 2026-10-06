@@ -1,8 +1,12 @@
 @import './tokens.css';
+@import './stagger.css';
 
 *, *::before, *::after { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; }
+
+/* Il pannello del menu mobile blocca lo scorrimento della pagina */
+html:has(dialog.menu-panel[open]) { overflow: hidden; }
 
 body {
   margin: 0;
@@ -28,6 +32,7 @@ a { color: inherit; text-decoration: none; }
 img, svg, video { display: block; max-width: 100%; height: auto; }
 h1, h2, h3, p { margin: 0; }
 button { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
 
 /* Taglio netto: niente angoli arrotondati, ombre o gradienti */
 * { border-radius: 0; box-shadow: none; }
@@ -53,11 +58,63 @@ button { font: inherit; color: inherit; }
 }
 .skip-link:focus { transform: none; z-index: 10; }
 
+/* Layout */
 .container {
   max-width: var(--page-max);
   margin-inline: auto;
   padding-inline: var(--page-pad);
 }
 
+.grid12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--space-4);
+}
+
+/* Sezione di testo: padding verticale 96px (64px su mobile), bordo superiore facoltativo */
+.section { padding-block: var(--space-8); }
+.section--bordered { border-top: 1px solid var(--line); }
+@media (max-width: 640px) {
+  .section { padding-block: var(--space-7); }
+}
+
+/* Tipografia (HANDOFF §4.2) */
 .label { font-size: var(--fs-small); font-weight: 500; line-height: 1.3; color: var(--ink-soft); }
 .meta { font-size: var(--fs-meta); font-weight: 500; line-height: 1.3; color: var(--ink-soft); }
+
+.display {
+  font-size: var(--fs-display);
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  max-width: 16ch;
+}
+.h2 {
+  font-size: var(--fs-h2);
+  line-height: 1.05;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+.lead {
+  font-size: var(--fs-h3);
+  line-height: 1.25;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+}
+.prose-soft { max-width: 620px; color: var(--ink-soft); line-height: 1.45; }
+
+/* Link di sezione: sottolineato, con freccia */
+.tlink {
+  display: inline-block;
+  font-size: var(--fs-link);
+  font-weight: 500;
+  line-height: 1.2;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  /* Area di tocco più alta senza spostare il testo: padding sopra compensato dal margine */
+  padding-top: 8px;
+  margin-top: -8px;
+}
+@media (max-width: 640px) {
+  .tlink { padding-top: 21px; margin-top: -21px; }
+}
