@@ -1,0 +1,76 @@
+---
+import ContactForm from '../components/ContactForm.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getContactPage, getSiteSettings } from '../lib/content';
+import { telHref } from '../lib/site';
+
+const [settings, page] = await Promise.all([getSiteSettings(), getContactPage()]);
+
+const title = `${page.seo?.title ?? 'Contatti'} — ${settings.studioName}`;
+const description = page.seo?.description ?? page.intro;
+// L'indirizzo in due righe: via, poi CAP e città
+const addressLines = settings.address.split(/\s+—\s+|\n/).map((line) => line.trim()).filter(Boolean);
+---
+<BaseLayout title={title} description={description} showBackToTop={false}>
+  <div class="container contact">
+    <div class="info">
+      <h1 class="display">Contatti</h1>
+      <p class="info__intro">{page.intro}</p>
+
+      <section class="block">
+        <h2 class="block__label">Studio</h2>
+        <address class="block__text">
+          {addressLines.map((line, i) => (<>{i > 0 && <br />}{line}</>))}
+        </address>
+      </section>
+
+      <section class="block">
+        <h2 class="block__label">Scrivi o chiama</h2>
+        <p class="block__text block__text--links">
+          <a href={`mailto:${settings.email}`}>{settings.email}</a><br />
+          <a href={telHref(settings.phone)}>{settings.phone}</a>
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 class="block__label">Seguici</h2>
+        <p class="social">
+          <a href={settings.instagramUrl} rel="noopener">Instagram</a>
+          <a href={settings.linkedinUrl} rel="noopener">LinkedIn</a>
+        </p>
+      </section>
+    </div>
+
+    <ContactForm title={page.formTitle} privacyNote={page.privacyNote} />
+  </div>
+</BaseLayout>
+
+<style>
+  .contact {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-8);
+    align-items: start;
+    padding-block: var(--space-8) var(--space-9);
+  }
+  .info h1 { max-width: none; }
+  .info__intro { margin-block: var(--space-4) var(--space-6); line-height: 1.5; color: var(--ink-soft); }
+
+  .block { border-top: 1px solid var(--line); padding-top: var(--space-5); margin-bottom: var(--space-5); }
+  .block:last-child { margin-bottom: 0; }
+  .block__label { font-size: var(--fs-meta); font-weight: 500; line-height: 1.3; color: var(--ink-soft); margin-bottom: var(--space-2); }
+  .block__text { font-style: normal; line-height: 1.6; }
+  .block__text--links { line-height: 1.7; }
+  .social { display: flex; gap: var(--space-5); font-weight: 500; }
+  .social a, .block__text--links a { display: inline-flex; align-items: center; min-height: 44px; }
+
+  @media (max-width: 1023px) {
+    .contact { grid-template-columns: minmax(0, 1fr); gap: var(--space-7); }
+  }
+  @media (max-width: 640px) {
+    .contact { padding-block: var(--space-7) var(--space-8); }
+    .block__text--links a { min-height: 44px; }
+    .block__text--links br { display: none; }
+    .block__text--links a { display: flex; }
+  }
+</style>

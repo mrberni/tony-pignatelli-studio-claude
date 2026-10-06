@@ -76,3 +76,10 @@ export interface HomePageData {
   servicesSection: TitledText;
   ctaQuestion: string;
 }
+
+export interface ContactPageData {
+  intro: string;
+  formTitle: string;
+  privacyNote: string;
+  seo?: { title?: string; description?: string };
+}
