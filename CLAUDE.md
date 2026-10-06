@@ -22,12 +22,15 @@ Font: Hanken Grotesk (self-hosted), ripiego Helvetica Neue, Helvetica, Arial.
 ## Comandi
 Sito: `pnpm dev` · `pnpm build` · `pnpm check` (astro check) · `pnpm preview`.
 Studio: `pnpm studio` (locale, porta 3333) · `pnpm studio:check` (tsc + validazione schema) · `pnpm studio:build` · `pnpm studio:deploy` (pubblica: chiedere conferma).
-Previsti nelle fasi successive: `pnpm import:dry` / `pnpm import:run` (importatore).
+Importatore Wix → Sanity (`/scripts`, Node 24 esegue direttamente i `.ts`): `pnpm import:dry` (non scrive nulla; con `-- --dataset staging` confronta in sola lettura) · `pnpm import:run -- --dataset staging` (scrive; serve `SANITY_WRITE_TOKEN` in `.env.local`) · `pnpm import:verify -- --dataset staging`. Opzioni: `--prune` (cancella i documenti estranei: chiedere conferma), `--update` (aggiorna anche i documenti esistenti), `--confirm-production` (obbligatorio per `production`: solo dopo l'ok dell'utente).
 
 ## Sanity Studio
 `/studio` è un pacchetto pnpm **separato** (proprio `pnpm-lock.yaml`, fuori dal workspace della radice), così il build del sito su Cloudflare non installa le dipendenze dello Studio. Prima installazione: `pnpm --dir studio install`.
 Due workspace nello stesso Studio: `production` ("Sito") e `staging` ("Prove"). Progetto Sanity `8yzoe1bm`.
 I file di configurazione vanno salvati in UTF-8 **senza BOM** (con il BOM `sanity dev` non legge `package.json`).
+
+## Contenuti: Sanity o dati di prova
+Le pagine leggono tutto da `src/lib/content.ts`. Con `SANITY_DATASET` impostato (`staging` per le anteprime, `production` per il sito) i contenuti arrivano da Sanity al momento del build; senza, si usano i dati di prova di `src/lib/fixtures.ts`. Il foglio Excel contiene in fondo una riga "Esempio di riga compilata (da non importare)": l'importatore si ferma lì.
 
 ## Hosting
 Il progetto Cloudflare `tps-claude` è di tipo **Workers** (Workers Builds), non Pages: gli asset statici di `dist/` sono dichiarati in `wrangler.jsonc`. Variabile di build `NODE_VERSION=24`.

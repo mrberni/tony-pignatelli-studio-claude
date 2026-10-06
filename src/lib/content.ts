@@ -1,49 +1,28 @@
 /**
- * Unico punto di accesso ai contenuti. Per ora legge i dati di prova (`fixtures.ts`);
- * quando arrivano le query Sanity cambia solo questo file, non le pagine.
+ * Unico punto di accesso ai contenuti per le pagine.
+ *
+ * - Con `SANITY_DATASET` impostato (anteprime → `staging`, produzione → `production`) i
+ *   contenuti vengono letti da Sanity al momento del build.
+ * - Senza, si usano i dati di prova (`fixtures.ts`): così `pnpm dev` e `pnpm build` funzionano
+ *   anche senza configurazione, e `main` resta com'è finché il dataset di produzione non è pronto.
  */
-import {
-  clientLogoUrls,
-  contactPageFixture,
-  homePageFixture,
-  logoClientFixtures,
-  projectFixtures,
-  servicesPageFixture,
-  siteSettingsFixture,
-  studioPageFixture,
-} from './fixtures';
-import type {
-  ContactPageData,
-  HomePageData,
-  LogoClient,
-  Project,
-  ProjectSummary,
-  ServicesPageData,
-  SiteSettings,
-  StudioPageData,
-} from './types';
+import * as fixtures from './content-fixtures';
+import * as sanity from './content-sanity';
+import { isSanityConfigured } from './sanity';
+import { toSummary } from './project-utils';
+import type { Project, ProjectSummary } from './types';
 
-/** Il lavoro più recente è il primo (`order` crescente). */
-function byOrder<T extends { order: number }>(items: T[]): T[] {
-  return [...items].sort((a, b) => a.order - b.order);
-}
+const source: typeof fixtures = isSanityConfigured ? sanity : fixtures;
 
-export const toSummary = ({ slug, title, category, sector, order, cover }: Project): ProjectSummary => ({
-  slug,
-  title,
-  category,
-  sector,
-  order,
-  cover,
-});
-
-export async function getSiteSettings(): Promise<SiteSettings> {
-  return siteSettingsFixture;
-}
-
-export async function getProjects(): Promise<Project[]> {
-  return byOrder(projectFixtures);
-}
+export const getSiteSettings = source.getSiteSettings;
+export const getProjects = source.getProjects;
+export const getHomePage = source.getHomePage;
+export const getLogoClients = source.getLogoClients;
+export const getStudioPage = source.getStudioPage;
+export const getStudioClients = source.getStudioClients;
+export const getServicesPage = source.getServicesPage;
+export const getContactPage = source.getContactPage;
+export { toSummary };
 
 /**
  * Precedente / successivo in ordine di recenza: "Precedente" ha `order` immediatamente
@@ -72,39 +51,4 @@ export async function getProjectSummaries(): Promise<ProjectSummary[]> {
 export async function getFeaturedProjects(): Promise<ProjectSummary[]> {
   const all = await getProjects();
   return all.filter((p) => p.featured).slice(0, 8).map(toSummary);
-}
-
-export async function getHomePage(): Promise<HomePageData> {
-  const { carouselSlugs, ...rest } = homePageFixture;
-  const all = await getProjects();
-  const carousel = carouselSlugs
-    .map((slug) => all.find((p) => p.slug === slug))
-    .filter((p): p is Project => p !== undefined)
-    .map(toSummary);
-  return { ...rest, carousel };
-}
-
-/** Clienti con `showInLogoStrip = true`. */
-export async function getLogoClients(): Promise<LogoClient[]> {
-  return logoClientFixtures;
-}
-
-export async function getServicesPage(): Promise<ServicesPageData> {
-  return servicesPageFixture;
-}
-
-export async function getStudioPage(): Promise<StudioPageData> {
-  return studioPageFixture;
-}
-
-/** Elenco "Clienti" della pagina Studio: logo dove esiste l'SVG, altrimenti il nome in testo. */
-export async function getStudioClients(names: string[]): Promise<LogoClient[]> {
-  return names.map((name) => {
-    const logoUrl = clientLogoUrls[name];
-    return logoUrl ? { name, logoUrl } : { name };
-  });
-}
-
-export async function getContactPage(): Promise<ContactPageData> {
-  return contactPageFixture;
 }
