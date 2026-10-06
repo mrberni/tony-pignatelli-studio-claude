@@ -32,6 +32,11 @@ export async function getProjects(): Promise<Project[]> {
   return byOrder(projectFixtures);
 }
 
+/** Tutti i progetti, dal più recente (pagina /progetti). */
+export async function getProjectSummaries(): Promise<ProjectSummary[]> {
+  return (await getProjects()).map(toSummary);
+}
+
 /** "Progetti selezionati" in home: `featured`, ordinati per `order`, al massimo 8. */
 export async function getFeaturedProjects(): Promise<ProjectSummary[]> {
   const all = await getProjects();

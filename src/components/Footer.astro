@@ -6,7 +6,7 @@ interface Props { showBackToTop?: boolean }
 const { showBackToTop = true } = Astro.props;
 const settings = await getSiteSettings();
 ---
-<footer class="site-footer on-dark">
+<footer class="site-footer on-dark" id="site-footer">
   <div class="container">
     <div class="top">
       <a href="/" class="brand">{settings.studioName}</a>
