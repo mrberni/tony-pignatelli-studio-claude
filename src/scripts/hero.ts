@@ -2,8 +2,8 @@ const AUTOPLAY_MS = 5000;
 const SWIPE_MIN_PX = 40;
 
 /**
- * Carousel della home. L'autoplay (5 s) si ferma con prefers-reduced-motion, al passaggio
- * del mouse, al focus da tastiera e al primo tocco.
+ * Carousel della home. L'autoplay (5 s) continua sempre in loop, anche con il mouse sopra l'area.
+ * Si ferma solo con prefers-reduced-motion, con il focus da tastiera e al primo tocco.
  */
 export function initHero(root: HTMLElement): void {
   const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-slide]'));
@@ -18,10 +18,9 @@ export function initHero(root: HTMLElement): void {
   let timer: number | undefined;
   let reduced = reducedMotion.matches;
   let touched = false;
-  let hovering = false;
   let focused = false;
 
-  const running = (): boolean => !reduced && !touched && !hovering && !focused;
+  const running = (): boolean => !reduced && !touched && !focused;
 
   function render(): void {
     slides.forEach((slide, i) => slide.setAttribute('data-active', String(i === index)));
@@ -51,18 +50,6 @@ export function initHero(root: HTMLElement): void {
   root.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowLeft') goTo(index - 1, true);
     if (event.key === 'ArrowRight') goTo(index + 1, true);
-  });
-
-  // Mouse: pausa mentre il puntatore è sopra il carousel
-  root.addEventListener('pointerenter', (event) => {
-    if (event.pointerType !== 'mouse') return;
-    hovering = true;
-    schedule();
-  });
-  root.addEventListener('pointerleave', (event) => {
-    if (event.pointerType !== 'mouse') return;
-    hovering = false;
-    schedule();
   });
 
   // Tastiera: pausa solo per il focus visibile (non per il click del mouse)
