@@ -17,6 +17,7 @@ Font: Hanken Grotesk (self-hosted), ripiego Helvetica Neue, Helvetica, Arial.
 4. **Segreti**: solo variabili d'ambiente, `.env.local` fuori da Git. Non stampare mai token nei log o nei messaggi.
 5. **Non inventare contenuti**: i testi tra `[parentesi quadre]` sono segnaposto. Non attribuire ai clienti affermazioni o risultati che non hai in input.
 6. **Regole di design**: nessun testo tutto in maiuscolo; il nome del cliente compare **solo** nella pagina del singolo progetto; nessun angolo arrotondato, ombra o gradiente; `accent` solo dove previsto; niente anno nell'interfaccia.
+   Eccezione approvata dall'utente: l'hero della home ha un velo piatto `rgba(7,16,19,0.25)` sopra le foto, per la leggibilità del titolo. Le foto di schede, copertine e gallerie restano senza overlay.
 7. In dubbio, fermati e chiedi: una domanda breve costa meno di un refactoring.
 
 ## Comandi

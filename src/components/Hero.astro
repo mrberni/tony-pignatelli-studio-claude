@@ -100,6 +100,14 @@ const { slides } = Astro.props;
     --photo-bg: #1c1f22;
   }
   .hero__slide :global(.photo__placeholder) { color: #7c8488; }
+  /* Velo piatto (niente gradiente) sopra la foto, approvato dall'utente: il titolo bianco resta leggibile anche sulle foto chiare */
+  .hero__slide :global(.hero__photo)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(7, 16, 19, 0.25);
+    pointer-events: none;
+  }
 
   /* Testo in basso a sinistra, link a destra; il testo non intercetta i click */
   .hero__caption {
