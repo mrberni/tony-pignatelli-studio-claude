@@ -32,7 +32,7 @@ Due workspace nello stesso Studio: `production` ("Sito") e `staging` ("Prove"). 
 I file di configurazione vanno salvati in UTF-8 **senza BOM** (con il BOM `sanity dev` non legge `package.json`).
 
 ## Contenuti: Sanity o dati di prova
-Le pagine leggono tutto da `src/lib/content.ts`. Con `SANITY_DATASET` impostato (`staging` per le anteprime, `production` per il sito) i contenuti arrivano da Sanity al momento del build; senza, si usano i dati di prova di `src/lib/fixtures.ts`. Il foglio Excel contiene in fondo una riga "Esempio di riga compilata (da non importare)": l'importatore si ferma lì.
+Le pagine leggono tutto da `src/lib/content.ts`. Con `SANITY_DATASET` impostato i contenuti arrivano da Sanity al momento del build; senza, si usano i dati di prova di `src/lib/fixtures.ts`. Nei build di Cloudflare di un branch diverso da `main` (anteprime) il dataset è `staging` in automatico (`WORKERS_CI_BRANCH`); `main` usa i dati di prova finché non si imposta `SANITY_DATASET=production` per l'ambiente di produzione. Ogni pagina ha `<meta name="content-source">` (`sanity:staging`, `sanity:production` o `fixtures`) per verificarlo. Il foglio Excel contiene in fondo una riga "Esempio di riga compilata (da non importare)": l'importatore si ferma lì.
 
 ## Hosting
 Il progetto Cloudflare `tps-claude` è di tipo **Workers** (Workers Builds), non Pages: gli asset statici di `dist/` sono dichiarati in `wrangler.jsonc`. Variabile di build `NODE_VERSION=24`.
