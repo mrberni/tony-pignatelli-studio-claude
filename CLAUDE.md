@@ -17,12 +17,14 @@ Font: Hanken Grotesk (self-hosted), ripiego Helvetica Neue, Helvetica, Arial.
 4. **Segreti**: solo variabili d'ambiente, `.env.local` fuori da Git. Non stampare mai token nei log o nei messaggi.
 5. **Non inventare contenuti**: i testi tra `[parentesi quadre]` sono segnaposto. Non attribuire ai clienti affermazioni o risultati che non hai in input.
 6. **Regole di design**: nessun testo tutto in maiuscolo; il nome del cliente compare **solo** nella pagina del singolo progetto; nessun angolo arrotondato, ombra o gradiente; `accent` solo dove previsto; niente anno nell'interfaccia.
+   Eccezione approvata dall'utente: l'hero della home ha un velo piatto `rgba(7,16,19,0.25)` sopra le foto, per la leggibilità del titolo. Le foto di schede, copertine e gallerie restano senza overlay.
 7. In dubbio, fermati e chiedi: una domanda breve costa meno di un refactoring.
 
 ## Comandi
 Sito: `pnpm dev` · `pnpm build` · `pnpm check` (astro check) · `pnpm preview`.
 Studio: `pnpm studio` (locale, porta 3333) · `pnpm studio:check` (tsc + validazione schema) · `pnpm studio:build` · `pnpm studio:deploy` (pubblica: chiedere conferma).
-Importatore Wix → Sanity (`/scripts`, Node 24 esegue direttamente i `.ts`): `pnpm import:dry` (non scrive nulla; con `-- --dataset staging` confronta in sola lettura) · `pnpm import:run -- --dataset staging` (scrive; serve `SANITY_WRITE_TOKEN` in `.env.local`) · `pnpm import:verify -- --dataset staging`. Opzioni: `--prune` (cancella i documenti estranei: chiedere conferma), `--update` (aggiorna anche i documenti esistenti), `--confirm-production` (obbligatorio per `production`: solo dopo l'ok dell'utente).
+Importatore Wix → Sanity (`/scripts`, Node 24 esegue direttamente i `.ts`): `pnpm import:dry` (non scrive nulla; con `-- --dataset staging` confronta in sola lettura) · `pnpm import:run -- --dataset staging` (scrive; serve `SANITY_WRITE_TOKEN` in `.env.local`) · `pnpm import:verify -- --dataset staging`. Foto (Fase 4, solo su richiesta esplicita): `pnpm import:photos:dry` (piano e peso, nessun download) · `pnpm import:photos:run -- --dataset staging [--limit N] [--update]` · `pnpm import:photos:verify -- --dataset staging`; scarica da Wix in `data/.cache/` (ignorata da git).
+Opzioni dell'importatore dati: `--prune` (cancella i documenti estranei: chiedere conferma), `--update` (aggiorna anche i documenti esistenti), `--confirm-production` (obbligatorio per `production`: solo dopo l'ok dell'utente).
 
 ## Sanity Studio
 `/studio` è un pacchetto pnpm **separato** (proprio `pnpm-lock.yaml`, fuori dal workspace della radice), così il build del sito su Cloudflare non installa le dipendenze dello Studio. Prima installazione: `pnpm --dir studio install`.

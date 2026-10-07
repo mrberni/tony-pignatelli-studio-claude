@@ -12,3 +12,4 @@ tps-handoff/
 .claude/
 studio/dist/
 studio/.sanity/
+data/.cache/
