@@ -1,5 +1,5 @@
 /** Sorgente Sanity: query GROQ al momento del build (documenti pubblicati). */
-import { sanityClient, sanityDataset } from './sanity';
+import { query, sanityDataset } from './sanity';
 import { byOrder, toSummary } from './project-utils';
 import type {
   CategoryValue,
@@ -51,7 +51,7 @@ function toPhoto(raw: RawImage | null | undefined, fallbackAlt?: string): PhotoD
 
 /** Un documento unico (singleton): se manca, il build si ferma con un messaggio chiaro. */
 async function singleton<T>(id: string, projection: string): Promise<T> {
-  const doc = await sanityClient.fetch<T | null>(`*[_id == $id][0]${projection}`, { id });
+  const doc = await query<T | null>(`*[_id == $id][0]${projection}`, { id });
   if (!doc) {
     throw new Error(
       `Documento "${id}" non trovato nel dataset "${sanityDataset}". Esegui l'importazione (pnpm import:run) o crealo nello Studio.`,
@@ -150,8 +150,7 @@ function toProject(raw: RawProject): Project {
 let projectsPromise: Promise<Project[]> | undefined;
 /** Una sola query per build, condivisa da tutte le pagine. */
 export function getProjects(): Promise<Project[]> {
-  projectsPromise ??= sanityClient
-    .fetch<RawProject[]>(`*[_type == "project" && defined(slug.current)] | order(order asc) ${PROJECT_FIELDS}`)
+  projectsPromise ??= query<RawProject[]>(`*[_type == "project" && defined(slug.current)] | order(order asc) ${PROJECT_FIELDS}`)
     .then((rows) => byOrder(rows.map(toProject)));
   return projectsPromise;
 }
@@ -190,7 +189,7 @@ export async function getHomePage(): Promise<HomePageData> {
 
 /** Clienti con `showInLogoStrip = true`, in ordine alfabetico (senza distinguere maiuscole). */
 export async function getLogoClients(): Promise<LogoClient[]> {
-  const rows = await sanityClient.fetch<Array<{ name: string; logoUrl?: string | null }>>(
+  const rows = await query<Array<{ name: string; logoUrl?: string | null }>>(
     `*[_type == "client" && showInLogoStrip == true] | order(lower(name) asc){ name, "logoUrl": logo.asset->url }`,
   );
   return rows.map((row) => (row.logoUrl ? { name: row.name, logoUrl: row.logoUrl } : { name: row.name }));
@@ -206,7 +205,7 @@ const normalize = (name: string): string =>
 
 /** Elenco "Clienti" della pagina Studio: logo dove esiste l'SVG, altrimenti il nome in testo. */
 export async function getStudioClients(names: string[]): Promise<LogoClient[]> {
-  const withLogo = await sanityClient.fetch<Array<{ name: string; logoUrl: string }>>(
+  const withLogo = await query<Array<{ name: string; logoUrl: string }>>(
     `*[_type == "client" && defined(logo.asset)]{ name, "logoUrl": logo.asset->url }`,
   );
   const logoByName = new Map(withLogo.map((row) => [normalize(row.name), row.logoUrl]));
@@ -307,4 +306,14 @@ export async function getContactPage(): Promise<ContactPageData> {
     privacyNote: text(raw.privacyNote),
     ...seoOf(raw.seo),
   };
+}
+
+/** Immagine di condivisione di riserva: quella delle Impostazioni, altrimenti la prima del carousel. */
+export async function getDefaultOgImage(): Promise<string | undefined> {
+  const fromSettings = await query<string | null>(
+    `*[_id == "siteSettings"][0].defaultSeo.image.asset->url`,
+  );
+  if (fromSettings) return fromSettings;
+  const home = await getHomePage();
+  return home.carousel[0]?.cover.src;
 }

@@ -30,3 +30,21 @@ export const sanityClient = createClient({
   perspective: 'published',
   ...(token ? { token } : {}),
 });
+
+/**
+ * Query GROQ con nuovi tentativi (1-2-4-8 s): una caduta di rete momentanea non deve far fallire
+ * un build di decine di pagine. Gli errori veri (query sbagliata, permessi) falliscono subito.
+ */
+export async function query<T>(groq: string, params: Record<string, unknown> = {}): Promise<T> {
+  const attempts = 5;
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await sanityClient.fetch<T>(groq, params);
+    } catch (error) {
+      const code = (error as { cause?: { code?: string } }).cause?.code ?? '';
+      const transient = ['EAI_AGAIN', 'ECONNRESET', 'ETIMEDOUT', 'ENOTFOUND', 'UND_ERR_CONNECT_TIMEOUT'].includes(code) || error instanceof TypeError;
+      if (!transient || attempt === attempts) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 1000 * 2 ** (attempt - 1)));
+    }
+  }
+}

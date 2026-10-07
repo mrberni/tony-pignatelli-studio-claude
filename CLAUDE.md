@@ -26,6 +26,8 @@ Studio: `pnpm studio` (locale, porta 3333) · `pnpm studio:check` (tsc + validaz
 Importatore Wix → Sanity (`/scripts`, Node 24 esegue direttamente i `.ts`): `pnpm import:dry` (non scrive nulla; con `-- --dataset staging` confronta in sola lettura) · `pnpm import:run -- --dataset staging` (scrive; serve `SANITY_WRITE_TOKEN` in `.env.local`) · `pnpm import:verify -- --dataset staging`. Foto (Fase 4, solo su richiesta esplicita): `pnpm import:photos:dry` (piano e peso, nessun download) · `pnpm import:photos:run -- --dataset staging [--limit N] [--update]` · `pnpm import:photos:verify -- --dataset staging`; scarica da Wix in `data/.cache/` (ignorata da git).
 Opzioni dell'importatore dati: `--prune` (cancella i documenti estranei: chiedere conferma), `--update` (aggiorna anche i documenti esistenti), `--confirm-production` (obbligatorio per `production`: solo dopo l'ok dell'utente).
 
+Redirect da Wix (Fase 5): `pnpm redirects` rigenera `public/_redirects` (e controlla che foglio e sitemap di Wix coincidano; l'elenco reale delle pagine di Wix è in `data/wix-sitemap.json`) · `pnpm redirects:check` (dopo `pnpm build`: ogni destinazione deve esistere in `dist/`). Dopo aver cambiato titoli/slug dei progetti vanno rigenerati.
+
 ## Sanity Studio
 `/studio` è un pacchetto pnpm **separato** (proprio `pnpm-lock.yaml`, fuori dal workspace della radice), così il build del sito su Cloudflare non installa le dipendenze dello Studio. Prima installazione: `pnpm --dir studio install`.
 Due workspace nello stesso Studio: `production` ("Sito") e `staging` ("Prove"). Progetto Sanity `8yzoe1bm`.
@@ -36,6 +38,9 @@ Le pagine leggono tutto da `src/lib/content.ts`. Con `SANITY_DATASET` impostato 
 
 ## Hosting
 Il progetto Cloudflare `tps-claude` è di tipo **Workers** (Workers Builds), non Pages: gli asset statici di `dist/` sono dichiarati in `wrangler.jsonc`. Variabile di build `NODE_VERSION=24`.
+
+## SEO e indicizzazione
+Il dominio per canonical, sitemap e Open Graph è `PUBLIC_SITE_URL` (predefinito `https://www.tonypignatellistudio.com`). `public/_headers` mette `X-Robots-Tag: noindex` a tutti gli indirizzi `*.workers.dev` (produzione provvisoria e anteprime): sul dominio vero la regola non si applica. `robots.txt` e `sitemap.xml` si generano al build. Nel sito generato Astro riporta i percorsi con `.html`: usare `cleanPath()` (`src/lib/site.ts`) per canonical e voce attiva del menu.
 
 ## Larghezza massima
 Decisione dell'utente che **sostituisce** i 1440px di HANDOFF §4.4: il contenuto si estende con la finestra (margine laterale 32px) fino a `--page-max: 2560px`; oltre resta centrato. Le linee di separazione e le fasce nere coprono sempre tutta la finestra. Il valore sta in `src/styles/tokens.css` (la copia in `design/` resta quella originale).

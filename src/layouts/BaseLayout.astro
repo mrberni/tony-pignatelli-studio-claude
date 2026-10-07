@@ -7,7 +7,9 @@ import font400 from '@fontsource/hanken-grotesk/files/hanken-grotesk-latin-400-n
 import font500 from '@fontsource/hanken-grotesk/files/hanken-grotesk-latin-500-normal.woff2?url';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { getSiteSettings } from '../lib/content';
+import { getDefaultOgImage, getSiteSettings } from '../lib/content';
+import { ogImageUrl } from '../lib/image';
+import { cleanPath } from '../lib/site';
 import { isSanityConfigured, sanityDataset } from '../lib/sanity';
 
 interface Props {
@@ -21,16 +23,16 @@ interface Props {
   /** Pagine segnaposto: non vanno indicizzate. */
   noindex?: boolean;
 }
-const settings = await getSiteSettings();
+const [settings, defaultImage] = await Promise.all([getSiteSettings(), getDefaultOgImage()]);
 const {
   title = settings.defaultSeo.title,
   description = settings.defaultSeo.description,
-  image,
+  image = defaultImage ? ogImageUrl(defaultImage) : undefined,
   showBackToTop = true,
   jsonLd,
   noindex = false,
 } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+const canonical = new URL(cleanPath(Astro.url.pathname), Astro.site);
 ---
 <!doctype html>
 <html lang="it">
@@ -52,6 +54,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:url" content={canonical.href} />
     {image && <meta property="og:image" content={image} />}
     <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {image && <meta name="twitter:image" content={image} />}
     <link rel="preload" href={font400} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={font500} as="font" type="font/woff2" crossorigin />
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}

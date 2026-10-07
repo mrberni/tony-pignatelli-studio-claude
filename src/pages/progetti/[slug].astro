@@ -4,7 +4,7 @@ import Gallery from '../../components/Gallery.astro';
 import Photo from '../../components/Photo.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getNeighbors, getProjects, getSiteSettings } from '../../lib/content';
-import { sizedUrl } from '../../lib/image';
+import { ogImageUrl } from '../../lib/image';
 import { metaLine } from '../../lib/labels';
 import type { Project, ProjectSummary } from '../../lib/types';
 
@@ -28,7 +28,7 @@ const settings = await getSiteSettings();
 // Titolo, descrizione e immagine social: SEO del progetto se c'è, altrimenti titolo, frase di apertura e copertina
 const pageTitle = `${project.seo?.title ?? project.title} — ${settings.studioName}`;
 const description = project.seo?.description ?? project.intro ?? settings.defaultSeo.description;
-const ogImage = project.seo?.imageUrl ?? (project.cover.src ? sizedUrl(project.cover.src, 1200) : undefined);
+const ogImage = project.seo?.imageUrl ?? (project.cover.src ? ogImageUrl(project.cover.src) : undefined);
 
 // Paragrafi separati da una riga vuota
 const paragraphs = (project.description ?? '')
@@ -36,13 +36,25 @@ const paragraphs = (project.description ?? '')
   .map((p) => p.trim())
   .filter(Boolean);
 
+// Dati strutturati (facoltativi, §9.2): il progetto come opera creativa dello studio
+const creativeWork = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: project.title,
+  url: new URL(`/progetti/${project.slug}`, Astro.site).href,
+  creator: { '@type': 'Organization', name: settings.studioName },
+  ...(ogImage ? { image: ogImage } : {}),
+  ...(project.intro ? { description: project.intro } : {}),
+  ...(project.city ? { locationCreated: { '@type': 'Place', name: project.city } } : {}),
+};
+
 const info = [
   { label: 'Cliente', values: [project.client] },
   ...(project.city ? [{ label: 'Luogo', values: [project.city] }] : []),
   ...(project.services.length > 0 ? [{ label: 'Servizi', values: project.services }] : []),
 ];
 ---
-<BaseLayout title={pageTitle} description={description} {...(ogImage ? { image: ogImage } : {})}>
+<BaseLayout title={pageTitle} description={description} jsonLd={creativeWork} {...(ogImage ? { image: ogImage } : {})}>
   <div class="container head grid12">
     <a href="/progetti" class="label head__back">← Progetti</a>
     <div class="head__title">
