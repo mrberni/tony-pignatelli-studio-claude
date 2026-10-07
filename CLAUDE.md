@@ -28,6 +28,8 @@ Opzioni dell'importatore dati: `--prune` (cancella i documenti estranei: chieder
 
 Redirect da Wix (Fase 5): `pnpm redirects` rigenera `public/_redirects` (e controlla che foglio e sitemap di Wix coincidano; l'elenco reale delle pagine di Wix è in `data/wix-sitemap.json`) · `pnpm redirects:check` (dopo `pnpm build`: ogni destinazione deve esistere in `dist/`). Dopo aver cambiato titoli/slug dei progetti vanno rigenerati.
 
+Loghi dei clienti: metti i file SVG in `svg/` e lancia `pnpm logos:prepare` (Chrome headless: ritaglia lo spazio vuoto attorno a ogni logo, toglie sfondi bianchi, rende vuote le scritte chiare su fondo scuro e assegna il nome atteso) → scrive `data/logos/`; poi `pnpm import:run -- --dataset staging` li carica in Sanity. `svg/` e `data/logos/` sono ignorate da git (marchi registrati, repository pubblico). Il sito mostra i loghi come `<img>` con il filtro `#tps-ink` (colore del testo): non si può usare `mask-image` perché i file di Sanity non hanno intestazioni CORS. La dimensione è uniforme per area ottica (`src/lib/logo-size.ts`). I nomi della lista Studio senza progetto ma con logo diventano documenti `client` aggiuntivi solo per ospitare il file.
+
 ## Sanity Studio
 `/studio` è un pacchetto pnpm **separato** (proprio `pnpm-lock.yaml`, fuori dal workspace della radice), così il build del sito su Cloudflare non installa le dipendenze dello Studio. Prima installazione: `pnpm --dir studio install`.
 Due workspace nello stesso Studio: `production` ("Sito") e `staging` ("Prove"). Progetto Sanity `8yzoe1bm`.

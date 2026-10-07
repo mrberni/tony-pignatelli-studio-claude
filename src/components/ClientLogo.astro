@@ -1,0 +1,43 @@
+---
+import { logoBox } from '../lib/logo-size';
+import type { LogoClient } from '../lib/types';
+
+/**
+ * Logo di un cliente, reso in un solo colore (`--ink`) con il filtro `#tps-ink` definito nel layout.
+ * È un `<img>` e non una maschera CSS: il server dei file di Sanity non invia le intestazioni CORS e il
+ * browser rifiuta `mask-image` da un altro indirizzo.
+ *
+ * Dimensione ottica uniforme fra loghi di proporzioni diverse (`logoBox`): vedi `src/lib/logo-size.ts`.
+ */
+interface Props { client: LogoClient & { logoUrl: string } }
+const { client } = Astro.props;
+const box = logoBox(client.logoRatio ?? 3);
+---
+<img
+  class="client-logo"
+  src={client.logoUrl}
+  alt={client.name}
+  width={Math.round(box.width)}
+  height={Math.round(box.height)}
+  loading="lazy"
+  decoding="async"
+  style={`--logo-w: ${box.width}px; --logo-h: ${box.height}px`}
+/>
+
+<style is:global>
+  .client-logo {
+    display: block;
+    width: calc(var(--logo-w) * var(--logo-scale, 1));
+    height: calc(var(--logo-h) * var(--logo-scale, 1));
+    /* In una cella stretta il logo si rimpicciolisce mantenendo le proporzioni */
+    max-width: 100%;
+    object-fit: contain;
+    object-position: left center;
+    /* Un solo colore: prima nero (riserva), poi il colore esatto del testo */
+    filter: brightness(0);
+    filter: url('#tps-ink');
+  }
+  @media (max-width: 640px) {
+    .client-logo { --logo-scale: 0.8; }
+  }
+</style>

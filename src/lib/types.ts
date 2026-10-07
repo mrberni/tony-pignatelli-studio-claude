@@ -52,6 +52,8 @@ export interface LogoClient {
   name: string;
   /** URL del file SVG. Assente = si mostra il nome in testo. */
   logoUrl?: string;
+  /** Larghezza / altezza del logo (dal `viewBox` dell'SVG): serve a dimensionarlo in modo uniforme. */
+  logoRatio?: number;
 }
 
 export interface SiteSettings {

@@ -1,5 +1,6 @@
 /** Sorgente Sanity: query GROQ al momento del build (documenti pubblicati). */
-import { query, sanityDataset } from './sanity';
+import { fetchText, query, sanityDataset } from './sanity';
+import { ratioFromSvg } from './logo-size';
 import { byOrder, toSummary } from './project-utils';
 import type {
   CategoryValue,
@@ -187,18 +188,35 @@ export async function getHomePage(): Promise<HomePageData> {
 
 // --- Clienti con logo
 
+const ratioCache = new Map<string, Promise<number | undefined>>();
+/** Proporzione del logo letta dal `viewBox` dell'SVG (una sola richiesta per file e per build). */
+function logoRatio(url: string): Promise<number | undefined> {
+  let ratio = ratioCache.get(url);
+  if (!ratio) {
+    ratio = fetchText(url).then(ratioFromSvg, () => undefined);
+    ratioCache.set(url, ratio);
+  }
+  return ratio;
+}
+
+async function toLogoClient(row: { name: string; logoUrl?: string | null }): Promise<LogoClient> {
+  if (!row.logoUrl) return { name: row.name };
+  const ratio = await logoRatio(row.logoUrl);
+  return { name: row.name, logoUrl: row.logoUrl, ...(ratio ? { logoRatio: ratio } : {}) };
+}
+
 /** Clienti con `showInLogoStrip = true`, in ordine alfabetico (senza distinguere maiuscole). */
 export async function getLogoClients(): Promise<LogoClient[]> {
   const rows = await query<Array<{ name: string; logoUrl?: string | null }>>(
     `*[_type == "client" && showInLogoStrip == true] | order(lower(name) asc){ name, "logoUrl": logo.asset->url }`,
   );
-  return rows.map((row) => (row.logoUrl ? { name: row.name, logoUrl: row.logoUrl } : { name: row.name }));
+  return Promise.all(rows.map(toLogoClient));
 }
 
 const normalize = (name: string): string =>
   name
     .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, ' ')
     .trim();
@@ -209,10 +227,7 @@ export async function getStudioClients(names: string[]): Promise<LogoClient[]> {
     `*[_type == "client" && defined(logo.asset)]{ name, "logoUrl": logo.asset->url }`,
   );
   const logoByName = new Map(withLogo.map((row) => [normalize(row.name), row.logoUrl]));
-  return names.map((name) => {
-    const logoUrl = logoByName.get(normalize(name));
-    return logoUrl ? { name, logoUrl } : { name };
-  });
+  return Promise.all(names.map((name) => toLogoClient({ name, logoUrl: logoByName.get(normalize(name)) ?? null })));
 }
 
 // --- Studio, Servizi, Contatti

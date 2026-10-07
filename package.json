@@ -19,7 +19,8 @@
     "import:photos:run": "node --env-file-if-exists=.env.local scripts/import-photos.ts --run",
     "import:photos:verify": "node --env-file-if-exists=.env.local scripts/import-photos.ts --verify",
     "redirects": "node scripts/generate-redirects.ts",
-    "redirects:check": "node scripts/generate-redirects.ts --check"
+    "redirects:check": "node scripts/generate-redirects.ts --check",
+    "logos:prepare": "node scripts/normalize-logos.ts"
   },
   "dependencies": {
     "@fontsource/hanken-grotesk": "^5.3.0",

@@ -8,7 +8,8 @@ export interface Check {
   detail: string;
 }
 
-export async function verifyDataset(client: SanityClient): Promise<Check[]> {
+/** `expectedClients`: i 45 clienti dei progetti più i clienti aggiuntivi che esistono solo per ospitare un logo. */
+export async function verifyDataset(client: SanityClient, expectedClients: number = EXPECTED.clients): Promise<Check[]> {
   const checks: Check[] = [];
   const add = (label: string, ok: boolean, detail: string): void => {
     checks.push({ label, ok, detail });
@@ -30,7 +31,9 @@ export async function verifyDataset(client: SanityClient): Promise<Check[]> {
   }
 
   const clients = await client.fetch<number>(`count(*[_type == "client" && !(_id in path("drafts.**"))])`);
-  same('Clienti', clients, EXPECTED.clients);
+  same('Clienti (progetti + solo logo)', clients, expectedClients);
+  const linked = await client.fetch<number>(`count(array::unique(*[_type == "project" && !(_id in path("drafts.**"))].client._ref))`);
+  same('  di cui collegati ai progetti', linked, EXPECTED.clients);
   same('Progetti in evidenza', projects.filter((p) => p.featured).length, EXPECTED.featured);
 
   const carousel = await client.fetch<number>(`count(*[_id == "homePage"][0].carousel[]->_id)`);

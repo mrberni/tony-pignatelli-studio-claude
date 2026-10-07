@@ -13,3 +13,6 @@ tps-handoff/
 studio/dist/
 studio/.sanity/
 data/.cache/
+# Loghi dei brand forniti dall'utente: marchi registrati, non si ridistribuiscono dal repository pubblico
+svg/
+data/logos/

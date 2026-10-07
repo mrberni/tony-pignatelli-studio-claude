@@ -6,6 +6,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { slugify } from '../../studio/lib/slugify.ts';
+import { studioPageInitial } from '../../studio/schemaTypes/initialContent.ts';
 import { readCsv, type CsvRow } from './csv.ts';
 import { readWorkbook, type Row } from './xlsx.ts';
 
@@ -70,7 +71,13 @@ export interface SourceClient {
 
 export interface Source {
   projects: SourceProject[];
+  /** I 45 clienti del foglio (quelli collegati ai progetti). */
   clients: SourceClient[];
+  /**
+   * Nomi della lista "Clienti" della pagina Studio che non sono clienti di un progetto ma hanno un logo
+   * in `data/logos/`: servono come documenti `client` solo per ospitare il file del logo.
+   */
+  extraClients: SourceClient[];
   /** Errori: l'importazione non parte. */
   errors: string[];
   /** Avvisi e note informative: l'importazione parte comunque. */
@@ -121,6 +128,26 @@ export function loadSource(): Source {
     };
   });
   const clientByName = new Map(clients.map((c) => [c.name, c]));
+
+  // Nomi della lista Studio senza progetto ma con un logo pronto: documenti `client` solo per il logo
+  const nameKey = (value: string): string =>
+    value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/&/g, '')
+      .replace(/[^a-z0-9]+/g, '');
+  const sheetKeys = new Set(clients.map((c) => nameKey(c.name)));
+  const takenSlugs = new Set(clients.map((c) => c.slug));
+  const extraClients: SourceClient[] = [];
+  for (const name of studioPageInitial.clientNames) {
+    if (sheetKeys.has(nameKey(name))) continue;
+    const slug = slugify(name);
+    const logoPath = join(LOGOS, `${slug}.svg`);
+    if (!existsSync(logoPath) || takenSlugs.has(slug)) continue;
+    takenSlugs.add(slug);
+    extraClients.push({ name, slug, id: `client-${slug}`, logoFile: `${slug}.svg`, logoPath, showInLogoStrip: false });
+  }
 
   // --- Export CSV di Wix, indicizzati per URL (colonna "... (Item)")
   const wixByUrl = new Map<string, CsvRow>();
@@ -206,5 +233,5 @@ export function loadSource(): Source {
     if (clientByName.has(name)) warnings.push(`Nome da verificare (§13.11): "${name}"`);
   }
 
-  return { projects, clients, errors, warnings };
+  return { projects, clients, extraClients, errors, warnings };
 }

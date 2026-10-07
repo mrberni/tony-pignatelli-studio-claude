@@ -48,3 +48,18 @@ export async function query<T>(groq: string, params: Record<string, unknown> = {
     }
   }
 }
+
+/** Scarica un testo (es. un SVG) con gli stessi nuovi tentativi delle query. */
+export async function fetchText(url: string): Promise<string> {
+  const attempts = 5;
+  for (let attempt = 1; ; attempt++) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status} per ${url}`);
+      return await response.text();
+    } catch (error) {
+      if (attempt === attempts) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 1000 * 2 ** (attempt - 1)));
+    }
+  }
+}

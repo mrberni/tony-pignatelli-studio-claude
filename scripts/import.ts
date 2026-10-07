@@ -23,7 +23,7 @@ import {
   singletonDocuments,
   type SanityDoc,
 } from './lib/documents.ts';
-import { loadSource, type Source } from './lib/source.ts';
+import { EXPECTED, loadSource, type Source } from './lib/source.ts';
 import { verifyDataset } from './lib/verify.ts';
 
 const API_VERSION = process.env.SANITY_API_VERSION ?? '2026-10-01';
@@ -57,7 +57,8 @@ function printSource(source: Source): void {
   const renamed = projects.filter((p) => p.wixTitle && p.wixTitle !== p.title);
   line(`Titoli diversi tra foglio e Wix (normale, il foglio vale): ${renamed.length}`);
   const withLogo = clients.filter((c) => c.logoPath).length;
-  line(`Loghi SVG trovati in data/logos/: ${withLogo} su ${clients.filter((c) => c.logoFile).length} dichiarati`);
+  line(`Loghi SVG trovati in data/logos/: ${withLogo} su ${clients.filter((c) => c.logoFile).length} dichiarati nel foglio`);
+  line(`Clienti aggiuntivi solo per il logo (nomi della lista Studio senza progetto): ${source.extraClients.length}`);
 
   // Controllo informativo per la Fase 4: foto dichiarate nel foglio vs foto nell'export Wix
   let mismatch = 0;
@@ -119,7 +120,8 @@ async function main(): Promise<void> {
   printMessages(source);
   if (source.errors.length) process.exit(1);
 
-  const clientDocs = source.clients;
+  // 45 clienti dei progetti + i nomi della lista Studio che hanno solo il logo (documenti `client` per ospitarlo)
+  const clientDocs = [...source.clients, ...source.extraClients];
   const projectDocs = source.projects;
   const singletons = singletonDocuments(source);
   const importIds = new Set<string>([
@@ -152,7 +154,7 @@ async function main(): Promise<void> {
   }
 
   if (mode === 'verify') {
-    await runVerify(buildClient(false));
+    await runVerify(buildClient(false), EXPECTED.clients + source.extraClients.length);
     return;
   }
 
@@ -226,12 +228,12 @@ async function main(): Promise<void> {
   }
   line(`   loghi caricati: ${logos.length}${logos.length === 0 ? ' (nessun file in data/logos/)' : ''}`);
 
-  await runVerify(client);
+  await runVerify(client, EXPECTED.clients + source.extraClients.length);
 }
 
-async function runVerify(client: SanityClient): Promise<void> {
+async function runVerify(client: SanityClient, expectedClients: number): Promise<void> {
   section(`Verifiche sul dataset "${dataset}"`);
-  const checks = await verifyDataset(client);
+  const checks = await verifyDataset(client, expectedClients);
   for (const check of checks) line(`${check.ok ? '✓' : '✗'} ${check.label}: ${check.detail}`);
   line('✓ Foto per progetto: non applicabile (le foto si importano in Fase 4)');
   const failed = checks.filter((c) => !c.ok);
