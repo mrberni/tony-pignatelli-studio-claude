@@ -8,6 +8,7 @@ import font500 from '@fontsource/hanken-grotesk/files/hanken-grotesk-latin-500-n
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { getSiteSettings } from '../lib/content';
+import { isSanityConfigured, sanityDataset } from '../lib/sanity';
 
 interface Props {
   title?: string;
@@ -38,6 +39,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <!-- Da dove arrivano i contenuti di questo build (utile per capire se un'anteprima legge Sanity o i dati di prova) -->
+    <meta name="content-source" content={isSanityConfigured ? `sanity:${sanityDataset}` : 'fixtures'} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical.href} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

@@ -6,7 +6,13 @@ function env(name: string): string | undefined {
   return value && value.trim() !== '' ? value.trim() : undefined;
 }
 
-export const sanityDataset = env('SANITY_DATASET');
+/**
+ * Dataset da cui leggere. `SANITY_DATASET` vince sempre. Se manca, nei build di Cloudflare di un
+ * branch diverso da `main` (le anteprime) si usa `staging`, senza dipendere da una variabile
+ * impostata a mano; `main` resta sui dati di prova finché non si imposta `SANITY_DATASET=production`.
+ */
+const branch = env('WORKERS_CI_BRANCH') ?? env('CF_PAGES_BRANCH');
+export const sanityDataset = env('SANITY_DATASET') ?? (branch && branch !== 'main' ? 'staging' : undefined);
 
 /** Se `false` il sito usa i dati di prova (vedi `content.ts`). */
 export const isSanityConfigured = sanityDataset !== undefined;
