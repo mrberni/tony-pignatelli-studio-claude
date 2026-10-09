@@ -7,12 +7,12 @@ const settings = await getSiteSettings();
 ---
 <!-- BOZZA: testo preparato da Claude, non è consulenza legale. Le parti tra [parentesi quadre] vanno completate e tutto il testo va fatto rivedere da un consulente prima della pubblicazione. -->
 <BaseLayout title="Privacy — Tony Pignatelli Studio" noindex>
-  <LegalText title="Privacy" updated="[data]">
+  <LegalText title="Privacy" updated="9 ottobre 2026">
     <p>Questa pagina spiega come vengono trattati i dati personali di chi visita questo sito o ci scrive attraverso il modulo contatti, ai sensi del Regolamento (UE) 2016/679 (GDPR).</p>
 
     <h2>Titolare del trattamento</h2>
     <p>
-      [Ragione sociale o nome e cognome del titolare], [partita IVA / codice fiscale], con sede in {settings.address}.
+      Antonio Pignatelli (Tony Pignatelli Studio), partita IVA IT03237050962, con sede in {settings.address}.
       Per qualsiasi richiesta sui tuoi dati: <a href={`mailto:${settings.email}`}>{settings.email}</a>.
     </p>
 
@@ -33,14 +33,14 @@ const settings = await getSiteSettings();
     <p>Il conferimento dei dati del modulo è facoltativo, ma senza di essi non possiamo risponderti.</p>
 
     <h2>Per quanto tempo li conserviamo</h2>
-    <p>I messaggi ricevuti dal modulo sono conservati per il tempo necessario a rispondere e a gestire l'eventuale rapporto che ne nasce, e comunque non oltre [periodo, per esempio 24 mesi] dall'ultimo contatto, salvo obblighi di legge. I dati tecnici sono conservati dal fornitore dell'hosting per i tempi indicati nelle sue condizioni.</p>
+    <p>I messaggi ricevuti dal modulo sono conservati per il tempo necessario a rispondere e a gestire l'eventuale rapporto che ne nasce, e comunque non oltre 30 giorni dalla ricezione, salvo che dalla richiesta nasca un rapporto di lavoro o che la legge imponga di conservarli più a lungo. I dati tecnici sono conservati dal fornitore dell'hosting per i tempi indicati nelle sue condizioni.</p>
 
     <h2>Con chi li condividiamo</h2>
     <p>I dati sono trattati da fornitori che ci aiutano a far funzionare il sito, nominati responsabili del trattamento dove previsto:</p>
     <ul>
       <li>Cloudflare, Inc. — hosting del sito e protezione da abusi [e verifica anti-spam del modulo, quando attivata];</li>
       <li>Sanity AS — gestione dei contenuti e distribuzione delle immagini;</li>
-      <li>[servizio di invio email scelto per il modulo, da indicare] — consegna dei messaggi del modulo alla nostra casella di posta.</li>
+      <li>Resend, Inc. — consegna dei messaggi del modulo alla nostra casella di posta.</li>
     </ul>
     <p>I dati non sono venduti né ceduti a terzi per fini commerciali. Alcuni fornitori hanno sede fuori dallo Spazio economico europeo (in particolare negli Stati Uniti): in questi casi il trasferimento avviene sulla base di una decisione di adeguatezza, come il Data Privacy Framework, o di clausole contrattuali standard approvate dalla Commissione europea [da verificare con i contratti dei fornitori].</p>
 
