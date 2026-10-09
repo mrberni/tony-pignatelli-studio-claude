@@ -1,19 +1,19 @@
 ---
 import Cta from '../components/Cta.astro';
 import Hero from '../components/Hero.astro';
-import LogoStrip from '../components/LogoStrip.astro';
+import BrandStrip from '../components/BrandStrip.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import SectionTLC from '../components/SectionTLC.astro';
 import TextLink from '../components/TextLink.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getFeaturedProjects, getHomePage, getLogoClients, getSiteSettings } from '../lib/content';
+import { getFeaturedProjects, getHomePage, getStripClients, getSiteSettings } from '../lib/content';
 import { telHref } from '../lib/site';
 
 const [settings, home, featured, clients] = await Promise.all([
   getSiteSettings(),
   getHomePage(),
   getFeaturedProjects(),
-  getLogoClients(),
+  getStripClients(),
 ]);
 
 const organization = {
@@ -61,7 +61,7 @@ const organization = {
     linkLabel="Scopri i servizi"
   />
 
-  <LogoStrip clients={clients} />
+  <BrandStrip clients={clients} />
 
   <Cta question={home.ctaQuestion} />
 </BaseLayout>

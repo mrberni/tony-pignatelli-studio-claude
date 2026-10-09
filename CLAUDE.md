@@ -26,6 +26,8 @@ Studio: `pnpm studio` (locale, porta 3333) · `pnpm studio:check` (tsc + validaz
 Importatore Wix → Sanity (`/scripts`, Node 24 esegue direttamente i `.ts`): `pnpm import:dry` (non scrive nulla; con `-- --dataset staging` confronta in sola lettura) · `pnpm import:run -- --dataset staging` (scrive; serve `SANITY_WRITE_TOKEN` in `.env.local`) · `pnpm import:verify -- --dataset staging`. Foto (Fase 4, solo su richiesta esplicita): `pnpm import:photos:dry` (piano e peso, nessun download) · `pnpm import:photos:run -- --dataset staging [--limit N] [--update]` · `pnpm import:photos:verify -- --dataset staging`; scarica da Wix in `data/.cache/` (ignorata da git).
 Opzioni dell'importatore dati: `--prune` (cancella i documenti estranei: chiedere conferma), `--update` (aggiorna anche i documenti esistenti), `--confirm-production` (obbligatorio per `production`: solo dopo l'ok dell'utente).
 
+Foto della pagina Studio (dall'/about di Wix): `pnpm import:studio-photo -- --dataset staging [--update]` (idempotente; serve `SANITY_WRITE_TOKEN`). I clienti (striscia della home, elenco dello Studio) sono **solo nomi in testo**, niente loghi.
+
 Redirect da Wix (Fase 5): `pnpm redirects` rigenera `public/_redirects` (e controlla che foglio e sitemap di Wix coincidano; l'elenco reale delle pagine di Wix è in `data/wix-sitemap.json`) · `pnpm redirects:check` (dopo `pnpm build`: ogni destinazione deve esistere in `dist/`). Dopo aver cambiato titoli/slug dei progetti vanno rigenerati.
 
 ## Sanity Studio

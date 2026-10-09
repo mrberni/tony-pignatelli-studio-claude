@@ -11,7 +11,7 @@ import {
 import type {
   ContactPageData,
   HomePageData,
-  LogoClient,
+  ClientEntry,
   Project,
   ServicesPageData,
   SiteSettings,
@@ -178,7 +178,7 @@ export const homePageFixture: Omit<HomePageData, 'carousel'> & { carouselSlugs: 
   ctaQuestion: 'Qual è lo spazio che vuoi raccontare?',
 };
 
-export const logoClientFixtures: LogoClient[] = [
+export const stripClientFixtures: ClientEntry[] = [
   'BMW',
   'Disney',
   'Ferrari',
@@ -204,7 +204,5 @@ export const studioPageFixture: StudioPageData = {
   },
 };
 
-/** URL dei loghi SVG per nome cliente. Vuoto finché non ci sono i file (HANDOFF §13.1). */
-export const clientLogoUrls: Record<string, string> = {};
 
 export const contactPageFixture: ContactPageData = contactPageInitial;

@@ -5,7 +5,7 @@ import type {
   CategoryValue,
   ContactPageData,
   HomePageData,
-  LogoClient,
+  ClientEntry,
   PhotoData,
   Project,
   ProjectSummary,
@@ -185,34 +185,19 @@ export async function getHomePage(): Promise<HomePageData> {
   };
 }
 
-// --- Clienti con logo
+// --- Elenchi di clienti (solo nomi)
 
-/** Clienti con `showInLogoStrip = true`, in ordine alfabetico (senza distinguere maiuscole). */
-export async function getLogoClients(): Promise<LogoClient[]> {
-  const rows = await query<Array<{ name: string; logoUrl?: string | null }>>(
-    `*[_type == "client" && showInLogoStrip == true] | order(lower(name) asc){ name, "logoUrl": logo.asset->url }`,
+/** Clienti con `showInLogoStrip = true` (campo "Mostra nella striscia Brand & partner"), in ordine alfabetico. */
+export async function getStripClients(): Promise<ClientEntry[]> {
+  const rows = await query<Array<{ name: string }>>(
+    `*[_type == "client" && showInLogoStrip == true] | order(lower(name) asc){ name }`,
   );
-  return rows.map((row) => (row.logoUrl ? { name: row.name, logoUrl: row.logoUrl } : { name: row.name }));
+  return rows.map((row) => ({ name: row.name }));
 }
 
-const normalize = (name: string): string =>
-  name
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim();
-
-/** Elenco "Clienti" della pagina Studio: logo dove esiste l'SVG, altrimenti il nome in testo. */
-export async function getStudioClients(names: string[]): Promise<LogoClient[]> {
-  const withLogo = await query<Array<{ name: string; logoUrl: string }>>(
-    `*[_type == "client" && defined(logo.asset)]{ name, "logoUrl": logo.asset->url }`,
-  );
-  const logoByName = new Map(withLogo.map((row) => [normalize(row.name), row.logoUrl]));
-  return names.map((name) => {
-    const logoUrl = logoByName.get(normalize(name));
-    return logoUrl ? { name, logoUrl } : { name };
-  });
+/** Elenco "Clienti" della pagina Studio: i nomi scritti nello Studio, nell'ordine scelto. */
+export async function getStudioClients(names: string[]): Promise<ClientEntry[]> {
+  return names.map((name) => ({ name }));
 }
 
 // --- Studio, Servizi, Contatti

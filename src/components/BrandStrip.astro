@@ -1,0 +1,36 @@
+---
+import type { ClientEntry } from '../lib/types';
+
+/** Striscia "Brand & partner" della home: i nomi dei clienti in testo. */
+interface Props { clients: ClientEntry[] }
+const { clients } = Astro.props;
+---
+<section class="section section--bordered">
+  <div class="container">
+    <h2 class="label brands__label">Brand &amp; partner</h2>
+    <ul class="brands">
+      {clients.map((client) => (
+        <li class="brands__item">{client.name}</li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .brands__label { margin-bottom: var(--space-6); }
+  .brands {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--space-5) var(--space-4);
+  }
+  .brands__item { font-size: var(--fs-body); font-weight: 500; line-height: 1.3; }
+  @media (max-width: 1023px) {
+    .brands { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .brands { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+</style>
