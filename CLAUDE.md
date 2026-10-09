@@ -30,6 +30,9 @@ Foto della pagina Studio (dall'/about di Wix): `pnpm import:studio-photo -- --da
 
 Redirect da Wix (Fase 5): `pnpm redirects` rigenera `public/_redirects` (e controlla che foglio e sitemap di Wix coincidano; l'elenco reale delle pagine di Wix è in `data/wix-sitemap.json`) · `pnpm redirects:check` (dopo `pnpm build`: ogni destinazione deve esistere in `dist/`). Dopo aver cambiato titoli/slug dei progetti vanno rigenerati.
 
+## Modulo contatti
+`worker/` è il Worker di Cloudflare davanti al sito statico: risponde solo a `/api/contact` (`run_worker_first` in `wrangler.jsonc`), verifica Turnstile e invia la mail con Resend; non salva nulla. Test: `pnpm test:worker`. Variabile di **build** pubblica: `PUBLIC_TURNSTILE_SITE_KEY`. Segreti/variabili del **Worker** (su Cloudflare; in locale solo `.env.local`): `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`, `CONTACT_TO`, `CONTACT_FROM` (dominio verificato in Resend; senza, Resend consegna solo all'email dell'account). Senza queste variabili il Worker risponde errore e non invia.
+
 ## Sanity Studio
 `/studio` è un pacchetto pnpm **separato** (proprio `pnpm-lock.yaml`, fuori dal workspace della radice), così il build del sito su Cloudflare non installa le dipendenze dello Studio. Prima installazione: `pnpm --dir studio install`.
 Due workspace nello stesso Studio: `production` ("Sito") e `staging` ("Prove"). Progetto Sanity `8yzoe1bm`.

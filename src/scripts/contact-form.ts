@@ -15,7 +15,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 /**
  * Modulo contatti: validazione in italiano e accessibile (messaggio collegato con
  * `aria-describedby`, focus sul primo campo non valido) e invio a `/api/contact`.
- * Senza JavaScript il modulo si invia comunque con un normale POST.
+ * L'invio richiede JavaScript (anche la verifica Turnstile ne ha bisogno).
  */
 export function initContactForm(form: HTMLFormElement): void {
   const submit = form.querySelector<HTMLButtonElement>('[data-submit]');
@@ -111,6 +111,7 @@ export function initContactForm(form: HTMLFormElement): void {
           email: String(data.get('email') ?? '').trim(),
           message: String(data.get('message') ?? '').trim(),
           website: '',
+          turnstile: String(data.get('cf-turnstile-response') ?? ''),
         }),
       });
       if (!response.ok) throw new Error(`Risposta ${response.status}`);
@@ -119,6 +120,8 @@ export function initContactForm(form: HTMLFormElement): void {
     } catch {
       showStatus('error');
     } finally {
+      // Il token Turnstile vale una sola volta: ne serve uno nuovo per un altro invio
+      (window as { turnstile?: { reset(): void } }).turnstile?.reset();
       ui.submit.disabled = false;
       ui.submit.textContent = submitLabel;
       form.removeAttribute('aria-busy');

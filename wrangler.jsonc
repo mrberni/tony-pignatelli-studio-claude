@@ -2,11 +2,14 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "tps-claude",
   "compatibility_date": "2026-10-01",
+  "main": "worker/index.ts",
   "build": {
     "command": "pnpm build"
   },
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"],
     "not_found_handling": "404-page"
   },
   "previews": {

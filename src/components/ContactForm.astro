@@ -3,8 +3,8 @@ import { getSiteSettings } from '../lib/content';
 
 /**
  * Modulo contatti (HANDOFF §10): solo tre campi — Nome, Email, Messaggio — più un campo
- * trappola nascosto. L'invio va a `/api/contact` (funzione serverless: Fase 5, dopo la
- * scelta del servizio di posta).
+ * trappola nascosto e la verifica anti-spam Cloudflare Turnstile (chiave pubblica in
+ * `PUBLIC_TURNSTILE_SITE_KEY`). L'invio va a `/api/contact` (`worker/`).
  */
 interface Props {
   title: string;
@@ -12,6 +12,7 @@ interface Props {
 }
 const { title, privacyNote } = Astro.props;
 const settings = await getSiteSettings();
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
 ---
 <div class="panel">
   <h2 class="panel__title">{title}</h2>
@@ -67,7 +68,9 @@ const settings = await getSiteSettings();
       <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off" />
     </div>
 
-    <!-- Verifica anti-spam (Cloudflare Turnstile): si aggiunge in Fase 5 insieme all'invio -->
+    {turnstileSiteKey && (
+      <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-language="it" data-theme="light"></div>
+    )}
 
     <button type="submit" class="button" data-submit>Invia richiesta</button>
 
@@ -76,6 +79,8 @@ const settings = await getSiteSettings();
     <p class="note">{privacyNote} <a href="/privacy" class="note__link">Privacy policy</a></p>
   </form>
 </div>
+
+{turnstileSiteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
 
 <script>
   import { initContactForm } from '../scripts/contact-form';
