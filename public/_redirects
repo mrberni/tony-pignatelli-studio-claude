@@ -1,0 +1,103 @@
+# Generato da `pnpm redirects` (scripts/generate-redirects.ts): non modificare a mano.
+# Redirect 301 dal vecchio sito Wix. Fonte degli indirizzi: data/wix-sitemap.json e foglio progetti.
+
+# Pagine principali
+/work /progetti 301
+/copia-di-work /progetti 301
+/about /studio 301
+/what-we-do /servizi 301
+/contact /contatti 301
+/eventi /progetti?categoria=eventi 301
+/vetrine /progetti?categoria=vetrine 301
+/set-design /progetti?categoria=set-design 301
+
+# Vecchie pagine singole di Wix
+/moleskine-elefante /progetti/moleskine 301
+/missoni /progetti/missoni 301
+/eicma /progetti/eicma-2018 301
+/eicma-1 /progetti?categoria=vetrine 301
+/ferrari /progetti/ferrari 301
+/flussimaterici /progetti?categoria=vetrine 301
+/fox /progetti/fox-circus 301
+/gazzetta /progetti/rinascente-food 301
+/le-pandorine /progetti/le-pandorine 301
+/nyx-halloween /progetti/nyx-halloween 301
+/paul-shark /progetti?categoria=vetrine 301
+/rinascente-natale /progetti/disney-frozen 301
+/sneak-1 /progetti/sneakerness-2019 301
+/vans-box /progetti?categoria=vetrine 301
+/yoox /progetti/superga 301
+
+# Progetti: 63 indirizzi del foglio
+/eventi/nescafé-dolce-gusto-neo /progetti/nescafe-dolce-gusto-neo 301
+/eventi/nescaf%C3%A9-dolce-gusto-neo /progetti/nescafe-dolce-gusto-neo 301
+/eventi/disney-toy-story-5 /progetti/disney-toy-story-5-premiere 301
+/eventi/world-ducati-week-2026-main-stage /progetti/world-ducati-week-2026-main-stage 301
+/eventi/starbucks-at-home-pop-up-activation /progetti/starbucks-at-home-pop-up-activation 301
+/eventi/lego-stadium /progetti/lego-stadium 301
+/eventi/stellantis---installazione-milano-cortina /progetti/stellantis-installazione-milano-cortina 301
+/eventi/disney-jumpers-installation /progetti/disney-jumpers 301
+/eventi/youtube-creator-collective /progetti/youtube-creator-collective 301
+/eventi/on-location-ultimate-hospitality-interior-design /progetti/on-location-ultimate-hospitality-interior-design 301
+/eventi/avatar-fuoco-&-cenere-premiere /progetti/disney-avatar-fuoco-cenere-premiere 301
+/eventi/avatar-fuoco-%26-cenere-premiere /progetti/disney-avatar-fuoco-cenere-premiere 301
+/eventi/disney+-all's-fair- /progetti/disney-alls-fair 301
+/eventi/disney%2B-all's-fair- /progetti/disney-alls-fair 301
+/eventi/disney---fantastici-4-premiere /progetti/disney-fantastici-4-premiere 301
+/eventi/google-pixel-9-summer-tour /progetti/google-pixel-9-summer-tour 301
+/eventi/google-pixel-9-activation /progetti/google-pixel-9-activation 301
+/eventi/xiaominote14 /progetti/xiaomi-note-14-series-launch 301
+/eventi/honor--- /progetti/honor-magic-7-launch 301
+/eventi/disney-deadpool-wolverine-première-party /progetti/disney-deadpool-wolverine-premiere-party 301
+/eventi/disney-deadpool-wolverine-premi%C3%A8re-party /progetti/disney-deadpool-wolverine-premiere-party 301
+/eventi/miele-milan-design-week /progetti/miele-milan-design-week 301
+/eventi/bmw---xm-launch /progetti/bmw-xm-launch 301
+/eventi/lamborghini-revuelto-dynamic-training-event /progetti/lamborghini-revuelto-dynamic-training-event 301
+/eventi/arena /progetti/arena 301
+/eventi/philadelphia /progetti/philadelphia 301
+/eventi/mini-big-love-days /progetti/mini-big-love-days 301
+/eventi/sneakerness /progetti/sneakerness-2019 301
+/eventi/disney---avatar- /progetti/disney-avatar 301
+/eventi/disney-frozen /progetti/disney-frozen 301
+/eventi/pandora /progetti/pandora-look-factory 301
+/eventi/nyxminicorner /progetti/nyx-mini-corner 301
+/eventi/nyxhalloween /progetti/nyx-halloween 301
+/eventi/foxcircus /progetti/fox-circus 301
+/eventi/edison /progetti/edison 301
+/eventi/bauli /progetti/bauli 301
+/vetrine/paul-shark-cortina /progetti/paul-shark-cortina 301
+/vetrine/bialetti-store-milano /progetti/bialetti-store 301
+/vetrine/gutteridge /progetti/gutteridge 301
+/vetrine/bixio-x-paul-shark /progetti/bixio-x-paul-shark 301
+/vetrine/paul-shark-pitti-firenze /progetti/paul-shark-pitti-firenze 301
+/vetrine/paul-shark-pitti-venezia /progetti/paul-shark-pitti-venezia 301
+/vetrine/paul-shark-firenze /progetti/paul-shark-firenze 301
+/vetrine/vans-the-imaginary-wilderness /progetti/vans-the-imaginary-wilderness 301
+/vetrine/missoni /progetti/missoni 301
+/vetrine/eicma---2018 /progetti/eicma-2018 301
+/vetrine/le-pandorine /progetti/le-pandorine 301
+/vetrine/vans /progetti/vans-tnt-advanced-prototype 301
+/vetrine/ferrari--- /progetti/ferrari-worlds-strongest-brand 301
+/vetrine/trussardi /progetti/trussardi 301
+/vetrine/moleskine /progetti/moleskine 301
+/vetrine/ferrari /progetti/ferrari 301
+/vetrine/eicma /progetti/eicma-rinascente 301
+/vetrine/paulshark /progetti/paul-shark-rinascente 301
+/vetrine/msgm /progetti/msgm 301
+/vetrine/rinascente /progetti/rinascente-food 301
+/vetrine/rinascente-annex /progetti/rinascente-annex 301
+/vetrine/brian-berry /progetti/brian-berry 301
+/vetrine/estee-lauder /progetti/estee-lauder 301
+/vetrine/serapian /progetti/serapian 301
+/vetrine/vans-frida-kahlo /progetti/vans-frida-kahlo 301
+/vetrine/vans-harry-potter /progetti/vans-harry-potter 301
+/set-design/superga /progetti/superga 301
+/set-design/canali /progetti/canali 301
+/set-design/io-donna /progetti/io-donna 301
+/set-design/maliparmi /progetti/maliparmi 301
+/set-design/nero-giardini /progetti/nero-giardini 301
+
+# Fallback per vecchi indirizzi di progetto non elencati
+/eventi/* /progetti?categoria=eventi 301
+/vetrine/* /progetti?categoria=vetrine 301
+/set-design/* /progetti?categoria=set-design 301

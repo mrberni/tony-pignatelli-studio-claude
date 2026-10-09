@@ -62,3 +62,8 @@ export async function getServicesPage(): Promise<ServicesPageData> {
 export async function getContactPage(): Promise<ContactPageData> {
   return contactPageFixture;
 }
+
+/** Immagine di condivisione di riserva: i dati di prova non hanno foto. */
+export async function getDefaultOgImage(): Promise<string | undefined> {
+  return undefined;
+}

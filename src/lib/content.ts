@@ -22,6 +22,7 @@ export const getStudioPage = source.getStudioPage;
 export const getStudioClients = source.getStudioClients;
 export const getServicesPage = source.getServicesPage;
 export const getContactPage = source.getContactPage;
+export const getDefaultOgImage = source.getDefaultOgImage;
 export { toSummary };
 
 /**

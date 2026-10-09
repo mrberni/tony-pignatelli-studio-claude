@@ -17,7 +17,9 @@
     "import:verify": "node --env-file-if-exists=.env.local scripts/import.ts --verify",
     "import:photos:dry": "node --env-file-if-exists=.env.local scripts/import-photos.ts --dry",
     "import:photos:run": "node --env-file-if-exists=.env.local scripts/import-photos.ts --run",
-    "import:photos:verify": "node --env-file-if-exists=.env.local scripts/import-photos.ts --verify"
+    "import:photos:verify": "node --env-file-if-exists=.env.local scripts/import-photos.ts --verify",
+    "redirects": "node scripts/generate-redirects.ts",
+    "redirects:check": "node scripts/generate-redirects.ts --check"
   },
   "dependencies": {
     "@fontsource/hanken-grotesk": "^5.3.0",

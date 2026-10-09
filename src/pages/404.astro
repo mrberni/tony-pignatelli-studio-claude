@@ -1,0 +1,16 @@
+---
+import TextLink from '../components/TextLink.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Pagina non trovata — Tony Pignatelli Studio" noindex>
+  <section class="container notfound">
+    <h1 class="display">Pagina non trovata</h1>
+    <p class="notfound__link"><TextLink href="/progetti">Torna ai progetti</TextLink></p>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound { padding-block: var(--space-8) var(--space-9); }
+  .notfound h1 { max-width: none; }
+  .notfound__link { margin-top: var(--space-6); }
+</style>

@@ -12,6 +12,15 @@ export function sizedUrl(src: string, width: number): string {
   return url.toString();
 }
 
+/** Immagine per Open Graph e anteprime social: sempre JPEG (i social non leggono tutti WebP/AVIF), larga 1200. */
+export function ogImageUrl(src: string): string {
+  const url = new URL(src);
+  url.searchParams.set('w', '1200');
+  url.searchParams.set('fm', 'jpg');
+  url.searchParams.set('fit', 'max');
+  return url.toString();
+}
+
 export function buildSrcset(photo: PhotoData): { src: string; srcset: string } | undefined {
   if (!photo.src) return undefined;
   const widths = IMAGE_WIDTHS.filter((w) => w <= photo.width);

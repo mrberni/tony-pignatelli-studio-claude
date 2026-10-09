@@ -1,0 +1,10 @@
+# Sintassi verificata su developers.cloudflare.com/workers/static-assets/headers
+# Gli indirizzi *.workers.dev (produzione provvisoria e anteprime) non devono comparire nei motori di ricerca.
+# La regola vale solo per quegli host: sul dominio vero (quando verrà collegato) non si applica.
+https://:version.:subdomain.workers.dev/*
+  X-Robots-Tag: noindex
+
+# Sicurezza di base per tutte le pagine
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
