@@ -1,24 +1,13 @@
 ---
-import type { LogoClient } from '../lib/types';
+import type { ClientEntry } from '../lib/types';
 
-/** Elenco clienti: il logo (SVG monocromatico) dove esiste, altrimenti il nome in testo. */
-interface Props { clients: LogoClient[] }
+/** Elenco "Clienti" della pagina Studio: i nomi in testo, su 6 colonne (3 su tablet, 2 su telefono). */
+interface Props { clients: ClientEntry[] }
 const { clients } = Astro.props;
 ---
 <ul class="clients">
   {clients.map((client) => (
-    <li class="clients__item">
-      {client.logoUrl ? (
-        <span
-          class="clients__logo"
-          role="img"
-          aria-label={client.name}
-          style={`--logo: url("${client.logoUrl}")`}
-        ></span>
-      ) : (
-        <span>{client.name}</span>
-      )}
-    </li>
+    <li>{client.name}</li>
   ))}
 </ul>
 
@@ -32,16 +21,6 @@ const { clients } = Astro.props;
     gap: var(--space-4);
     font-size: var(--fs-body);
     line-height: 1.5;
-  }
-  .clients__item { display: flex; align-items: center; min-height: 36px; }
-  .clients__logo {
-    display: block;
-    width: 100%;
-    max-width: 140px;
-    height: 36px;
-    background: var(--ink);
-    -webkit-mask: var(--logo) left center / contain no-repeat;
-    mask: var(--logo) left center / contain no-repeat;
   }
   @media (max-width: 1023px) {
     .clients { grid-template-columns: repeat(3, minmax(0, 1fr)); }

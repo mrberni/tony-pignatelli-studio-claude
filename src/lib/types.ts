@@ -48,10 +48,9 @@ export interface Project extends ProjectSummary {
   seo?: { title?: string; description?: string; imageUrl?: string };
 }
 
-export interface LogoClient {
+/** Un nome della lista clienti (striscia della home, elenco dello Studio). */
+export interface ClientEntry {
   name: string;
-  /** URL del file SVG. Assente = si mostra il nome in testo. */
-  logoUrl?: string;
 }
 
 export interface SiteSettings {
