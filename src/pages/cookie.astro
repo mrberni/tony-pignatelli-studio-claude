@@ -1,15 +1,29 @@
 ---
+import LegalText from '../components/LegalText.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
----
-<!-- Pagina segnaposto: il testo legale lo fornisce l'utente (HANDOFF §5, §13.6) -->
-<BaseLayout title="Cookie — Tony Pignatelli Studio" noindex>
-  <div class="container legal">
-    <h1 class="display">Cookie</h1>
-    <p class="prose-soft">Il testo di questa pagina è in preparazione.</p>
-  </div>
-</BaseLayout>
+import { getSiteSettings } from '../lib/content';
 
-<style>
-  .legal { padding-block: var(--space-8) var(--space-9); }
-  .legal p { margin-top: var(--space-4); }
-</style>
+const settings = await getSiteSettings();
+---
+<!-- BOZZA: testo preparato da Claude, non è consulenza legale. Va rivisto da un consulente e aggiornato se si aggiungono strumenti (statistiche, verifica anti-spam, ecc.). -->
+<BaseLayout title="Cookie — Tony Pignatelli Studio" noindex>
+  <LegalText title="Cookie" updated="[data]">
+    <p>I cookie sono piccoli file che un sito salva sul tuo dispositivo. Questa pagina spiega se e come li usa questo sito.</p>
+
+    <h2>Cosa usa questo sito</h2>
+    <p>Questo sito <strong>non imposta cookie</strong> e non salva dati nel tuo browser per profilarti, misurare le visite o mostrarti pubblicità. Non usa strumenti di statistica né pixel di social network. Per questo non mostra un banner di consenso.</p>
+    <p>I caratteri tipografici sono ospitati sul sito stesso, non su servizi esterni.</p>
+
+    <h2>Richieste a servizi esterni</h2>
+    <p>Anche senza cookie, aprire il sito comporta richieste tecniche ai server che lo distribuiscono (Cloudflare per le pagine, Sanity per le immagini), che ricevono l'indirizzo IP necessario a rispondere. Trovi i dettagli nella pagina <a href="/privacy">Privacy</a>.</p>
+
+    <h2>Se in futuro cambierà</h2>
+    <p>Se aggiungeremo strumenti che usano cookie o tecnologie simili (per esempio statistiche o la verifica anti-spam del modulo [da verificare quando sarà attivata]), aggiorneremo questa pagina e, dove la legge lo richiede, chiederemo prima il tuo consenso.</p>
+
+    <h2>Come controllare i cookie dal browser</h2>
+    <p>Puoi in ogni momento vedere, bloccare o cancellare i cookie dalle impostazioni del tuo browser. Per le istruzioni cerca «cookie» nella guida del browser che usi.</p>
+
+    <h2>Contatti</h2>
+    <p>Per domande: <a href={`mailto:${settings.email}`}>{settings.email}</a>.</p>
+  </LegalText>
+</BaseLayout>
