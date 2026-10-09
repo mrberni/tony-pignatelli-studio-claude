@@ -12,7 +12,7 @@ interface Props {
 }
 const { title, privacyNote } = Astro.props;
 const settings = await getSiteSettings();
-const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAAFSa2vThzS_IlKMK';
 ---
 <div class="panel">
   <h2 class="panel__title">{title}</h2>
