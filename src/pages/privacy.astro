@@ -1,15 +1,59 @@
 ---
+import LegalText from '../components/LegalText.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
----
-<!-- Pagina segnaposto: il testo legale lo fornisce l'utente (HANDOFF §5, §13.6) -->
-<BaseLayout title="Privacy — Tony Pignatelli Studio" noindex>
-  <div class="container legal">
-    <h1 class="display">Privacy</h1>
-    <p class="prose-soft">Il testo di questa pagina è in preparazione.</p>
-  </div>
-</BaseLayout>
+import { getSiteSettings } from '../lib/content';
 
-<style>
-  .legal { padding-block: var(--space-8) var(--space-9); }
-  .legal p { margin-top: var(--space-4); }
-</style>
+const settings = await getSiteSettings();
+---
+<!-- BOZZA: testo preparato da Claude, non è consulenza legale. Le parti tra [parentesi quadre] vanno completate e tutto il testo va fatto rivedere da un consulente prima della pubblicazione. -->
+<BaseLayout title="Privacy — Tony Pignatelli Studio" noindex>
+  <LegalText title="Privacy" updated="[data]">
+    <p>Questa pagina spiega come vengono trattati i dati personali di chi visita questo sito o ci scrive attraverso il modulo contatti, ai sensi del Regolamento (UE) 2016/679 (GDPR).</p>
+
+    <h2>Titolare del trattamento</h2>
+    <p>
+      [Ragione sociale o nome e cognome del titolare], [partita IVA / codice fiscale], con sede in {settings.address}.
+      Per qualsiasi richiesta sui tuoi dati: <a href={`mailto:${settings.email}`}>{settings.email}</a>.
+    </p>
+
+    <h2>Quali dati trattiamo</h2>
+    <ul>
+      <li><strong>Dati che ci invii tu</strong>: nome, indirizzo email e testo del messaggio, quando compili il modulo nella pagina Contatti. Se ci scrivi per email o telefono, trattiamo i dati che ci comunichi in quel modo.</li>
+      <li><strong>Dati tecnici di navigazione</strong>: come ogni sito, per funzionare il server riceve l'indirizzo IP e le informazioni tecniche della richiesta (tipo di browser, pagina richiesta, data e ora). Li gestisce il fornitore dell'hosting, Cloudflare, per erogare il sito e proteggerlo da abusi.</li>
+      <li><strong>Immagini</strong>: le foto dei progetti sono caricate dalla rete di distribuzione di Sanity (cdn.sanity.io). Anche in questo caso il fornitore riceve la richiesta tecnica, compreso l'indirizzo IP.</li>
+    </ul>
+    <p>Il sito non richiede la registrazione, non usa strumenti di profilazione né di pubblicità. Maggiori dettagli nella pagina <a href="/cookie">Cookie</a>.</p>
+
+    <h2>Perché li trattiamo e su quale base</h2>
+    <ul>
+      <li>Per <strong>rispondere alla tua richiesta</strong> e, se lo desideri, avviare un rapporto di lavoro: base giuridica è l'esecuzione di misure precontrattuali adottate su tua richiesta (art. 6.1.b GDPR).</li>
+      <li>Per <strong>far funzionare e proteggere il sito</strong>, anche con controlli anti-spam sul modulo: legittimo interesse del titolare (art. 6.1.f GDPR).</li>
+      <li>Per <strong>adempiere a obblighi di legge</strong>, se applicabili (art. 6.1.c GDPR).</li>
+    </ul>
+    <p>Il conferimento dei dati del modulo è facoltativo, ma senza di essi non possiamo risponderti.</p>
+
+    <h2>Per quanto tempo li conserviamo</h2>
+    <p>I messaggi ricevuti dal modulo sono conservati per il tempo necessario a rispondere e a gestire l'eventuale rapporto che ne nasce, e comunque non oltre [periodo, per esempio 24 mesi] dall'ultimo contatto, salvo obblighi di legge. I dati tecnici sono conservati dal fornitore dell'hosting per i tempi indicati nelle sue condizioni.</p>
+
+    <h2>Con chi li condividiamo</h2>
+    <p>I dati sono trattati da fornitori che ci aiutano a far funzionare il sito, nominati responsabili del trattamento dove previsto:</p>
+    <ul>
+      <li>Cloudflare, Inc. — hosting del sito e protezione da abusi [e verifica anti-spam del modulo, quando attivata];</li>
+      <li>Sanity AS — gestione dei contenuti e distribuzione delle immagini;</li>
+      <li>[servizio di invio email scelto per il modulo, da indicare] — consegna dei messaggi del modulo alla nostra casella di posta.</li>
+    </ul>
+    <p>I dati non sono venduti né ceduti a terzi per fini commerciali. Alcuni fornitori hanno sede fuori dallo Spazio economico europeo (in particolare negli Stati Uniti): in questi casi il trasferimento avviene sulla base di una decisione di adeguatezza, come il Data Privacy Framework, o di clausole contrattuali standard approvate dalla Commissione europea [da verificare con i contratti dei fornitori].</p>
+
+    <h2>I tuoi diritti</h2>
+    <p>Puoi chiedere in qualsiasi momento l'accesso ai tuoi dati, la rettifica, la cancellazione, la limitazione del trattamento, la portabilità e opporti al trattamento basato sul legittimo interesse (artt. 15–22 GDPR). Scrivi a <a href={`mailto:${settings.email}`}>{settings.email}</a>. Se ritieni che il trattamento violi la normativa, puoi presentare reclamo al Garante per la protezione dei dati personali (<a href="https://www.garanteprivacy.it" rel="noopener">garanteprivacy.it</a>).</p>
+
+    <h2>Processi automatizzati</h2>
+    <p>Non viene effettuata alcuna decisione basata unicamente su un trattamento automatizzato, compresa la profilazione.</p>
+
+    <h2>Link ad altri siti</h2>
+    <p>Il sito rimanda ai profili Instagram e LinkedIn dello studio. Quando li apri, la gestione dei tuoi dati dipende dalle informative di quei servizi, di cui non siamo responsabili.</p>
+
+    <h2>Modifiche a questa informativa</h2>
+    <p>Possiamo aggiornare questa pagina, per esempio se cambiano gli strumenti del sito. La data in alto indica l'ultima versione.</p>
+  </LegalText>
+</BaseLayout>
