@@ -94,7 +94,7 @@ const projectRows: ReadonlyArray<readonly [string, Project['category'], Project[
   ["Nero Giardini", 'set-design', 'fashion'],
 ];
 
-const FEATURED_TITLES = new Set([
+const FEATURED_TITLES = [
   'Lego Stadium',
   'Google Pixel 9 - Summer tour',
   'Disney - Deadpool & Wolverine - Première party',
@@ -103,7 +103,7 @@ const FEATURED_TITLES = new Set([
   'Gutteridge',
   'Ferrari',
   'EICMA - Rinascente',
-]);
+];
 
 const CAROUSEL_TITLES = [
   'Disney - Toy Story 5 - Premiere',
@@ -139,7 +139,6 @@ export const projectFixtures: Project[] = projectRows.map(([title, category, sec
   order: index + 1,
   // Il cliente vero arriva da Sanity: qui un segnaposto ricavato dal titolo.
   client: title.split(' - ')[0] ?? title,
-  featured: FEATURED_TITLES.has(title),
   cover: { width: 1600, height: 1200 },
   // Testi segnaposto dei mockup (tra parentesi quadre: non sono contenuti veri)
   intro: "[Frase di apertura: l'idea del progetto in due righe.]",
@@ -165,8 +164,9 @@ export const siteSettingsFixture: SiteSettings = {
   },
 };
 
-export const homePageFixture: Omit<HomePageData, 'carousel'> & { carouselSlugs: string[] } = {
+export const homePageFixture: Omit<HomePageData, 'carousel' | 'featured'> & { carouselSlugs: string[]; featuredSlugs: string[] } = {
   carouselSlugs: CAROUSEL_TITLES.map(slugify),
+  featuredSlugs: FEATURED_TITLES.map(slugify),
   studioSection: {
     title: 'Progettiamo spazi che rendono visibile una visione.',
     text: "Tony Pignatelli Studio è uno studio indipendente di set design, scenografia e progettazione degli spazi. Lavoriamo a partire da un'idea, da un brief o da una direzione creativa per trasformarla in uno spazio concreto, coerente e riconoscibile.",

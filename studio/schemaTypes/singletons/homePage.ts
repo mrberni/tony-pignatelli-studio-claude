@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
+import { FEATURED_LIMIT, FEATURED_MIN } from '../constants';
 import { homePageInitial } from '../initialContent';
 
 const sectionFields = [
@@ -34,6 +35,18 @@ export const homePage = defineType({
         rule.min(4).error('Servono almeno 4 progetti nel carousel.'),
         rule.max(5).error('Il carousel può contenere al massimo 5 progetti.'),
         rule.unique().error('Lo stesso progetto compare due volte nel carousel.'),
+      ],
+    }),
+    defineField({
+      name: 'featuredProjects',
+      title: 'Progetti selezionati',
+      type: 'array',
+      description: `Da ${FEATURED_MIN} a ${FEATURED_LIMIT} progetti. Compaiono in home nell'ordine di questo elenco: trascina per cambiarlo.`,
+      of: [defineArrayMember({ type: 'reference', to: [{ type: 'project' }] })],
+      validation: (rule) => [
+        rule.min(FEATURED_MIN).error(`Servono almeno ${FEATURED_MIN} progetti selezionati.`),
+        rule.max(FEATURED_LIMIT).error(`Si possono selezionare al massimo ${FEATURED_LIMIT} progetti.`),
+        rule.unique().error('Lo stesso progetto compare due volte.'),
       ],
     }),
     defineField({

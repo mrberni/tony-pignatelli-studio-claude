@@ -107,7 +107,6 @@ interface RawProject {
   category: CategoryValue;
   sector: SectorValue;
   order: number;
-  featured?: boolean | null;
   city?: string | null;
   intro?: string | null;
   description?: string | null;
@@ -119,7 +118,7 @@ interface RawProject {
 }
 
 const PROJECT_FIELDS = `{
-  "slug": slug.current, title, category, sector, order, featured, city, intro, description, services,
+  "slug": slug.current, title, category, sector, order, city, intro, description, services,
   "client": client->name,
   seo{title, description, "imageUrl": image.asset->url},
   "cover": coverImage ${IMAGE},
@@ -136,7 +135,6 @@ function toProject(raw: RawProject): Project {
     sector: raw.sector,
     order: raw.order,
     client: text(raw.client),
-    featured: raw.featured === true,
     cover: toPhoto(raw.cover, raw.title),
     gallery: (raw.gallery ?? []).filter((image) => image?.src).map((image) => toPhoto(image, raw.title)),
     services: raw.services ?? [],
@@ -162,6 +160,7 @@ interface RawHome {
   servicesSection?: { title?: string; text?: string };
   ctaQuestion?: string;
   carousel?: Array<Omit<RawProject, 'gallery'> | null> | null;
+  featuredProjects?: Array<Omit<RawProject, 'gallery'> | null> | null;
 }
 
 export async function getHomePage(): Promise<HomePageData> {
@@ -171,14 +170,19 @@ export async function getHomePage(): Promise<HomePageData> {
       studioSection, servicesSection, ctaQuestion,
       "carousel": carousel[]->{
         "slug": slug.current, title, category, sector, order, "cover": coverImage ${IMAGE}
+      },
+      "featuredProjects": featuredProjects[]->{
+        "slug": slug.current, title, category, sector, order, "cover": coverImage ${IMAGE}
       }
     }`,
   );
-  const carousel: ProjectSummary[] = (raw.carousel ?? [])
-    .filter((p): p is NonNullable<typeof p> => p !== null && p !== undefined)
-    .map((p) => toSummary(toProject({ ...p, gallery: [] })));
+  const summaries = (list: RawHome['carousel']): ProjectSummary[] =>
+    (list ?? [])
+      .filter((p): p is NonNullable<typeof p> => p !== null && p !== undefined)
+      .map((p) => toSummary(toProject({ ...p, gallery: [] })));
   return {
-    carousel,
+    carousel: summaries(raw.carousel),
+    featured: summaries(raw.featuredProjects),
     studioSection: { title: text(raw.studioSection?.title), text: text(raw.studioSection?.text) },
     servicesSection: { title: text(raw.servicesSection?.title), text: text(raw.servicesSection?.text) },
     ctaQuestion: text(raw.ctaQuestion),

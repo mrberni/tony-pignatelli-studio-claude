@@ -1,7 +1,7 @@
 import { defineArrayMember, defineField, defineType, type ValidationContext } from 'sanity';
 import { apiVersion } from '../../env';
 import { slugify } from '../../lib/slugify';
-import { CATEGORIES, FEATURED_LIMIT, SECTORS, SUGGESTED_SERVICES, labelOf } from '../constants';
+import { CATEGORIES, SECTORS, SUGGESTED_SERVICES, labelOf } from '../constants';
 
 const publishedId = (id: string | undefined) => (id ?? '').replace(/^drafts\./, '');
 
@@ -109,26 +109,6 @@ export const project = defineType({
           .warning(),
       ],
     }),
-    defineField({
-      name: 'featured',
-      title: 'In evidenza in home',
-      type: 'boolean',
-      group: 'main',
-      description: `Compare in "Progetti selezionati" in home (consigliati ${FEATURED_LIMIT}).`,
-      initialValue: false,
-      validation: (rule) =>
-        rule
-          .custom(async (value, context) => {
-            if (value !== true) return true;
-            const docs = await fetchOtherProjects(context, 'featured == true');
-            const others = new Set(docs.map((doc) => publishedId(doc._id))).size;
-            return others < FEATURED_LIMIT
-              ? true
-              : `Ci sono già ${others} progetti in evidenza. In home compaiono solo i primi ${FEATURED_LIMIT} per ordine: togli la spunta a uno degli altri.`;
-          })
-          .warning(),
-    }),
-
     defineField({
       name: 'coverImage',
       title: 'Foto di copertina',

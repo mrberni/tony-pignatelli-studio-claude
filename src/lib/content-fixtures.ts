@@ -14,6 +14,7 @@ import type {
   HomePageData,
   ClientEntry,
   Project,
+  ProjectSummary,
   ServicesPageData,
   SiteSettings,
   StudioPageData,
@@ -28,13 +29,14 @@ export async function getProjects(): Promise<Project[]> {
 }
 
 export async function getHomePage(): Promise<HomePageData> {
-  const { carouselSlugs, ...rest } = homePageFixture;
+  const { carouselSlugs, featuredSlugs, ...rest } = homePageFixture;
   const all = await getProjects();
-  const carousel = carouselSlugs
-    .map((slug) => all.find((p) => p.slug === slug))
-    .filter((p): p is Project => p !== undefined)
-    .map(toSummary);
-  return { ...rest, carousel };
+  const pick = (slugs: string[]): ProjectSummary[] =>
+    slugs
+      .map((slug) => all.find((p) => p.slug === slug))
+      .filter((p): p is Project => p !== undefined)
+      .map(toSummary);
+  return { ...rest, carousel: pick(carouselSlugs), featured: pick(featuredSlugs) };
 }
 
 /** Clienti con `showInLogoStrip = true`. */
