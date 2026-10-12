@@ -24,8 +24,9 @@ export function initMenu(): void {
       setExpanded(false);
     }),
   );
-  // Esc chiude il pannello da solo: il pulsante "Menu" deve seguire
-  dialog.addEventListener('close', () => setExpanded(false));
+  // Esc (o qualsiasi altra chiusura) chiude il pannello da solo: il pulsante "Menu" segue lo stato
+  // reale del pannello, senza dipendere dall'evento `close`, che non arriva in tutti i browser.
+  new MutationObserver(() => setExpanded(dialog.open)).observe(dialog, { attributes: true, attributeFilter: ['open'] });
 
   // Se la finestra diventa larga, il menu orizzontale riprende il suo posto
   window.matchMedia('(min-width: 641px)').addEventListener('change', (event) => {
