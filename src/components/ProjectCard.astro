@@ -5,33 +5,26 @@ import Photo from './Photo.astro';
 
 interface Props {
   project: ProjectSummary;
-  /** Posizione nello schema della griglia sfalsata (1–8, a ciclo). */
-  position?: number;
   /** Titolo da 22px in /progetti, 19px altrove. */
   size?: 'default' | 'large';
   loading?: 'eager' | 'lazy';
   sizes?: string;
-  /** Proporzione della foto (es. "4 / 5"); se manca vale quella dello slot o della foto. */
-  ratio?: string;
 }
 
 const {
   project,
-  position,
   size = 'default',
   loading = 'lazy',
   sizes = '(max-width: 640px) 100vw, (max-width: 1023px) 50vw, 40vw',
-  ratio,
 } = Astro.props;
 ---
 <a
   href={`/progetti/${project.slug}`}
   class:list={['card', { 'card--large': size === 'large' }]}
-  data-slot={position}
   data-category={project.category}
   data-sector={project.sector}
 >
-  <Photo photo={project.cover} fallbackAlt={project.title} loading={loading} sizes={sizes} {...(ratio ? { ratio } : {})} />
+  <Photo photo={project.cover} fallbackAlt={project.title} loading={loading} sizes={sizes} />
   <div class="card__text">
     <div class="card__title">{project.title}</div>
     <div class="meta card__meta">{metaLine(project)}</div>

@@ -1,70 +1,32 @@
 ---
+import { layoutMasonry, MASONRY_COLUMNS } from '../lib/masonry';
 import type { ProjectSummary } from '../lib/types';
 import ProjectCard from './ProjectCard.astro';
 
 /**
- * "Progetti selezionati" della home: 3 colonne della stessa larghezza (stile Pinterest).
- * Le foto hanno proporzioni diverse (orizzontale, verticale, quadrata) secondo una sequenza fissa,
- * ritagliate attorno al punto focale: l'effetto Pinterest senza disordine.
- * Le schede si distribuiscono al momento del build: la prossima va sempre nella colonna
- * più bassa (a parità, quella più a sinistra), così le prime tre stanno in alto, nell'ordine
- * scelto nello Studio, e le colonne restano bilanciate. Su telefono c'è una sola colonna.
+ * "Progetti selezionati" della home: 3 colonne della stessa larghezza (stile Pinterest),
+ * foto con proporzioni diverse ritagliate attorno al punto focale. Disposizione in `lib/masonry.ts`,
+ * stili in `styles/masonry.css`. Su telefono c'è una sola colonna.
  */
 interface Props { projects: ProjectSummary[] }
 const { projects } = Astro.props;
 
-const COLUMNS = 3;
-/** Proporzioni (larghezza / altezza) a ciclo, nell'ordine dell'elenco. */
-const RATIOS: ReadonlyArray<readonly [number, number]> = [
-  [3, 2], [4, 5], [1, 1], [4, 5], [3, 2], [1, 1], [4, 5], [3, 2],
-];
-// Altezza stimata del testo sotto la foto, in rapporto alla larghezza della colonna
-const TEXT_HEIGHT = 0.18;
-
-const items = projects.map((project, index) => {
-  const [w, h] = RATIOS[index % RATIOS.length] ?? [3, 2];
-  return { project, index, ratio: w / h, css: `${w} / ${h}` };
-});
-
-const heights: number[] = Array.from({ length: COLUMNS }, () => 0);
-const columns: typeof items[] = Array.from({ length: COLUMNS }, () => []);
-for (const item of items) {
-  let target = 0;
-  heights.forEach((height, i) => {
-    if (height < (heights[target] ?? 0)) target = i;
-  });
-  columns[target]?.push(item);
-  heights[target] = (heights[target] ?? 0) + 1 / item.ratio + TEXT_HEIGHT;
-}
+const slots = layoutMasonry(projects.length);
+const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
+  slots.filter((slot) => slot.column === column).flatMap((slot) => {
+    const project = projects[slot.index];
+    return project ? [{ project, slot }] : [];
+  }),
+);
 ---
-<div class="featured-grid">
+<div class="masonry">
   {columns.map((column) => (
-    <div class="featured-grid__column">
-      {column.map(({ project, index, css }) => (
-        <div class="featured-grid__item" style={`order: ${index}`}>
-          <ProjectCard
-            project={project}
-            ratio={css}
-            sizes="(max-width: 640px) 100vw, 34vw"
-          />
+    <div class="masonry__column">
+      {column.map(({ project, slot }) => (
+        <div style={`--ratio: ${slot.ratio}; order: ${slot.index}`}>
+          <ProjectCard project={project} sizes="(max-width: 640px) 100vw, 34vw" />
         </div>
       ))}
     </div>
   ))}
 </div>
-
-<style>
-  .featured-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: var(--space-4);
-    align-items: start;
-  }
-  .featured-grid__column { display: flex; flex-direction: column; gap: var(--space-6); min-width: 0; }
-
-  /* Telefono: una colonna, nell'ordine scelto nello Studio */
-  @media (max-width: 640px) {
-    .featured-grid { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-5); }
-    .featured-grid__column { display: contents; }
-  }
-</style>

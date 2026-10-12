@@ -1,5 +1,5 @@
 @import './tokens.css';
-@import './stagger.css';
+@import './masonry.css';
 
 *, *::before, *::after { box-sizing: border-box; }
 

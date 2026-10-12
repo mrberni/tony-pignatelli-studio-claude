@@ -1,0 +1,18 @@
+/*
+ * Colonne stile Pinterest (home: "Progetti selezionati"; /progetti: elenco).
+ * 3 colonne della stessa larghezza, tutte le schede con lo stesso spazio verticale.
+ * Ogni scheda porta `--ratio` (proporzione della foto) e `order` (posizione nell'elenco):
+ * su telefono le colonne si "sciolgono" e le schede si rimettono in fila nell'ordine giusto.
+ */
+.masonry {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--space-4);
+  align-items: start;
+}
+.masonry__column { display: flex; flex-direction: column; gap: var(--space-6); min-width: 0; }
+
+@media (max-width: 640px) {
+  .masonry { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-5); }
+  .masonry__column { display: contents; }
+}

@@ -1,7 +1,8 @@
+import { layoutMasonry } from '../lib/masonry';
+
 const PAGE_SIZE = 9;
 /** Distanza dalla fine dell'elenco a cui si caricano altri progetti. */
 const LOAD_MARGIN_PX = 300;
-const SLOTS = 8;
 
 interface Filters {
   category: string | null;
@@ -10,7 +11,7 @@ interface Filters {
 
 /**
  * Elenco progetti: tutte le schede sono già nell'HTML (SEO, funziona anche senza JavaScript);
- * qui si filtrano e si rivelano a blocchi di 9 con IntersectionObserver.
+ * qui si filtrano, si ridispongono nelle 3 colonne e si rivelano a blocchi di 9 con IntersectionObserver.
  * Stato dei filtri nell'URL: ?categoria=eventi&settore=fashion.
  */
 export function initProjectList(root: HTMLElement): void {
@@ -26,7 +27,8 @@ export function initProjectList(root: HTMLElement): void {
   // Dopo il controllo i riferimenti sono tutti presenti: raccolti qui, restano tipizzati nelle funzioni interne
   const ui = { grid, sectorSelect, sentinel, statusEl, countEl, emptyEl };
 
-  const cards = Array.from(ui.grid.children).filter((el): el is HTMLElement => el instanceof HTMLElement);
+  const cards = Array.from(ui.grid.querySelectorAll<HTMLElement>('[data-item]'));
+  const columns = Array.from(ui.grid.querySelectorAll<HTMLElement>('[data-column]'));
   const validCategories = new Set(categoryButtons.map((b) => b.dataset.categoryButton ?? ''));
   const validSectors = new Set(Array.from(ui.sectorSelect.options, (o) => o.value).filter(Boolean));
 
@@ -60,9 +62,14 @@ export function initProjectList(root: HTMLElement): void {
     cards.forEach((card) => {
       card.hidden = !shown.has(card);
     });
-    // Lo schema sfalsato riparte da 1 a ogni cambio di filtro: numera solo i visibili
+    // Le colonne si ridispongono a ogni cambio di filtro, solo con le schede visibili
+    const slots = layoutMasonry(shown.size);
     matching.slice(0, visible).forEach((card, i) => {
-      card.dataset.slot = String((i % SLOTS) + 1);
+      const slot = slots[i];
+      if (!slot) return;
+      card.style.setProperty('--ratio', slot.ratio);
+      card.style.order = String(i);
+      columns[slot.column]?.append(card);
     });
 
     categoryButtons.forEach((button) =>
