@@ -56,6 +56,7 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
             {column.map(({ project, slot }) => (
               <div
                 data-item
+                data-index={slot.index}
                 data-category={project.category}
                 data-sector={project.sector}
                 style={`--ratio: ${slot.ratio}; order: ${slot.index}`}

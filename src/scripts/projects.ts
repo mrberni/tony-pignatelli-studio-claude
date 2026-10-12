@@ -27,7 +27,10 @@ export function initProjectList(root: HTMLElement): void {
   // Dopo il controllo i riferimenti sono tutti presenti: raccolti qui, restano tipizzati nelle funzioni interne
   const ui = { grid, sectorSelect, sentinel, statusEl, countEl, emptyEl };
 
-  const cards = Array.from(ui.grid.querySelectorAll<HTMLElement>('[data-item]'));
+  // Nell'HTML le schede sono raggruppate per colonna: l'ordine dei progetti è `data-index`
+  const cards = Array.from(ui.grid.querySelectorAll<HTMLElement>('[data-item]')).sort(
+    (a, b) => Number(a.dataset.index) - Number(b.dataset.index),
+  );
   const columns = Array.from(ui.grid.querySelectorAll<HTMLElement>('[data-column]'));
   const validCategories = new Set(categoryButtons.map((b) => b.dataset.categoryButton ?? ''));
   const validSectors = new Set(Array.from(ui.sectorSelect.options, (o) => o.value).filter(Boolean));
