@@ -2,6 +2,7 @@
 import ProjectCard from '../../components/ProjectCard.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getProjectSummaries } from '../../lib/content';
+import { layoutMasonry, MASONRY_COLUMNS } from '../../lib/masonry';
 import { CATEGORY_LABELS, SECTOR_LABELS } from '../../lib/labels';
 import type { CategoryValue, SectorValue } from '../../lib/types';
 
@@ -11,6 +12,16 @@ const sectors = Object.entries(SECTOR_LABELS) as [SectorValue, string][];
 
 /** Quanti progetti compaiono subito: gli altri si rivelano scorrendo (stessa soglia nello script). */
 const PAGE_SIZE = 9;
+
+// Tutte le schede sono nell'HTML, già disposte in colonne (senza JavaScript si vedono tutte);
+// lo script le ridispone quando si filtra. Stessa funzione, `lib/masonry.ts`.
+const slots = layoutMasonry(projects.length);
+const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
+  slots.filter((slot) => slot.column === column).flatMap((slot) => {
+    const project = projects[slot.index];
+    return project ? [{ project, slot }] : [];
+  }),
+);
 ---
 <BaseLayout
   title="Progetti — Tony Pignatelli Studio"
@@ -39,14 +50,25 @@ const PAGE_SIZE = 9;
 
     <div class="container">
       <a href="#site-footer" class="skip-link">Vai al piè di pagina</a>
-      <div class="stagger" data-grid>
-        {projects.map((project, i) => (
-          <ProjectCard
-            project={project}
-            position={(i % 8) + 1}
-            size="large"
-            loading={i < PAGE_SIZE ? 'eager' : 'lazy'}
-          />
+      <div class="masonry grid" data-grid>
+        {columns.map((column) => (
+          <div class="masonry__column" data-column>
+            {column.map(({ project, slot }) => (
+              <div
+                data-item
+                data-category={project.category}
+                data-sector={project.sector}
+                style={`--ratio: ${slot.ratio}; order: ${slot.index}`}
+              >
+                <ProjectCard
+                  project={project}
+                  size="large"
+                  loading={slot.index < PAGE_SIZE ? 'eager' : 'lazy'}
+                  sizes="(max-width: 640px) 100vw, 34vw"
+                />
+              </div>
+            ))}
+          </div>
         ))}
       </div>
 
@@ -116,7 +138,7 @@ const PAGE_SIZE = 9;
     cursor: pointer;
   }
 
-  .stagger { padding-bottom: var(--space-5); }
+  .grid { padding-bottom: var(--space-5); }
   .skip-link { position: fixed; }
   .status { padding-block: var(--space-7) var(--space-8); text-align: center; }
   .empty { padding-block: var(--space-7); text-align: center; }
