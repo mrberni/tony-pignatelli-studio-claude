@@ -1,8 +1,8 @@
 ---
 import Cta from '../components/Cta.astro';
+import FeaturedGrid from '../components/FeaturedGrid.astro';
 import Hero from '../components/Hero.astro';
 import BrandStrip from '../components/BrandStrip.astro';
-import ProjectCard from '../components/ProjectCard.astro';
 import SectionTLC from '../components/SectionTLC.astro';
 import TextLink from '../components/TextLink.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -44,11 +44,7 @@ const organization = {
       <h2 class="label">Progetti selezionati</h2>
       <TextLink href="/progetti">Tutti i progetti</TextLink>
     </div>
-    <div class="stagger">
-      {featured.map((project, i) => (
-        <ProjectCard project={project} position={(i % 8) + 1} loading="lazy" />
-      ))}
-    </div>
+    <FeaturedGrid projects={featured} />
    </div>
   </section>
 

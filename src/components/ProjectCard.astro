@@ -11,6 +11,8 @@ interface Props {
   size?: 'default' | 'large';
   loading?: 'eager' | 'lazy';
   sizes?: string;
+  /** Proporzione della foto (es. "4 / 5"); se manca vale quella dello slot o della foto. */
+  ratio?: string;
 }
 
 const {
@@ -19,6 +21,7 @@ const {
   size = 'default',
   loading = 'lazy',
   sizes = '(max-width: 640px) 100vw, (max-width: 1023px) 50vw, 40vw',
+  ratio,
 } = Astro.props;
 ---
 <a
@@ -28,7 +31,7 @@ const {
   data-category={project.category}
   data-sector={project.sector}
 >
-  <Photo photo={project.cover} fallbackAlt={project.title} loading={loading} sizes={sizes} />
+  <Photo photo={project.cover} fallbackAlt={project.title} loading={loading} sizes={sizes} {...(ratio ? { ratio } : {})} />
   <div class="card__text">
     <div class="card__title">{project.title}</div>
     <div class="meta card__meta">{metaLine(project)}</div>
