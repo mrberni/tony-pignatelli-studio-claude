@@ -6,7 +6,10 @@ const SWIPE_MIN_PX = 40;
  */
 export function initGallery(gallery: HTMLElement): void {
   const viewer = gallery.parentElement?.querySelector<HTMLDialogElement>('[data-viewer]');
-  const items = Array.from(gallery.querySelectorAll<HTMLElement>('[data-gallery-item]'));
+  // Nell'HTML le foto sono raggruppate per colonna: il visore le scorre nell'ordine dell'elenco
+  const items = Array.from(gallery.querySelectorAll<HTMLElement>('[data-gallery-item]')).sort(
+    (a, b) => Number(a.dataset.index) - Number(b.dataset.index),
+  );
   if (!viewer || items.length === 0) return;
 
   const img = viewer.querySelector<HTMLImageElement>('[data-viewer-img]');

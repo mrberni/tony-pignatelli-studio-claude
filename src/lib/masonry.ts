@@ -1,5 +1,5 @@
 /**
- * Disposizione a colonne (stile Pinterest) di "Progetti selezionati" in home e dell'elenco in /progetti.
+ * Disposizione a colonne (stile Pinterest): "Progetti selezionati" in home, elenco in /progetti e gallerie dei singoli progetti.
  * Funzione pura, usata sia al build (HTML) sia nel browser (filtri): la scheda successiva va sempre
  * nella colonna più bassa (a parità, la più a sinistra), quindi le prime tre stanno in alto e
  * l'ordine dello Studio si legge per righe. Chi dispone le prime N schede ottiene sempre lo stesso
@@ -24,17 +24,29 @@ export interface MasonrySlot {
   ratio: string;
 }
 
-export function layoutMasonry(count: number): MasonrySlot[] {
+/** Assegna ogni scheda (con la sua proporzione larghezza / altezza) alla colonna più bassa. */
+function placeInColumns(ratios: number[]): number[] {
   const heights: number[] = Array.from({ length: MASONRY_COLUMNS }, () => 0);
-  const slots: MasonrySlot[] = [];
-  for (let index = 0; index < count; index++) {
-    const [w, h] = RATIOS[index % RATIOS.length] ?? [3, 2];
+  return ratios.map((ratio) => {
     let column = 0;
     heights.forEach((height, i) => {
       if (height < (heights[column] ?? 0)) column = i;
     });
-    heights[column] = (heights[column] ?? 0) + h / w + TEXT_HEIGHT;
-    slots.push({ index, column, ratio: `${w} / ${h}` });
-  }
-  return slots;
+    heights[column] = (heights[column] ?? 0) + 1 / ratio + TEXT_HEIGHT;
+    return column;
+  });
+}
+
+/** Elenchi di progetti: proporzioni a ciclo (foto ritagliate attorno al punto focale). */
+export function layoutMasonry(count: number): MasonrySlot[] {
+  const pairs = Array.from({ length: count }, (_, i) => RATIOS[i % RATIOS.length] ?? ([3, 2] as const));
+  const columns = placeInColumns(pairs.map(([w, h]) => w / h));
+  return pairs.map(([w, h], index) => ({ index, column: columns[index] ?? 0, ratio: `${w} / ${h}` }));
+}
+
+/** Gallerie dei progetti: proporzione reale di ogni foto (nessun ritaglio), tra 3:4 e 16:9. */
+export function layoutMasonryFor(photos: ReadonlyArray<{ width: number; height: number }>): MasonrySlot[] {
+  const ratios = photos.map((p) => Math.min(16 / 9, Math.max(3 / 4, p.width / p.height)));
+  const columns = placeInColumns(ratios);
+  return ratios.map((ratio, index) => ({ index, column: columns[index] ?? 0, ratio: `${ratio.toFixed(4)} / 1` }));
 }

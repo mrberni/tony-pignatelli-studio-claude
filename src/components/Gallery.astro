@@ -1,44 +1,55 @@
 ---
 import { buildSrcset } from '../lib/image';
-import { layoutGallery } from '../lib/gallery';
+import { layoutMasonryFor, MASONRY_COLUMNS } from '../lib/masonry';
 import type { PhotoData } from '../lib/types';
 import Photo from './Photo.astro';
 
-/** Galleria sfalsata con le proporzioni reali delle foto + visore a tutto schermo. */
+/** Galleria a 3 colonne (stile Pinterest) con le proporzioni reali delle foto + visore a tutto schermo. */
 interface Props {
   photos: PhotoData[];
   /** Testo alternativo di riserva (titolo del progetto). */
   fallbackAlt: string;
 }
 const { photos, fallbackAlt } = Astro.props;
-const items = layoutGallery(photos);
+const slots = layoutMasonryFor(photos);
+const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
+  slots.filter((slot) => slot.column === column).flatMap((slot) => {
+    const photo = photos[slot.index];
+    return photo ? [{ photo, slot }] : [];
+  }),
+);
 ---
-<div class="gallery" data-gallery>
-  {items.map((item) => {
-    const image = buildSrcset(item.photo);
-    const alt = item.photo.alt?.trim() || fallbackAlt;
-    return (
-      <button
-        type="button"
-        class={`gallery__item gallery__item--${item.orientation}`}
-        style={`--col-start: ${item.colStart}; --col-end: ${item.colEnd}; --mt: ${item.marginTop}px; --ratio-m: ${item.mobileRatio}`}
-        data-gallery-item
-        data-alt={alt}
-        data-src={image?.src ?? ''}
-        data-srcset={image?.srcset ?? ''}
-        data-width={item.photo.width}
-        data-height={item.photo.height}
-        aria-label={`Apri la foto ${item.index + 1} di ${items.length}`}
-      >
-        <Photo
-          photo={item.photo}
-          fallbackAlt={alt}
-          loading={item.index < 3 ? 'eager' : 'lazy'}
-          sizes="(max-width: 640px) 100vw, (max-width: 1023px) 50vw, 60vw"
-        />
-      </button>
-    );
-  })}
+<div class="masonry gallery" data-gallery>
+  {columns.map((column) => (
+    <div class="masonry__column">
+      {column.map(({ photo, slot }) => {
+        const image = buildSrcset(photo);
+        const alt = photo.alt?.trim() || fallbackAlt;
+        return (
+          <button
+            type="button"
+            class="gallery__item"
+            style={`--ratio: ${slot.ratio}; order: ${slot.index}`}
+            data-gallery-item
+            data-index={slot.index}
+            data-alt={alt}
+            data-src={image?.src ?? ''}
+            data-srcset={image?.srcset ?? ''}
+            data-width={photo.width}
+            data-height={photo.height}
+            aria-label={`Apri la foto ${slot.index + 1} di ${photos.length}`}
+          >
+            <Photo
+              photo={photo}
+              fallbackAlt={alt}
+              loading={slot.index < 3 ? 'eager' : 'lazy'}
+              sizes="(max-width: 640px) 100vw, 34vw"
+            />
+          </button>
+        );
+      })}
+    </div>
+  ))}
 </div>
 
 <dialog class="viewer on-dark" aria-label="Galleria fotografica" data-viewer>
@@ -60,17 +71,8 @@ const items = layoutGallery(photos);
 </script>
 
 <style is:global>
-  /* Desktop: griglia a 12 colonne, posizione e scarto da `layoutGallery` */
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--space-4);
-    row-gap: var(--space-6);
-    align-items: start;
-  }
+  /* Colonne: stili in `styles/masonry.css` */
   .gallery__item {
-    grid-column: var(--col-start) / var(--col-end);
-    margin-top: var(--mt);
     display: block;
     width: 100%;
     padding: 0;
@@ -78,22 +80,6 @@ const items = layoutGallery(photos);
     background: none;
     cursor: zoom-in;
     text-align: inherit;
-  }
-
-  /* Tablet: 2 colonne, orizzontali a tutta larghezza, verticali e quadrate a mezza */
-  @media (max-width: 1023px) {
-    .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .gallery__item { grid-column: auto; margin-top: 0; }
-    .gallery__item--wide { grid-column: 1 / -1; }
-  }
-
-  /* Mobile: 1 colonna; larghezza piena alternata a 88%; le verticali non oltre 4:5 */
-  @media (max-width: 640px) {
-    .gallery { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-5); }
-    .gallery__item { grid-column: 1; }
-    .gallery__item .photo { --ratio: var(--ratio-m); }
-    .gallery__item:nth-child(3n + 2) { width: 88%; justify-self: end; }
-    .gallery__item:nth-child(3n + 3) { width: 88%; justify-self: start; }
   }
 
   /* Visore a tutto schermo */
