@@ -29,7 +29,6 @@ export function projectFields(project: SourceProject): Record<string, unknown> {
     client: { _type: 'reference', _ref: project.clientId },
     ...(project.city ? { city: project.city } : {}),
     order: project.order,
-    featured: project.featured,
   };
 }
 
@@ -57,6 +56,11 @@ export function singletonDocuments(source: Source): SanityDoc[] {
     .sort((a, b) => a.order - b.order)
     .map((p) => ({ _type: 'reference', _key: `carousel-${p.slug}`.slice(0, 64), _ref: projectId(p) }));
 
+  const featuredProjects = source.projects
+    .filter((p) => p.featured)
+    .sort((a, b) => a.order - b.order)
+    .map((p) => ({ _type: 'reference', _key: `featured-${p.slug}`.slice(0, 64), _ref: projectId(p) }));
+
   return [
     {
       _id: 'siteSettings',
@@ -64,7 +68,7 @@ export function singletonDocuments(source: Source): SanityDoc[] {
       ...siteSettingsInitial,
       defaultSeo: { _type: 'seo', ...siteSettingsInitial.defaultSeo },
     },
-    { _id: 'homePage', _type: 'homePage', ...homePageInitial, carousel },
+    { _id: 'homePage', _type: 'homePage', ...homePageInitial, carousel, featuredProjects },
     {
       _id: 'studioPage',
       _type: 'studioPage',

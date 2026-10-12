@@ -19,6 +19,7 @@
     "import:photos:run": "node --env-file-if-exists=.env.local scripts/import-photos.ts --run",
     "import:studio-photo": "node --env-file-if-exists=.env.local scripts/import-studio-photo.ts",
     "test:worker": "node --test worker/contact.test.ts",
+    "migrate:featured": "node --env-file-if-exists=.env.local scripts/migrate-featured-list.ts",
     "import:photos:verify": "node --env-file-if-exists=.env.local scripts/import-photos.ts --verify",
     "redirects": "node scripts/generate-redirects.ts",
     "redirects:check": "node scripts/generate-redirects.ts --check"

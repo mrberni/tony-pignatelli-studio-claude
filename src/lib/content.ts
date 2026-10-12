@@ -48,8 +48,7 @@ export async function getProjectSummaries(): Promise<ProjectSummary[]> {
   return (await getProjects()).map(toSummary);
 }
 
-/** "Progetti selezionati" in home: `featured`, ordinati per `order`, al massimo 8. */
+/** "Progetti selezionati" in home: l'elenco scelto nello Studio (pagina Home), nell'ordine impostato, al massimo 8. */
 export async function getFeaturedProjects(): Promise<ProjectSummary[]> {
-  const all = await getProjects();
-  return all.filter((p) => p.featured).slice(0, 8).map(toSummary);
+  return (await getHomePage()).featured.slice(0, 8);
 }

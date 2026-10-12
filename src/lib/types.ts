@@ -40,7 +40,6 @@ export interface ProjectSummary {
 export interface Project extends ProjectSummary {
   client: string;
   city?: string;
-  featured: boolean;
   gallery: PhotoData[];
   intro?: string;
   description?: string;
@@ -71,6 +70,8 @@ export interface TitledText {
 
 export interface HomePageData {
   carousel: ProjectSummary[];
+  /** "Progetti selezionati": nell'ordine scelto nello Studio (da 4 a 8). */
+  featured: ProjectSummary[];
   studioSection: TitledText;
   servicesSection: TitledText;
   ctaQuestion: string;

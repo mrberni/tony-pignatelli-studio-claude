@@ -17,10 +17,10 @@ export async function verifyDataset(client: SanityClient): Promise<Check[]> {
     add(label, actual === expected, `${actual} (atteso ${expected})`);
 
   // Solo documenti pubblicati
-  type Project = { _id: string; title?: string; category?: string; sector?: string; order?: number; clientOk?: boolean; slug?: string; featured?: boolean };
+  type Project = { _id: string; title?: string; category?: string; sector?: string; order?: number; clientOk?: boolean; slug?: string; };
   const projects = await client.fetch<Project[]>(
     `*[_type == "project" && !(_id in path("drafts.**"))]{
-      _id, title, category, sector, order, featured, "slug": slug.current,
+      _id, title, category, sector, order, "slug": slug.current,
       "clientOk": defined(client->name)
     }`,
   );
@@ -31,7 +31,8 @@ export async function verifyDataset(client: SanityClient): Promise<Check[]> {
 
   const clients = await client.fetch<number>(`count(*[_type == "client" && !(_id in path("drafts.**"))])`);
   same('Clienti', clients, EXPECTED.clients);
-  same('Progetti in evidenza', projects.filter((p) => p.featured).length, EXPECTED.featured);
+  const featured = await client.fetch<number>(`count(*[_id == "homePage"][0].featuredProjects[]->_id)`);
+  same('Progetti selezionati in home (riferimenti validi)', featured, EXPECTED.featured);
 
   const carousel = await client.fetch<number>(`count(*[_id == "homePage"][0].carousel[]->_id)`);
   same('Progetti nel carousel (riferimenti validi)', carousel, EXPECTED.carousel);
