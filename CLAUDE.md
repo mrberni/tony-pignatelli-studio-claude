@@ -44,6 +44,9 @@ I file di configurazione vanno salvati in UTF-8 **senza BOM** (con il BOM `sanit
 ## Contenuti: Sanity o dati di prova
 Le pagine leggono tutto da `src/lib/content.ts`. Con `SANITY_DATASET` impostato i contenuti arrivano da Sanity al momento del build; senza, si usano i dati di prova di `src/lib/fixtures.ts`. Nei build di Cloudflare di un branch diverso da `main` (anteprime) il dataset è `staging` in automatico (`WORKERS_CI_BRANCH`); `main` (produzione) legge il dataset `production`, importato il 12 ottobre 2026 (63 progetti, 45 clienti, 618 foto) e impostato con `SANITY_DATASET=production` nelle variabili di build dell'ambiente Production di Cloudflare; senza quella variabile ripiega sui dati di prova. Ogni pagina ha `<meta name="content-source">` (`sanity:staging`, `sanity:production` o `fixtures`) per verificarlo. Il foglio Excel contiene in fondo una riga "Esempio di riga compilata (da non importare)": l'importatore si ferma lì.
 
+## Build automatico dalla pubblicazione in Sanity
+Un webhook di Sanity (progetto `8yzoe1bm`, dataset `production`, create/update/delete, bozze escluse, filtro sui tipi `project`, `client`, `homePage`, `studioPage`, `servicesPage`, `contactPage`, `siteSettings`) chiama un Deploy hook di Cloudflare (tps-claude → Settings → Builds → Deploy Hooks, branch `main`) che ricostruisce il sito. L'indirizzo del hook è segreto: sta solo nelle impostazioni di Sanity e di Cloudflare, mai nel repository. Il dataset `staging` non ha webhook.
+
 ## Hosting
 Il progetto Cloudflare `tps-claude` è di tipo **Workers** (Workers Builds), non Pages: gli asset statici di `dist/` sono dichiarati in `wrangler.jsonc`. Variabile di build `NODE_VERSION=24`.
 
