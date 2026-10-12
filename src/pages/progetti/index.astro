@@ -10,8 +10,8 @@ const projects = await getProjectSummaries();
 const categories = Object.entries(CATEGORY_LABELS) as [CategoryValue, string][];
 const sectors = Object.entries(SECTOR_LABELS) as [SectorValue, string][];
 
-/** Quanti progetti compaiono subito: gli altri si rivelano scorrendo (stessa soglia nello script). */
-const PAGE_SIZE = 9;
+/** Foto caricate subito (la prima riga su desktop, la prima scheda su telefono); le altre quando si avvicinano. */
+const EAGER = 3;
 
 // Tutte le schede sono nell'HTML, già disposte in colonne (senza JavaScript si vedono tutte);
 // lo script le ridispone quando si filtra. Stessa funzione, `lib/masonry.ts`.
@@ -63,7 +63,8 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
                 <ProjectCard
                   project={project}
                   size="large"
-                  loading={slot.index < PAGE_SIZE ? 'eager' : 'lazy'}
+                  loading={slot.index < EAGER ? 'eager' : 'lazy'}
+                  fetchpriority={slot.index < EAGER ? 'high' : 'auto'}
                   sizes="(max-width: 640px) 100vw, 34vw"
                 />
               </div>

@@ -8,6 +8,7 @@ interface Props {
   /** Titolo da 22px in /progetti, 19px altrove. */
   size?: 'default' | 'large';
   loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'low' | 'auto';
   sizes?: string;
 }
 
@@ -15,6 +16,7 @@ const {
   project,
   size = 'default',
   loading = 'lazy',
+  fetchpriority = 'auto',
   sizes = '(max-width: 640px) 100vw, (max-width: 1023px) 50vw, 40vw',
 } = Astro.props;
 ---
@@ -24,7 +26,7 @@ const {
   data-category={project.category}
   data-sector={project.sector}
 >
-  <Photo photo={project.cover} fallbackAlt={project.title} loading={loading} sizes={sizes} />
+  <Photo photo={project.cover} fallbackAlt={project.title} loading={loading} fetchpriority={fetchpriority} sizes={sizes} />
   <div class="card__text">
     <div class="card__title">{project.title}</div>
     <div class="meta card__meta">{metaLine(project)}</div>
