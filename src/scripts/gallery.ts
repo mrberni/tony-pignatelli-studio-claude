@@ -20,18 +20,32 @@ export function initGallery(gallery: HTMLElement): void {
   const prev = viewer.querySelector<HTMLButtonElement>('[data-viewer-prev]');
   const next = viewer.querySelector<HTMLButtonElement>('[data-viewer-next]');
   const close = viewer.querySelector<HTMLButtonElement>('[data-viewer-close]');
-  if (!img || !video || !placeholder || !count || !stage || !prev || !next || !close) return;
-  const ui = { img, video, placeholder, count, stage, prev, next, close };
+  const toggle = viewer.querySelector<HTMLButtonElement>('[data-viewer-toggle]');
+  if (!toggle || !img || !video || !placeholder || !count || !stage || !prev || !next || !close) return;
+  const ui = { toggle, img, video, placeholder, count, stage, prev, next, close };
 
   let index = 0;
   let swiped = false;
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+  const syncToggle = (): void => {
+    ui.toggle.textContent = ui.video.paused ? 'Riproduci' : 'Pausa';
+  };
+  const togglePlayback = (): void => {
+    if (ui.video.paused) void ui.video.play().catch(() => undefined);
+    else ui.video.pause();
+  };
+  ui.video.addEventListener('play', syncToggle);
+  ui.video.addEventListener('pause', syncToggle);
+  ui.video.addEventListener('click', togglePlayback);
+  ui.toggle.addEventListener('click', togglePlayback);
+
   /** Ferma il video e libera il file (si scarica solo quando serve). */
   function stopVideo(): void {
     ui.video.pause();
     ui.video.hidden = true;
+    ui.toggle.hidden = true;
     if (ui.video.hasAttribute('src')) {
       ui.video.removeAttribute('src');
       ui.video.removeAttribute('poster');
@@ -49,10 +63,17 @@ export function initGallery(gallery: HTMLElement): void {
       // Video: l'anteprima resta come poster, il file parte dopo il clic (anche con le frecce)
       ui.img.hidden = true;
       ui.placeholder.hidden = true;
+      // Sempre senza audio: nessun modo di attivarlo (niente controlli del browser)
+      ui.video.muted = true;
+      ui.video.loop = true;
+      ui.video.disablePictureInPicture = true;
+      ui.video.disableRemotePlayback = true;
       ui.video.setAttribute('aria-label', alt ?? 'Video');
       if (src) ui.video.poster = src;
       ui.video.src = videoSrc;
       ui.video.hidden = false;
+      ui.toggle.hidden = false;
+      syncToggle();
       if (!reducedMotion.matches) void ui.video.play().catch(() => undefined);
     } else if (src) {
       ui.img.hidden = false;
@@ -90,8 +111,6 @@ export function initGallery(gallery: HTMLElement): void {
   viewer.addEventListener('close', stopVideo);
 
   viewer.addEventListener('keydown', (event) => {
-    // Con il video selezionato le frecce servono a spostarsi nel video: per cambiare elemento ci sono i pulsanti
-    if (event.target === ui.video) return;
     if (event.key === 'ArrowLeft') show(index - 1);
     if (event.key === 'ArrowRight') show(index + 1);
   });
@@ -108,7 +127,7 @@ export function initGallery(gallery: HTMLElement): void {
   let tracking = false;
   viewer.addEventListener('pointerdown', (event) => {
     swiped = false;
-    if (event.target instanceof Element && event.target.closest('button, video')) return;
+    if (event.target instanceof Element && event.target.closest('button')) return;
     tracking = true;
     startX = event.clientX;
     startY = event.clientY;
