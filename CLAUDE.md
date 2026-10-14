@@ -33,6 +33,9 @@ Redirect da Wix (Fase 5): `pnpm redirects` rigenera `public/_redirects` (e contr
 ## Progetti selezionati in home
 Sono un elenco trascinabile (da 4 a 8 progetti) nella pagina **Home** dello Studio (`homePage.featuredProjects`), nell'ordine scelto lì; il campo `featured` sui progetti non esiste più. Passaggio una tantum per dataset: `pnpm migrate:featured -- --dataset staging` (riempie l'elenco con gli 8 di prima), poi `--cleanup` toglie il vecchio campo dai progetti; `production` richiede `--confirm-production`.
 
+## Video nelle gallerie dei progetti
+La galleria (`project.gallery`) accetta foto e video: nello Studio, «Aggiungi elemento» → Video (tipo `video`: file .mp4 + immagine di anteprima). Il file va su Sanity (asset `file`, servito da cdn.sanity.io, senza transcodifica: meglio .mp4 H.264 sotto i 30 MB). Nel sito il video è la sua anteprima con un segno di riproduzione; si avvia nel visore a tutto schermo (il file si scarica solo allora). Lo schema va pubblicato con `pnpm studio:deploy` (chiedere conferma).
+
 ## Modulo contatti
 `worker/` è il Worker di Cloudflare davanti al sito statico: risponde solo a `/api/contact` (`run_worker_first` in `wrangler.jsonc`), verifica Turnstile e invia la mail con Resend; non salva nulla. Test: `pnpm test:worker`. Variabile di **build** pubblica: `PUBLIC_TURNSTILE_SITE_KEY`. Segreti/variabili del **Worker** (su Cloudflare; in locale solo `.env.local`): `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`, `CONTACT_TO`, `CONTACT_FROM` (dominio verificato in Resend; senza, Resend consegna solo all'email dell'account). Senza queste variabili il Worker risponde errore e non invia.
 

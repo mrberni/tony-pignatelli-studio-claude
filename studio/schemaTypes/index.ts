@@ -2,6 +2,7 @@ import { client } from './documents/client';
 import { project } from './documents/project';
 import { photo } from './objects/photo';
 import { seo } from './objects/seo';
+import { video } from './objects/video';
 import { contactPage } from './singletons/contactPage';
 import { homePage } from './singletons/homePage';
 import { servicesPage } from './singletons/servicesPage';
@@ -18,4 +19,5 @@ export const schemaTypes = [
   siteSettings,
   seo,
   photo,
+  video,
 ];

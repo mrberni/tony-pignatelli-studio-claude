@@ -1,12 +1,15 @@
 ---
 import { buildSrcset } from '../lib/image';
 import { coverSizes, layoutMasonryFor, MASONRY_COLUMNS } from '../lib/masonry';
-import type { PhotoData } from '../lib/types';
+import type { GalleryItem } from '../lib/types';
 import Photo from './Photo.astro';
 
-/** Galleria a 3 colonne (stile Pinterest) con le proporzioni reali delle foto + visore a tutto schermo. */
+/**
+ * Galleria a 3 colonne (stile Pinterest) con le proporzioni reali delle foto + visore a tutto schermo.
+ * Un video compare come la sua immagine di anteprima con un segno di riproduzione; si avvia nel visore.
+ */
 interface Props {
-  photos: PhotoData[];
+  photos: GalleryItem[];
   /** Testo alternativo di riserva (titolo del progetto). */
   fallbackAlt: string;
 }
@@ -38,7 +41,9 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
             data-srcset={image?.srcset ?? ''}
             data-width={photo.width}
             data-height={photo.height}
-            aria-label={`Apri la foto ${slot.index + 1} di ${photos.length}`}
+            data-video-src={photo.video?.src}
+            data-video-type={photo.video?.type}
+            aria-label={`${photo.video ? 'Apri il video' : 'Apri la foto'} ${slot.index + 1} di ${photos.length}`}
           >
             <Photo
               photo={photo}
@@ -46,6 +51,11 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
               loading={slot.index < 3 ? 'eager' : 'lazy'}
               sizes={coverSizes(photo, slot.ratio)}
             />
+            {photo.video && (
+              <span class="gallery__play" aria-hidden="true">
+                <svg width="14" height="16" viewBox="0 0 14 16"><path d="M0 0l14 8-14 8z" fill="currentColor" /></svg>
+              </span>
+            )}
           </button>
         );
       })}
@@ -60,6 +70,7 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
   </div>
   <div class="viewer__stage" data-viewer-stage>
     <img class="viewer__img" alt="" data-viewer-img hidden />
+    <video class="viewer__video" controls playsinline preload="metadata" data-viewer-video hidden></video>
     <p class="meta viewer__placeholder" data-viewer-placeholder hidden></p>
   </div>
   <button type="button" class="viewer__nav viewer__nav--prev" data-viewer-prev aria-label="Foto precedente">←</button>
@@ -76,6 +87,7 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
 <style is:global>
   /* Colonne: stili in `styles/masonry.css` */
   .gallery__item {
+    position: relative;
     display: block;
     width: 100%;
     padding: 0;
@@ -83,6 +95,20 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
     background: none;
     cursor: zoom-in;
     text-align: inherit;
+  }
+
+  /* Segno di riproduzione sull'anteprima di un video: quadrato pieno, senza ombre né rotondità */
+  .gallery__play {
+    position: absolute;
+    left: var(--space-2);
+    bottom: var(--space-2);
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    background: var(--surface-inverse);
+    color: var(--ink-inverse);
+    pointer-events: none;
   }
 
   /* Visore a tutto schermo */
@@ -139,6 +165,13 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
     object-fit: contain;
     -webkit-user-drag: none;
     user-select: none;
+  }
+  .viewer__video {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    background: #000;
   }
   .viewer__placeholder { color: var(--ink-soft-inverse); text-align: center; }
   .viewer__nav {

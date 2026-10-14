@@ -13,24 +13,48 @@ export function initGallery(gallery: HTMLElement): void {
   if (!viewer || items.length === 0) return;
 
   const img = viewer.querySelector<HTMLImageElement>('[data-viewer-img]');
+  const video = viewer.querySelector<HTMLVideoElement>('[data-viewer-video]');
   const placeholder = viewer.querySelector<HTMLElement>('[data-viewer-placeholder]');
   const count = viewer.querySelector<HTMLElement>('[data-viewer-count]');
   const stage = viewer.querySelector<HTMLElement>('[data-viewer-stage]');
   const prev = viewer.querySelector<HTMLButtonElement>('[data-viewer-prev]');
   const next = viewer.querySelector<HTMLButtonElement>('[data-viewer-next]');
   const close = viewer.querySelector<HTMLButtonElement>('[data-viewer-close]');
-  if (!img || !placeholder || !count || !stage || !prev || !next || !close) return;
-  const ui = { img, placeholder, count, stage, prev, next, close };
+  if (!img || !video || !placeholder || !count || !stage || !prev || !next || !close) return;
+  const ui = { img, video, placeholder, count, stage, prev, next, close };
 
   let index = 0;
   let swiped = false;
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /** Ferma il video e libera il file (si scarica solo quando serve). */
+  function stopVideo(): void {
+    ui.video.pause();
+    ui.video.hidden = true;
+    if (ui.video.hasAttribute('src')) {
+      ui.video.removeAttribute('src');
+      ui.video.removeAttribute('poster');
+      ui.video.load();
+    }
+  }
 
   function show(target: number): void {
     index = Math.min(Math.max(target, 0), items.length - 1);
     const item = items[index];
     if (!item) return;
-    const { src, srcset, alt } = item.dataset;
-    if (src) {
+    const { src, srcset, alt, videoSrc } = item.dataset;
+    stopVideo();
+    if (videoSrc) {
+      // Video: l'anteprima resta come poster, il file parte dopo il clic (anche con le frecce)
+      ui.img.hidden = true;
+      ui.placeholder.hidden = true;
+      ui.video.setAttribute('aria-label', alt ?? 'Video');
+      if (src) ui.video.poster = src;
+      ui.video.src = videoSrc;
+      ui.video.hidden = false;
+      if (!reducedMotion.matches) void ui.video.play().catch(() => undefined);
+    } else if (src) {
       ui.img.hidden = false;
       ui.placeholder.hidden = true;
       ui.img.alt = alt ?? '';
@@ -63,8 +87,11 @@ export function initGallery(gallery: HTMLElement): void {
   ui.prev.addEventListener('click', () => show(index - 1));
   ui.next.addEventListener('click', () => show(index + 1));
   ui.close.addEventListener('click', () => viewer.close());
+  viewer.addEventListener('close', stopVideo);
 
   viewer.addEventListener('keydown', (event) => {
+    // Con il video selezionato le frecce servono a spostarsi nel video: per cambiare elemento ci sono i pulsanti
+    if (event.target === ui.video) return;
     if (event.key === 'ArrowLeft') show(index - 1);
     if (event.key === 'ArrowRight') show(index + 1);
   });
@@ -81,7 +108,7 @@ export function initGallery(gallery: HTMLElement): void {
   let tracking = false;
   viewer.addEventListener('pointerdown', (event) => {
     swiped = false;
-    if (event.target instanceof Element && event.target.closest('button')) return;
+    if (event.target instanceof Element && event.target.closest('button, video')) return;
     tracking = true;
     startX = event.clientX;
     startY = event.clientY;

@@ -124,10 +124,10 @@ export const project = defineType({
       type: 'array',
       group: 'photos',
       description:
-        'Le altre foto del progetto. Puoi trascinarne più di una insieme. L\'ordine qui è l\'ordine nel sito: trascina per cambiarlo. Non rimettere la foto di copertina.',
-      of: [defineArrayMember({ type: 'photo' })],
+        "Le altre foto e i video del progetto. Puoi trascinare più foto insieme; per un video usa «Aggiungi elemento» e scegli Video. L'ordine qui è l'ordine nel sito: trascina per cambiarlo. Non rimettere la foto di copertina.",
+      of: [defineArrayMember({ type: 'photo' }), defineArrayMember({ type: 'video' })],
       options: { layout: 'grid' },
-      validation: (rule) => rule.min(1).error('Carica almeno una foto nella galleria.'),
+      validation: (rule) => rule.min(1).error('Carica almeno una foto o un video nella galleria.'),
     }),
 
     defineField({
