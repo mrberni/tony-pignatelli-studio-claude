@@ -1,4 +1,4 @@
-import { layoutMasonry } from '../lib/masonry';
+import { coverSizes, layoutMasonry } from '../lib/masonry';
 
 const PAGE_SIZE = 9;
 /** Distanza dalla fine dell'elenco a cui si caricano altri progetti. */
@@ -71,6 +71,11 @@ export function initProjectList(root: HTMLElement): void {
       const slot = slots[i];
       if (!slot) return;
       card.style.setProperty('--ratio', slot.ratio);
+      // Con il nuovo ritaglio serve un file di larghezza diversa: aggiorna `sizes` della foto
+      const img = card.querySelector('img');
+      const width = Number(img?.getAttribute('width'));
+      const height = Number(img?.getAttribute('height'));
+      if (img && width > 0 && height > 0) img.sizes = coverSizes({ width, height }, slot.ratio);
       card.style.order = String(i);
       columns[slot.column]?.append(card);
     });

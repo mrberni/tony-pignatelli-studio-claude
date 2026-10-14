@@ -1,6 +1,6 @@
 ---
 import { buildSrcset } from '../lib/image';
-import { layoutMasonryFor, MASONRY_COLUMNS } from '../lib/masonry';
+import { coverSizes, layoutMasonryFor, MASONRY_COLUMNS } from '../lib/masonry';
 import type { PhotoData } from '../lib/types';
 import Photo from './Photo.astro';
 
@@ -43,7 +43,7 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
               photo={photo}
               fallbackAlt={alt}
               loading={slot.index < 3 ? 'eager' : 'lazy'}
-              sizes="(max-width: 640px) 100vw, 34vw"
+              sizes={coverSizes(photo, slot.ratio)}
             />
           </button>
         );
