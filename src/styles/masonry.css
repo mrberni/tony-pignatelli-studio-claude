@@ -16,3 +16,19 @@
   .masonry { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-5); }
   .masonry__column { display: contents; }
 }
+
+/*
+ * Comparsa allo scroll (`scripts/reveal.ts`): dissolvenza e piccolo movimento verso l'alto.
+ * Lo stato nascosto esiste solo se lo script ha aggiunto `reveal-on` a <html>, e non con
+ * `prefers-reduced-motion`. La transizione è sullo stato "rivelato", così il nascondere iniziale è istantaneo.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-on [data-reveal] { opacity: 0; transform: translateY(28px); }
+  .reveal-on [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) var(--reveal-delay, 0ms),
+      transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) var(--reveal-delay, 0ms);
+  }
+}

@@ -56,6 +56,7 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
             {column.map(({ project, slot }) => (
               <div
                 data-item
+                data-reveal={slot.index >= EAGER ? '' : undefined}
                 data-index={slot.index}
                 data-category={project.category}
                 data-sector={project.sector}
@@ -89,7 +90,9 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
 
 <script>
   import { initProjectList } from '../../scripts/projects';
+  import { initReveal } from '../../scripts/reveal';
   document.querySelectorAll<HTMLElement>('[data-project-list]').forEach(initProjectList);
+  initReveal();
 </script>
 
 <style>
