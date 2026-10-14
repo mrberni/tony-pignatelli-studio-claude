@@ -1,7 +1,7 @@
 import type { PhotoData } from './types';
 
 /** Larghezze del `srcset` (HANDOFF §3). */
-export const IMAGE_WIDTHS = [480, 768, 1200, 1800, 2400] as const;
+export const IMAGE_WIDTHS = [480, 640, 768, 960, 1200, 1800, 2400] as const;
 
 /** URL dell'immagine ridimensionata dal CDN di Sanity, con formato automatico. */
 export function sizedUrl(src: string, width: number): string {

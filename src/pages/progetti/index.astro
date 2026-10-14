@@ -2,7 +2,7 @@
 import ProjectCard from '../../components/ProjectCard.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getProjectSummaries } from '../../lib/content';
-import { layoutMasonry, MASONRY_COLUMNS } from '../../lib/masonry';
+import { coverSizes, layoutMasonry, MASONRY_COLUMNS } from '../../lib/masonry';
 import { CATEGORY_LABELS, SECTOR_LABELS } from '../../lib/labels';
 import type { CategoryValue, SectorValue } from '../../lib/types';
 
@@ -66,7 +66,7 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
                   size="large"
                   loading={slot.index < EAGER ? 'eager' : 'lazy'}
                   fetchpriority={slot.index < EAGER ? 'high' : 'auto'}
-                  sizes="(max-width: 640px) 100vw, 34vw"
+                  sizes={coverSizes(project.cover, slot.ratio)}
                 />
               </div>
             ))}
