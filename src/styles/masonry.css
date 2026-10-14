@@ -15,6 +15,8 @@
 @media (max-width: 640px) {
   .masonry { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-5); }
   .masonry__column { display: contents; }
+  /* Una colonna sola: nessun ritaglio, ogni foto con la sua proporzione (file più leggeri e nitidi) */
+  .masonry .photo { aspect-ratio: var(--photo-ratio); }
 }
 
 /*

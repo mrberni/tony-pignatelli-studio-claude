@@ -52,7 +52,8 @@ export function layoutMasonryFor(photos: ReadonlyArray<{ width: number; height: 
 }
 
 /**
- * `sizes` di una foto ritagliata nel riquadro con `object-fit: cover`. Se il riquadro è più alto
+ * `sizes` di una foto ritagliata nel riquadro con `object-fit: cover` (sopra i 640 px: su telefono
+ * le foto non si ritagliano e occupano la larghezza dello schermo). Se il riquadro è più alto
  * della foto (per esempio un 4:5 ricavato da un 3:2), la foto si ingrandisce per riempirlo: la
  * larghezza che serve è quella della colonna moltiplicata per (proporzione foto / proporzione
  * riquadro). Senza questo il browser sceglie un file troppo piccolo e la foto appare sfocata.
@@ -61,5 +62,5 @@ export function coverSizes(photo: { width: number; height: number }, boxRatio: s
   const [w = 1, h = 1] = boxRatio.split('/').map((part) => Number(part.trim()));
   const box = w / (h || 1);
   const factor = Math.max(1, photo.width / photo.height / box);
-  return `(max-width: 640px) ${Math.round(100 * factor)}vw, ${Math.round(columnVw * factor)}vw`;
+  return `(max-width: 640px) 100vw, ${Math.round(columnVw * factor)}vw`;
 }
