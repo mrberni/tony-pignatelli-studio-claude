@@ -27,6 +27,11 @@ export interface PhotoData {
   bg?: string;
 }
 
+/** Elemento della galleria di un progetto: una foto, oppure un video (la foto è la sua anteprima). */
+export interface GalleryItem extends PhotoData {
+  video?: { src: string; type: string };
+}
+
 /** Dati minimi per schede, carousel e navigazione precedente/successivo. */
 export interface ProjectSummary {
   slug: string;
@@ -40,7 +45,7 @@ export interface ProjectSummary {
 export interface Project extends ProjectSummary {
   client: string;
   city?: string;
-  gallery: PhotoData[];
+  gallery: GalleryItem[];
   intro?: string;
   description?: string;
   services: string[];

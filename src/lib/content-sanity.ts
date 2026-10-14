@@ -6,6 +6,7 @@ import type {
   ContactPageData,
   HomePageData,
   ClientEntry,
+  GalleryItem,
   PhotoData,
   Project,
   ProjectSummary,
@@ -27,6 +28,11 @@ const IMAGE = `{
   "height": asset->metadata.dimensions.height,
   "bg": asset->metadata.palette.dominant.background
 }`;
+
+interface RawGalleryItem extends RawImage {
+  videoSrc?: string | null;
+  videoType?: string | null;
+}
 
 interface RawImage {
   alt?: string | null;
@@ -114,7 +120,7 @@ interface RawProject {
   client?: string | null;
   seo?: { title?: string | null; description?: string | null; imageUrl?: string | null } | null;
   cover?: RawImage | null;
-  gallery?: RawImage[] | null;
+  gallery?: RawGalleryItem[] | null;
 }
 
 const PROJECT_FIELDS = `{
@@ -122,7 +128,26 @@ const PROJECT_FIELDS = `{
   "client": client->name,
   seo{title, description, "imageUrl": image.asset->url},
   "cover": coverImage ${IMAGE},
-  "gallery": gallery[] ${IMAGE}
+  "gallery": gallery[]{
+    _type == "video" => {
+      "alt": poster.alt,
+      "focal": poster.hotspot{x, y},
+      "src": poster.asset->url,
+      "width": poster.asset->metadata.dimensions.width,
+      "height": poster.asset->metadata.dimensions.height,
+      "bg": poster.asset->metadata.palette.dominant.background,
+      "videoSrc": file.asset->url,
+      "videoType": file.asset->mimeType
+    },
+    _type != "video" => {
+      alt,
+      "focal": hotspot{x, y},
+      "src": asset->url,
+      "width": asset->metadata.dimensions.width,
+      "height": asset->metadata.dimensions.height,
+      "bg": asset->metadata.palette.dominant.background
+    }
+  }
 }`;
 
 function toProject(raw: RawProject): Project {
@@ -136,7 +161,12 @@ function toProject(raw: RawProject): Project {
     order: raw.order,
     client: text(raw.client),
     cover: toPhoto(raw.cover, raw.title),
-    gallery: (raw.gallery ?? []).filter((image) => image?.src).map((image) => toPhoto(image, raw.title)),
+    gallery: (raw.gallery ?? [])
+      .filter((item) => item?.src)
+      .map((item): GalleryItem => ({
+        ...toPhoto(item, raw.title),
+        ...(item.videoSrc ? { video: { src: item.videoSrc, type: item.videoType || 'video/mp4' } } : {}),
+      })),
     services: raw.services ?? [],
     ...(raw.city ? { city: raw.city } : {}),
     ...(raw.intro ? { intro: raw.intro } : {}),
