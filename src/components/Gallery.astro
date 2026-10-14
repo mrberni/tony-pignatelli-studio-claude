@@ -31,6 +31,7 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
             class="gallery__item"
             style={`--ratio: ${slot.ratio}; order: ${slot.index}`}
             data-gallery-item
+            data-reveal
             data-index={slot.index}
             data-alt={alt}
             data-src={image?.src ?? ''}
@@ -67,7 +68,9 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
 
 <script>
   import { initGallery } from '../scripts/gallery';
+  import { initReveal } from '../scripts/reveal';
   document.querySelectorAll<HTMLElement>('[data-gallery]').forEach(initGallery);
+  initReveal();
 </script>
 
 <style is:global>
