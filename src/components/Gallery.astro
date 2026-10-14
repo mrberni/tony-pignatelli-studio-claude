@@ -6,7 +6,8 @@ import Photo from './Photo.astro';
 
 /**
  * Galleria a 3 colonne (stile Pinterest) con le proporzioni reali delle foto + visore a tutto schermo.
- * Un video compare come la sua immagine di anteprima con un segno di riproduzione; si avvia nel visore.
+ * Un video compare come la sua immagine di anteprima con un segno di riproduzione; si avvia nel visore,
+ * sempre senza audio (muto, senza controlli del browser: solo il pulsante Pausa / Riproduci).
  */
 interface Props {
   photos: GalleryItem[];
@@ -66,11 +67,12 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
 <dialog class="viewer on-dark" aria-label="Galleria fotografica" data-viewer>
   <div class="viewer__bar">
     <span class="meta viewer__count" data-viewer-count aria-live="polite"></span>
+    <button type="button" class="viewer__button" data-viewer-toggle hidden>Pausa</button>
     <button type="button" class="viewer__button" data-viewer-close>Chiudi</button>
   </div>
   <div class="viewer__stage" data-viewer-stage>
     <img class="viewer__img" alt="" data-viewer-img hidden />
-    <video class="viewer__video" controls playsinline preload="metadata" data-viewer-video hidden></video>
+    <video class="viewer__video" muted loop playsinline preload="metadata" data-viewer-video hidden></video>
     <p class="meta viewer__placeholder" data-viewer-placeholder hidden></p>
   </div>
   <button type="button" class="viewer__nav viewer__nav--prev" data-viewer-prev aria-label="Foto precedente">←</button>
@@ -167,6 +169,7 @@ const columns = Array.from({ length: MASONRY_COLUMNS }, (_, column) =>
     user-select: none;
   }
   .viewer__video {
+    cursor: pointer;
     max-width: 100%;
     max-height: 100%;
     width: auto;

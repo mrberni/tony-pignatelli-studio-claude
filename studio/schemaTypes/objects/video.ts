@@ -12,7 +12,7 @@ export const video = defineType({
       type: 'file',
       options: { accept: 'video/mp4' },
       description:
-        'Formato .mp4 (H.264). Per un sito veloce: sotto i 30 MB e ben compresso, anche in formato breve. I file molto pesanti rallentano chi guarda.',
+        'Formato .mp4 (H.264). Sul sito il video si vede SEMPRE SENZA AUDIO, senza possibilità di attivarlo (se il file ha una traccia audio, resta nel file ma non viene riprodotta). Per un sito veloce: sotto i 30 MB e ben compresso, meglio se breve: si ripete in continuazione.',
       validation: (rule) => rule.required().error('Carica un file .mp4.'),
     }),
     defineField({
