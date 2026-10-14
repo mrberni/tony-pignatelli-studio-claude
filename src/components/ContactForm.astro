@@ -3,7 +3,8 @@ import { getSiteSettings } from '../lib/content';
 
 /**
  * Modulo contatti (HANDOFF §10): solo tre campi — Nome, Email, Messaggio — più un campo
- * trappola nascosto e la verifica anti-spam Cloudflare Turnstile (chiave pubblica in
+ * trappola nascosto e la verifica anti-spam Cloudflare Turnstile, il cui script si carica solo quando
+ * il modulo si avvicina alla vista o viene toccato (`scripts/contact-form.ts`; chiave pubblica in
  * `PUBLIC_TURNSTILE_SITE_KEY`). L'invio va a `/api/contact` (`worker/`).
  */
 interface Props {
@@ -69,7 +70,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAA
     </div>
 
     {turnstileSiteKey && (
-      <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-language="it" data-theme="light"></div>
+      <div class="cf-turnstile" data-turnstile data-sitekey={turnstileSiteKey} data-language="it" data-theme="light"></div>
     )}
 
     <button type="submit" class="button" data-submit>Invia richiesta</button>
@@ -79,8 +80,6 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAA
     <p class="note">{privacyNote} <a href="/privacy" class="note__link">Privacy policy</a></p>
   </form>
 </div>
-
-{turnstileSiteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
 
 <script>
   import { initContactForm } from '../scripts/contact-form';

@@ -6,9 +6,22 @@ const MESSAGES = {
   success: 'Grazie, ti rispondiamo entro un giorno lavorativo.',
   error: 'Non siamo riusciti a inviare il messaggio. Riprova o scrivici a',
   sending: 'Invio in corso…',
+  captcha: 'Completa la verifica anti-spam qui sopra e riprova.',
 } as const;
 
 type FieldName = 'name' | 'email' | 'message';
+
+const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+
+/** Carica lo script di Turnstile una sola volta, quando serve (non rallenta il resto della pagina). */
+function loadTurnstile(): void {
+  if (document.querySelector(`script[src="${TURNSTILE_SRC}"]`)) return;
+  const script = document.createElement('script');
+  script.src = TURNSTILE_SRC;
+  script.async = true;
+  script.defer = true;
+  document.head.append(script);
+}
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -62,10 +75,12 @@ export function initContactForm(form: HTMLFormElement): void {
     return invalid;
   }
 
-  function showStatus(kind: 'success' | 'error'): void {
+  function showStatus(kind: 'success' | 'error' | 'captcha'): void {
     ui.status.replaceChildren();
     if (kind === 'success') {
       ui.status.textContent = MESSAGES.success;
+    } else if (kind === 'captcha') {
+      ui.status.textContent = MESSAGES.captcha;
     } else {
       ui.status.append(`${MESSAGES.error} `);
       const link = document.createElement('a');
@@ -74,6 +89,26 @@ export function initContactForm(form: HTMLFormElement): void {
       ui.status.append(link, '.');
     }
     ui.status.hidden = false;
+  }
+
+  // Verifica anti-spam: lo script arriva quando il modulo sta per essere visto o appena lo si tocca
+  const widget = form.querySelector('[data-turnstile]');
+  if (widget) {
+    form.addEventListener('focusin', loadTurnstile, { once: true });
+    form.addEventListener('pointerdown', loadTurnstile, { once: true });
+    if ('IntersectionObserver' in window) {
+      const watcher = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          loadTurnstile();
+          watcher.disconnect();
+        },
+        { threshold: 0.05 },
+      );
+      watcher.observe(form);
+    } else {
+      loadTurnstile();
+    }
   }
 
   // Appena si corregge un campo l'errore sparisce
@@ -93,6 +128,12 @@ export function initContactForm(form: HTMLFormElement): void {
     }
 
     const data = new FormData(form);
+    // Verifica anti-spam non ancora pronta (o non superata): si chiede di completarla, senza inviare
+    if (widget && !String(data.get('cf-turnstile-response') ?? '')) {
+      loadTurnstile();
+      showStatus('captcha');
+      return;
+    }
     // Campo trappola compilato: è un bot. Si finge un successo senza inviare nulla.
     if (String(data.get('website') ?? '') !== '') {
       showStatus('success');
