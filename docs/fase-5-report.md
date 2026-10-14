@@ -12,14 +12,16 @@ Misure del 14 ottobre 2026 sul sito pubblicato (`https://tps-claude.bernardoalme
 | Singolo progetto (Lego Stadium) | desktop | 100 | 100 | 100 | 69 | 753 | 0 | 223 | 14 |
 | Studio | mobile | 99 | 100 | 100 | 69 | 1839 | 0 | 60 | 7 |
 | Studio | desktop | 100 | 100 | 100 | 69 | 554 | 0 | 60 | 7 |
-| Contatti | mobile | 92 | 100 | 100 | 66 | 2851 | 0 | 185 | 10 |
-| Contatti | desktop | 99 | 100 | 100 | 66 | 869 | 0.002 | 183 | 10 |
+| Contatti | mobile | 100 (100/100/100) | 100 | 100 | 66 | 1597 | 0 | 51 | 6 |
+| Contatti | desktop | 100 | 100 | 100 | 66 | 648 | 0.002 | 185 | 10 |
 
 * **SEO**: l'unica prova fallita è «Pagina bloccata dall'indicizzazione» (`is-crawlable`), voluta: tutti gli indirizzi `*.workers.dev` hanno l'intestazione `X-Robots-Tag: noindex` (vedi CLAUDE.md, «SEO e indicizzazione»). Sul dominio vero la regola non si applica e il punteggio va rifatto: nelle misure su build locale, senza l'intestazione, era 100.
 
-Obiettivi di HANDOFF §9.4 (mobile: Prestazioni ≥ 95, Accessibilità 100, Best Practices ≥ 95, SEO 100): rispettati su Home, Progetti, singolo progetto e Studio. **Eccezione: Contatti mobile, 92** (in sei misure fatte in questa fase: 92, 93, 94, 95, 99, 99): il tempo di primo contenuto sale a circa 2,4 s perché la pagina carica subito lo script di verifica anti-spam di Cloudflare (Turnstile, circa 135 KB) in concorrenza con il testo. Accessibilità e Best Practices a 100 ovunque, CLS 0 (0,002 in Contatti desktop), blocco del thread (TBT) 0 ms. Peso della home su mobile: circa 520 KB.
+Obiettivi di HANDOFF §9.4 (mobile: Prestazioni ≥ 95, Accessibilità 100, Best Practices ≥ 95, SEO 100): **rispettati su tutte le pagine misurate** (il SEO, spiegato sopra, solo per il `noindex` voluto su `workers.dev`). Accessibilità e Best Practices a 100 ovunque, CLS 0 (0,002 in Contatti desktop), blocco del thread (TBT) 0 ms. Peso della home su mobile: circa 520 KB. Home mobile è a 95: al limite dell'obiettivo (tre misure, tutte 95).
 
-Cronologia delle correzioni di prestazioni di questa fase: il caricamento immediato delle prime 9 foto in Progetti mobile (94) è stato ridotto alle prime 3; la nitidezza delle foto ritagliate (PR 29) aveva fatto salire il peso (Progetti 89–92, Home 94) e su telefono le schede ora non si ritagliano più (PR 32): Progetti mobile torna a 97–99.
+Cronologia delle correzioni di prestazioni di questa fase:
+- Progetti mobile: il caricamento immediato delle prime 9 foto (94) è stato ridotto alle prime 3. La correzione della nitidezza delle foto ritagliate (PR 29) aveva poi fatto salire il peso (Progetti 89–92, Home 94); su telefono le schede ora non si ritagliano più (PR 32) e Progetti mobile torna a 97–99.
+- Contatti mobile: tra 92 e 99 in sei misure (rumore di rete, ma con un costo reale: lo script anti-spam di Cloudflare, circa 135 KB, partiva subito). Ora si carica solo quando il modulo entra in vista o lo si tocca (PR 34): peso iniziale da 183 a 51 KB, Prestazioni 100/100/100.
 
 ## Controlli automatici sul sito generato (71 pagine)
 
@@ -40,7 +42,7 @@ Note: con il layout a colonne la tabulazione scorre per colonne (dall'alto in ba
 ## Cosa NON è stato verificato
 
 - Prova con un lettore di schermo (VoiceOver, NVDA, TalkBack): non fatta.
-- Casella Turnstile con la tastiera: è una verifica anti-bot, non completabile in automatico.
+- Casella Turnstile con la tastiera e invio completo con token valido dopo il caricamento rinviato dello script (PR 34): è una verifica anti-bot, non completabile in automatico; il rinvio, il messaggio «Completa la verifica…» e l'assenza di richieste prematuri sono invece verificati.
 - Test su dispositivi reali (iPhone, Android): finora solo emulazione.
 - Tempo per aggiungere un progetto da Sanity (§14): da misurare con l'utente.
 - Misure con il dominio vero e senza `noindex` (SEO), e da rete mobile reale: da rifare al passaggio di dominio.
@@ -53,5 +55,4 @@ Note: con il layout a colonne la tabulazione scorre per colonne (dall'alto in ba
 4. **Privacy e Cookie**: bozze complete con i dati del titolare, da far rivedere a un consulente; resta tra parentesi una verifica (se Turnstile salva dati nel browser) e quella sui contratti dei fornitori extra UE. Le pagine sono ancora `noindex`.
 5. **Redirect da Wix**: 7 destinazioni ambigue restano ai valori predefiniti proposti.
 6. **Nomi da verificare**: "FOX", "Brian & Berry" (forse "Barry"), "Bixio x Paul & Shark".
-7. **Contatti → mobile**: Prestazioni 92 (obiettivo 95), per lo script Turnstile caricato subito; si migliora caricandolo solo quando il modulo si avvicina alla vista (con il rischio, da gestire, di un invio prima che sia pronto).
-8. **Dominio e DNS**: da affrontare in Fase 6.
+7. **Dominio e DNS**: da affrontare in Fase 6.
