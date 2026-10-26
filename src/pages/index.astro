@@ -1,14 +1,14 @@
 ---
 import Cta from '../components/Cta.astro';
 import Hero from '../components/Hero.astro';
-import BrandStrip from '../components/BrandStrip.astro';
+import BrandMarquee from '../components/BrandMarquee.astro';
 import ProjectList from '../components/ProjectList.astro';
 import SectionTLC from '../components/SectionTLC.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getHomePage, getStripClients, getSiteSettings } from '../lib/content';
+import { getHomePage, getSiteSettings, getStudioPage } from '../lib/content';
 import { telHref } from '../lib/site';
 
-const [settings, home, clients] = await Promise.all([getSiteSettings(), getHomePage(), getStripClients()]);
+const [settings, home, studio] = await Promise.all([getSiteSettings(), getHomePage(), getStudioPage()]);
 
 const organization = {
   '@context': 'https://schema.org',
@@ -43,7 +43,7 @@ const organization = {
     linkLabel="Scopri i servizi"
   />
 
-  <BrandStrip clients={clients} />
+  <BrandMarquee names={studio.clientNames} />
 
   <Cta question={home.ctaQuestion} />
 </BaseLayout>

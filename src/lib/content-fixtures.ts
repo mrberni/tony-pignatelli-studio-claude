@@ -2,7 +2,6 @@
 import {
   contactPageFixture,
   homePageFixture,
-  stripClientFixtures,
   projectFixtures,
   servicesPageFixture,
   siteSettingsFixture,
@@ -37,11 +36,6 @@ export async function getHomePage(): Promise<HomePageData> {
       .filter((p): p is Project => p !== undefined)
       .map(toSummary);
   return { ...rest, carousel: pick(carouselSlugs) };
-}
-
-/** Clienti con `showInLogoStrip = true`. */
-export async function getStripClients(): Promise<ClientEntry[]> {
-  return stripClientFixtures;
 }
 
 export async function getStudioPage(): Promise<StudioPageData> {

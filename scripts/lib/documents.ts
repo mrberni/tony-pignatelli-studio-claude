@@ -41,7 +41,6 @@ export function clientFields(client: SourceClient): Record<string, unknown> {
   return {
     name: client.name,
     slug: { _type: 'slug', current: client.slug },
-    showInLogoStrip: client.showInLogoStrip,
   };
 }
 

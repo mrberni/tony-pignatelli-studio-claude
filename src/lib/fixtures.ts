@@ -11,7 +11,6 @@ import {
 import type {
   ContactPageData,
   HomePageData,
-  ClientEntry,
   Project,
   ServicesPageData,
   SiteSettings,
@@ -165,21 +164,6 @@ export const homePageFixture: Omit<HomePageData, 'carousel'> & { carouselSlugs: 
   },
   ctaQuestion: 'Qual è lo spazio che vuoi raccontare?',
 };
-
-export const stripClientFixtures: ClientEntry[] = [
-  'BMW',
-  'Disney',
-  'Ferrari',
-  'Google',
-  'Lamborghini',
-  'LEGO',
-  'Miele',
-  'Missoni',
-  'Moleskine',
-  'Rinascente',
-  'Vans',
-  'Xiaomi',
-].map((name) => ({ name }));
 
 export const servicesPageFixture: ServicesPageData = servicesPageInitial;
 

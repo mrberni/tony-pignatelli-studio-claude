@@ -36,7 +36,6 @@ export const EXPECTED = {
   perCategory: { eventi: 32, vetrine: 26, 'set-design': 5 },
   clients: 45,
   carousel: 5,
-  logoStrip: 12,
 } as const;
 
 export interface SourceProject {
@@ -63,7 +62,6 @@ export interface SourceClient {
   id: string;
   logoFile: string;
   logoPath: string | undefined;
-  showInLogoStrip: boolean;
 }
 
 export interface Source {
@@ -115,7 +113,6 @@ export function loadSource(): Source {
       id: `client-${slug}`,
       logoFile,
       logoPath: candidate && existsSync(candidate) ? candidate : undefined,
-      showInLogoStrip: isYes(row['Mostra nella striscia loghi'] ?? ''),
     };
   });
   const clientByName = new Map(clients.map((c) => [c.name, c]));
@@ -189,7 +186,6 @@ export function loadSource(): Source {
   }
   count(clients.length, EXPECTED.clients, 'Clienti');
   count(projects.filter((p) => p.carousel).length, EXPECTED.carousel, 'Progetti nel carousel');
-  count(clients.filter((c) => c.showInLogoStrip).length, EXPECTED.logoStrip, 'Clienti nella striscia loghi');
 
   const orders = projects.map((p) => p.order).sort((a, b) => a - b);
   if (orders.some((order, i) => order !== i + 1)) errors.push('Ordine: non è la sequenza continua da 1 a ' + projects.length);

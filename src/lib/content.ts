@@ -17,7 +17,6 @@ const source: typeof fixtures = isSanityConfigured ? sanity : fixtures;
 export const getSiteSettings = source.getSiteSettings;
 export const getProjects = source.getProjects;
 export const getHomePage = source.getHomePage;
-export const getStripClients = source.getStripClients;
 export const getStudioPage = source.getStudioPage;
 export const getStudioClients = source.getStudioClients;
 export const getServicesPage = source.getServicesPage;
