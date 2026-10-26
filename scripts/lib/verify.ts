@@ -31,8 +31,6 @@ export async function verifyDataset(client: SanityClient): Promise<Check[]> {
 
   const clients = await client.fetch<number>(`count(*[_type == "client" && !(_id in path("drafts.**"))])`);
   same('Clienti', clients, EXPECTED.clients);
-  const featured = await client.fetch<number>(`count(*[_id == "homePage"][0].featuredProjects[]->_id)`);
-  same('Progetti selezionati in home (riferimenti validi)', featured, EXPECTED.featured);
 
   const carousel = await client.fetch<number>(`count(*[_id == "homePage"][0].carousel[]->_id)`);
   same('Progetti nel carousel (riferimenti validi)', carousel, EXPECTED.carousel);

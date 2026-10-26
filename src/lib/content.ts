@@ -47,8 +47,3 @@ export async function getNeighbors(
 export async function getProjectSummaries(): Promise<ProjectSummary[]> {
   return (await getProjects()).map(toSummary);
 }
-
-/** "Progetti selezionati" in home: l'elenco scelto nello Studio (pagina Home), nell'ordine impostato, al massimo 8. */
-export async function getFeaturedProjects(): Promise<ProjectSummary[]> {
-  return (await getHomePage()).featured.slice(0, 8);
-}

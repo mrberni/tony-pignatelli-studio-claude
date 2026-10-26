@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { getProjects } from '../lib/content';
 
 /** Pagine pubbliche indicizzabili. Escluse 404, Privacy e Cookie (segnaposto, `noindex`). */
-const STATIC_PATHS = ['/', '/progetti', '/studio', '/servizi', '/contatti'];
+const STATIC_PATHS = ['/', '/studio', '/servizi', '/contatti'];
 
 const escapeXml = (value: string): string =>
   value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

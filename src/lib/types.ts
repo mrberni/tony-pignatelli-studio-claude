@@ -75,8 +75,6 @@ export interface TitledText {
 
 export interface HomePageData {
   carousel: ProjectSummary[];
-  /** "Progetti selezionati": nell'ordine scelto nello Studio (da 4 a 8). */
-  featured: ProjectSummary[];
   studioSection: TitledText;
   servicesSection: TitledText;
   ctaQuestion: string;

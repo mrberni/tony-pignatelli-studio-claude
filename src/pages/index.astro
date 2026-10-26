@@ -1,20 +1,14 @@
 ---
 import Cta from '../components/Cta.astro';
-import FeaturedGrid from '../components/FeaturedGrid.astro';
 import Hero from '../components/Hero.astro';
 import BrandStrip from '../components/BrandStrip.astro';
+import ProjectList from '../components/ProjectList.astro';
 import SectionTLC from '../components/SectionTLC.astro';
-import TextLink from '../components/TextLink.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getFeaturedProjects, getHomePage, getStripClients, getSiteSettings } from '../lib/content';
+import { getHomePage, getStripClients, getSiteSettings } from '../lib/content';
 import { telHref } from '../lib/site';
 
-const [settings, home, featured, clients] = await Promise.all([
-  getSiteSettings(),
-  getHomePage(),
-  getFeaturedProjects(),
-  getStripClients(),
-]);
+const [settings, home, clients] = await Promise.all([getSiteSettings(), getHomePage(), getStripClients()]);
 
 const organization = {
   '@context': 'https://schema.org',
@@ -38,15 +32,7 @@ const organization = {
     linkLabel="Conosci lo studio"
   />
 
-  <section class="section section--bordered featured">
-   <div class="container">
-    <div class="featured__head">
-      <h2 class="label">Progetti selezionati</h2>
-      <TextLink href="/progetti">Tutti i progetti</TextLink>
-    </div>
-    <FeaturedGrid projects={featured} />
-   </div>
-  </section>
+  <ProjectList />
 
   <SectionTLC
     bordered
@@ -62,17 +48,3 @@ const organization = {
   <Cta question={home.ctaQuestion} />
 </BaseLayout>
 
-<style>
-  .featured { padding-bottom: var(--space-9); }
-  .featured__head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-4);
-    margin-bottom: var(--space-7);
-  }
-  @media (max-width: 640px) {
-    .featured { padding-bottom: var(--space-8); }
-    .featured__head { margin-bottom: var(--space-6); }
-  }
-</style>

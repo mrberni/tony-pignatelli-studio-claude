@@ -63,6 +63,13 @@ const settings = await getSiteSettings();
 </script>
 
 <style>
+  /* Menu sempre visibile scorrendo: la barra resta in cima, piatta (senza ombra) */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--surface-100);
+  }
   .site-header {
     display: flex;
     align-items: center;

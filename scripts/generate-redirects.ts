@@ -14,14 +14,16 @@ import { loadSource, ROOT } from './lib/source.ts';
 
 /** Pagine principali di Wix → nuove pagine. */
 const MAIN_PAGES: Array<[string, string]> = [
-  ['/work', '/progetti'],
-  ['/copia-di-work', '/progetti'],
+  ['/work', '/#progetti'],
+  ['/copia-di-work', '/#progetti'],
+  // La vecchia pagina di questo sito (provvisorio su workers.dev)
+  ['/progetti', '/#progetti'],
   ['/about', '/studio'],
   ['/what-we-do', '/servizi'],
   ['/contact', '/contatti'],
-  ['/eventi', '/progetti?categoria=eventi'],
-  ['/vetrine', '/progetti?categoria=vetrine'],
-  ['/set-design', '/progetti?categoria=set-design'],
+  ['/eventi', '/?categoria=eventi#progetti'],
+  ['/vetrine', '/?categoria=vetrine#progetti'],
+  ['/set-design', '/?categoria=set-design#progetti'],
 ];
 
 /**
@@ -33,25 +35,25 @@ const LEGACY_PAGES: Array<{ from: string; to: string; nota: string; sicuro: bool
   { from: '/moleskine-elefante', to: '/progetti/moleskine', nota: 'vetrina Moleskine, Rinascente Milano', sicuro: true },
   { from: '/missoni', to: '/progetti/missoni', nota: 'vetrina Missoni, Rinascente Milano', sicuro: true },
   { from: '/eicma', to: '/progetti/eicma-2018', nota: 'pagina "EICMA 2018"', sicuro: true },
-  { from: '/eicma-1', to: '/progetti?categoria=vetrine', nota: 'pagina "EICMA 2019 / window design": nessun progetto 2019 nel foglio', sicuro: false },
+  { from: '/eicma-1', to: '/?categoria=vetrine#progetti', nota: 'pagina "EICMA 2019 / window design": nessun progetto 2019 nel foglio', sicuro: false },
   { from: '/ferrari', to: '/progetti/ferrari', nota: 'pagina "FERRARI" (esistono anche "Ferrari - World\'s Strongest Brand")', sicuro: false },
-  { from: '/flussimaterici', to: '/progetti?categoria=vetrine', nota: '"Ferrari Flussi Materici": nessun progetto con questo nome nel foglio', sicuro: false },
+  { from: '/flussimaterici', to: '/?categoria=vetrine#progetti', nota: '"Ferrari Flussi Materici": nessun progetto con questo nome nel foglio', sicuro: false },
   { from: '/fox', to: '/progetti/fox-circus', nota: 'pagina "FOX"', sicuro: true },
   { from: '/gazzetta', to: '/progetti/rinascente-food', nota: 'pagina "FOOD RINASCENTE"', sicuro: true },
   { from: '/le-pandorine', to: '/progetti/le-pandorine', nota: 'pagina "LE PANDORINE"', sicuro: true },
   { from: '/nyx-halloween', to: '/progetti/nyx-halloween', nota: 'pagina "NYX professional makeup"', sicuro: true },
-  { from: '/paul-shark', to: '/progetti?categoria=vetrine', nota: 'vetrine Paul & Shark: nel foglio ce ne sono 7', sicuro: false },
+  { from: '/paul-shark', to: '/?categoria=vetrine#progetti', nota: 'vetrine Paul & Shark: nel foglio ce ne sono 7', sicuro: false },
   { from: '/rinascente-natale', to: '/progetti/disney-frozen', nota: 'contenuto "FROZEN / exhibitions design"', sicuro: false },
   { from: '/sneak-1', to: '/progetti/sneakerness-2019', nota: 'pagina "SNEAKERNESS"', sicuro: true },
-  { from: '/vans-box', to: '/progetti?categoria=vetrine', nota: 'vetrina Vans: nel foglio ce ne sono 5', sicuro: false },
+  { from: '/vans-box', to: '/?categoria=vetrine#progetti', nota: 'vetrina Vans: nel foglio ce ne sono 5', sicuro: false },
   { from: '/yoox', to: '/progetti/superga', nota: 'la pagina si chiama /yoox ma il contenuto è "SUPERGA / set design"', sicuro: false },
 ];
 
 /** Fallback: un vecchio indirizzo di progetto che non conosciamo porta all'elenco della categoria. */
 const CATEGORY_FALLBACKS: Array<[string, string]> = [
-  ['/eventi/*', '/progetti?categoria=eventi'],
-  ['/vetrine/*', '/progetti?categoria=vetrine'],
-  ['/set-design/*', '/progetti?categoria=set-design'],
+  ['/eventi/*', '/?categoria=eventi#progetti'],
+  ['/vetrine/*', '/?categoria=vetrine#progetti'],
+  ['/set-design/*', '/?categoria=set-design#progetti'],
 ];
 
 interface WixSitemap {
@@ -150,7 +152,7 @@ function check(): string[] {
     if (code !== '301') errors.push(`Codice non 301: ${line}`);
     if (!origin.includes('*') && origins.has(origin)) continue; // varianti identiche: la prima vince
     origins.add(origin);
-    const path = destination.split('?')[0] ?? '';
+    const path = (destination.split('#')[0] ?? '').split('?')[0] ?? '';
     const html = path === '/' ? 'index.html' : `${path.slice(1)}.html`;
     if (!existsSync(join(dist, html))) errors.push(`La destinazione non esiste in dist: ${destination} (da ${origin})`);
     if (origin === path) errors.push(`Redirect su se stesso: ${origin}`);

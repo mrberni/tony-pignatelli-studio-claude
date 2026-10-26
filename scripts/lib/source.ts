@@ -35,7 +35,6 @@ export const EXPECTED = {
   projects: 63,
   perCategory: { eventi: 32, vetrine: 26, 'set-design': 5 },
   clients: 45,
-  featured: 8,
   carousel: 5,
   logoStrip: 12,
 } as const;
@@ -47,7 +46,6 @@ export interface SourceProject {
   category: string;
   sector: string;
   city: string;
-  featured: boolean;
   carousel: boolean;
   order: number;
   clientName: string;
@@ -164,7 +162,6 @@ export function loadSource(): Source {
       category: category ?? '',
       sector: sector ?? '',
       city: (row['Città'] ?? '').trim(),
-      featured: isYes(row['In evidenza'] ?? ''),
       carousel: isYes(row['Carousel home'] ?? ''),
       order,
       clientName,
@@ -191,7 +188,6 @@ export function loadSource(): Source {
     count(projects.filter((p) => p.category === category).length, expected, `Progetti ${category}`);
   }
   count(clients.length, EXPECTED.clients, 'Clienti');
-  count(projects.filter((p) => p.featured).length, EXPECTED.featured, 'Progetti in evidenza');
   count(projects.filter((p) => p.carousel).length, EXPECTED.carousel, 'Progetti nel carousel');
   count(clients.filter((c) => c.showInLogoStrip).length, EXPECTED.logoStrip, 'Clienti nella striscia loghi');
 

@@ -1,5 +1,5 @@
 export const navItems = [
-  { label: 'Progetti', href: '/progetti' },
+  { label: 'Progetti', href: '/#progetti' },
   { label: 'Studio', href: '/studio' },
   { label: 'Servizi', href: '/servizi' },
   { label: 'Contatti', href: '/contatti' },
@@ -14,9 +14,10 @@ export function cleanPath(pathname: string): string {
   return path.length > 1 ? path.replace(/\/$/, '') : '/';
 }
 
-/** `/progetti/[slug]` evidenzia "Progetti". */
+/** "Progetti" è una sezione della home (`/#progetti`): si evidenzia nelle pagine dei singoli progetti. */
 export function isActive(href: string, currentPath: string): boolean {
   const path = cleanPath(currentPath);
+  if (href === '/#progetti') return path.startsWith('/progetti/');
   return path === href || path.startsWith(`${href}/`);
 }
 

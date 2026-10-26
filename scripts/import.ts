@@ -52,7 +52,7 @@ function printSource(source: Source): void {
   section('Foglio e CSV');
   line(`Progetti: ${projects.length}  (Eventi ${projects.filter((p) => p.category === 'eventi').length}, Vetrine ${projects.filter((p) => p.category === 'vetrine').length}, Set design ${projects.filter((p) => p.category === 'set-design').length})`);
   line(`Clienti:  ${clients.length}  (nella striscia loghi: ${clients.filter((c) => c.showInLogoStrip).length})`);
-  line(`In evidenza: ${projects.filter((p) => p.featured).length} · nel carousel: ${projects.filter((p) => p.carousel).length} · ordine: ${Math.min(...projects.map((p) => p.order))}–${Math.max(...projects.map((p) => p.order))}`);
+  line(`Nel carousel: ${projects.filter((p) => p.carousel).length} · ordine: ${Math.min(...projects.map((p) => p.order))}–${Math.max(...projects.map((p) => p.order))}`);
   line(`Titoli Wix collegati tramite URL: ${projects.filter((p) => p.wixRow).length} su ${projects.length}`);
   const renamed = projects.filter((p) => p.wixTitle && p.wixTitle !== p.title);
   line(`Titoli diversi tra foglio e Wix (normale, il foglio vale): ${renamed.length}`);
