@@ -1,0 +1,81 @@
+---
+/**
+ * Brand & partner: tutti i nomi su 4 righe che scorrono da sole in orizzontale, lente e continue,
+ * senza pause. Prima e terza riga verso destra, seconda e quarta verso sinistra.
+ * Solo CSS: ogni riga ha 4 copie dell'elenco di quella riga (la prima è l'unica letta dai lettori di
+ * schermo) e si sposta di una copia, quindi il giro si richiude senza stacchi. Con
+ * `prefers-reduced-motion` non si muove niente e i nomi vanno a capo, tutti visibili.
+ */
+interface Props { names: string[] }
+const { names } = Astro.props;
+
+const ROWS = 4;
+const COPIES = 4;
+/** Velocità in pixel al secondo (lenta) e stima della larghezza di un nome (carattere medio + spazio). */
+const SPEED_PX_S = 28;
+const CHAR_PX = 10.5;
+const GAP_PX = 56;
+
+// Nomi distribuiti a turno: ogni riga ha un po' di tutto e circa lo stesso numero di nomi
+const rows = Array.from({ length: ROWS }, (_, row) => names.filter((_, i) => i % ROWS === row)).filter((row) => row.length > 0);
+const duration = (row: string[]): number =>
+  Math.round((row.reduce((sum, name) => sum + name.length * CHAR_PX + GAP_PX, 0)) / SPEED_PX_S);
+---
+<section class="section section--bordered brands" aria-labelledby="brands-label">
+  <div class="container">
+    <h2 class="label brands__label" id="brands-label">Brand &amp; partner</h2>
+  </div>
+  <div class="brands__rows">
+    {rows.map((row, r) => (
+      <div class={`brands__row brands__row--${r % 2 === 0 ? 'right' : 'left'}`} style={`--duration: ${duration(row)}s`}>
+        <div class="brands__track">
+          {Array.from({ length: COPIES }, (_, copy) => (
+            <ul class="brands__group" aria-hidden={copy === 0 ? undefined : 'true'}>
+              {row.map((name) => <li class="brands__item">{name}</li>)}
+            </ul>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .brands__label { margin-bottom: var(--space-6); }
+  .brands__rows { display: flex; flex-direction: column; gap: var(--space-4); overflow: hidden; }
+  .brands__row { overflow: hidden; }
+  .brands__track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    animation: brands-left var(--duration) linear infinite;
+  }
+  .brands__row--right .brands__track { animation-name: brands-right; }
+
+  .brands__group { display: flex; flex: none; list-style: none; margin: 0; padding: 0; }
+  .brands__item {
+    flex: none;
+    padding-right: 56px;
+    font-size: var(--fs-body);
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+
+  /* Una copia = un quarto della pista: il giro si richiude senza stacchi */
+  @keyframes brands-left { from { transform: translateX(0); } to { transform: translateX(-25%); } }
+  @keyframes brands-right { from { transform: translateX(-25%); } to { transform: translateX(0); } }
+
+  /* Con «riduci animazioni»: niente movimento, i nomi vanno a capo e si leggono tutti */
+  @media (prefers-reduced-motion: reduce) {
+    .brands__rows { gap: 0; }
+    .brands__row { padding-inline: var(--page-pad); }
+    .brands__track { width: auto; animation: none; }
+    .brands__group { flex-wrap: wrap; row-gap: var(--space-2); }
+    .brands__group[aria-hidden='true'] { display: none; }
+  }
+  @media (max-width: 640px) {
+    .brands__label { margin-bottom: var(--space-5); }
+    .brands__rows { gap: var(--space-3); }
+  }
+</style>

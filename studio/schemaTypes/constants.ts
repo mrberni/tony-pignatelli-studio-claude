@@ -27,10 +27,6 @@ export const SUGGESTED_SERVICES = [
   'Regia',
 ] as const;
 
-/** Massimo di progetti in "Progetti selezionati" in home (minimo 4). */
-export const FEATURED_LIMIT = 8;
-export const FEATURED_MIN = 4;
-
 export const SINGLETON_TYPES = [
   'homePage',
   'studioPage',

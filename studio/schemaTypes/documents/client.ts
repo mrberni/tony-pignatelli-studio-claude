@@ -28,20 +28,12 @@ export const client = defineType({
         'Logo vettoriale ufficiale, fornito dal brand. Solo file .svg, preferibilmente monocromatico. Se manca, il sito mostra il nome in testo.',
       options: { accept: '.svg,image/svg+xml' },
     }),
-    defineField({
-      name: 'showInLogoStrip',
-      title: 'Mostra nella striscia Brand & partner',
-      type: 'boolean',
-      description: 'Se attivo, il cliente compare tra i loghi in home.',
-      initialValue: false,
-    }),
   ],
   orderings: [{ title: 'Nome (A–Z)', name: 'nameAsc', by: [{ field: 'name', direction: 'asc' }] }],
   preview: {
-    select: { title: 'name', strip: 'showInLogoStrip', logo: 'logo.asset._ref' },
-    prepare({ title, strip, logo }) {
-      const notes = [strip ? 'Nella striscia loghi' : '', logo ? '' : 'Senza logo'].filter(Boolean);
-      return { title: title || 'Senza nome', subtitle: notes.join(' · ') };
+    select: { title: 'name' },
+    prepare({ title }) {
+      return { title: title || 'Senza nome' };
     },
   },
 });

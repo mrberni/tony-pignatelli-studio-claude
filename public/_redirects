@@ -2,30 +2,31 @@
 # Redirect 301 dal vecchio sito Wix. Fonte degli indirizzi: data/wix-sitemap.json e foglio progetti.
 
 # Pagine principali
-/work /progetti 301
-/copia-di-work /progetti 301
+/work /#progetti 301
+/copia-di-work /#progetti 301
+/progetti /#progetti 301
 /about /studio 301
 /what-we-do /servizi 301
 /contact /contatti 301
-/eventi /progetti?categoria=eventi 301
-/vetrine /progetti?categoria=vetrine 301
-/set-design /progetti?categoria=set-design 301
+/eventi /?categoria=eventi#progetti 301
+/vetrine /?categoria=vetrine#progetti 301
+/set-design /?categoria=set-design#progetti 301
 
 # Vecchie pagine singole di Wix
 /moleskine-elefante /progetti/moleskine 301
 /missoni /progetti/missoni 301
 /eicma /progetti/eicma-2018 301
-/eicma-1 /progetti?categoria=vetrine 301
+/eicma-1 /?categoria=vetrine#progetti 301
 /ferrari /progetti/ferrari 301
-/flussimaterici /progetti?categoria=vetrine 301
+/flussimaterici /?categoria=vetrine#progetti 301
 /fox /progetti/fox-circus 301
 /gazzetta /progetti/rinascente-food 301
 /le-pandorine /progetti/le-pandorine 301
 /nyx-halloween /progetti/nyx-halloween 301
-/paul-shark /progetti?categoria=vetrine 301
+/paul-shark /?categoria=vetrine#progetti 301
 /rinascente-natale /progetti/disney-frozen 301
 /sneak-1 /progetti/sneakerness-2019 301
-/vans-box /progetti?categoria=vetrine 301
+/vans-box /?categoria=vetrine#progetti 301
 /yoox /progetti/superga 301
 
 # Progetti: 63 indirizzi del foglio
@@ -98,6 +99,6 @@
 /set-design/nero-giardini /progetti/nero-giardini 301
 
 # Fallback per vecchi indirizzi di progetto non elencati
-/eventi/* /progetti?categoria=eventi 301
-/vetrine/* /progetti?categoria=vetrine 301
-/set-design/* /progetti?categoria=set-design 301
+/eventi/* /?categoria=eventi#progetti 301
+/vetrine/* /?categoria=vetrine#progetti 301
+/set-design/* /?categoria=set-design#progetti 301

@@ -190,7 +190,6 @@ interface RawHome {
   servicesSection?: { title?: string; text?: string };
   ctaQuestion?: string;
   carousel?: Array<Omit<RawProject, 'gallery'> | null> | null;
-  featuredProjects?: Array<Omit<RawProject, 'gallery'> | null> | null;
 }
 
 export async function getHomePage(): Promise<HomePageData> {
@@ -199,9 +198,6 @@ export async function getHomePage(): Promise<HomePageData> {
     `{
       studioSection, servicesSection, ctaQuestion,
       "carousel": carousel[]->{
-        "slug": slug.current, title, category, sector, order, "cover": coverImage ${IMAGE}
-      },
-      "featuredProjects": featuredProjects[]->{
         "slug": slug.current, title, category, sector, order, "cover": coverImage ${IMAGE}
       }
     }`,
@@ -212,7 +208,6 @@ export async function getHomePage(): Promise<HomePageData> {
       .map((p) => toSummary(toProject({ ...p, gallery: [] })));
   return {
     carousel: summaries(raw.carousel),
-    featured: summaries(raw.featuredProjects),
     studioSection: { title: text(raw.studioSection?.title), text: text(raw.studioSection?.text) },
     servicesSection: { title: text(raw.servicesSection?.title), text: text(raw.servicesSection?.text) },
     ctaQuestion: text(raw.ctaQuestion),
@@ -220,14 +215,6 @@ export async function getHomePage(): Promise<HomePageData> {
 }
 
 // --- Elenchi di clienti (solo nomi)
-
-/** Clienti con `showInLogoStrip = true` (campo "Mostra nella striscia Brand & partner"), in ordine alfabetico. */
-export async function getStripClients(): Promise<ClientEntry[]> {
-  const rows = await query<Array<{ name: string }>>(
-    `*[_type == "client" && showInLogoStrip == true] | order(lower(name) asc){ name }`,
-  );
-  return rows.map((row) => ({ name: row.name }));
-}
 
 /** Elenco "Clienti" della pagina Studio: i nomi scritti nello Studio, nell'ordine scelto. */
 export async function getStudioClients(names: string[]): Promise<ClientEntry[]> {

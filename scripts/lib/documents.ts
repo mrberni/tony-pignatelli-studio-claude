@@ -41,7 +41,6 @@ export function clientFields(client: SourceClient): Record<string, unknown> {
   return {
     name: client.name,
     slug: { _type: 'slug', current: client.slug },
-    showInLogoStrip: client.showInLogoStrip,
   };
 }
 
@@ -56,11 +55,6 @@ export function singletonDocuments(source: Source): SanityDoc[] {
     .sort((a, b) => a.order - b.order)
     .map((p) => ({ _type: 'reference', _key: `carousel-${p.slug}`.slice(0, 64), _ref: projectId(p) }));
 
-  const featuredProjects = source.projects
-    .filter((p) => p.featured)
-    .sort((a, b) => a.order - b.order)
-    .map((p) => ({ _type: 'reference', _key: `featured-${p.slug}`.slice(0, 64), _ref: projectId(p) }));
-
   return [
     {
       _id: 'siteSettings',
@@ -68,7 +62,7 @@ export function singletonDocuments(source: Source): SanityDoc[] {
       ...siteSettingsInitial,
       defaultSeo: { _type: 'seo', ...siteSettingsInitial.defaultSeo },
     },
-    { _id: 'homePage', _type: 'homePage', ...homePageInitial, carousel, featuredProjects },
+    { _id: 'homePage', _type: 'homePage', ...homePageInitial, carousel },
     {
       _id: 'studioPage',
       _type: 'studioPage',

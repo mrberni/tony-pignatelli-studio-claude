@@ -4,6 +4,11 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; }
+/* Il menu è fisso in cima: i link a una sezione (#progetti) non finiscono sotto la barra */
+html { scroll-padding-top: var(--header-h, 76px); }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
 
 /* Menu mobile e visore foto (dialog modali) bloccano lo scorrimento della pagina */
 html:has(dialog[open]) { overflow: hidden; }

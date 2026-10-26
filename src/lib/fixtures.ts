@@ -11,7 +11,6 @@ import {
 import type {
   ContactPageData,
   HomePageData,
-  ClientEntry,
   Project,
   ServicesPageData,
   SiteSettings,
@@ -94,17 +93,6 @@ const projectRows: ReadonlyArray<readonly [string, Project['category'], Project[
   ["Nero Giardini", 'set-design', 'fashion'],
 ];
 
-const FEATURED_TITLES = [
-  'Lego Stadium',
-  'Google Pixel 9 - Summer tour',
-  'Disney - Deadpool & Wolverine - Première party',
-  'Miele - Milan Design Week',
-  'BMW - XM Launch',
-  'Gutteridge',
-  'Ferrari',
-  'EICMA - Rinascente',
-];
-
 const CAROUSEL_TITLES = [
   'Disney - Toy Story 5 - Premiere',
   'Stellantis - Installazione Milano Cortina',
@@ -164,9 +152,8 @@ export const siteSettingsFixture: SiteSettings = {
   },
 };
 
-export const homePageFixture: Omit<HomePageData, 'carousel' | 'featured'> & { carouselSlugs: string[]; featuredSlugs: string[] } = {
+export const homePageFixture: Omit<HomePageData, 'carousel'> & { carouselSlugs: string[] } = {
   carouselSlugs: CAROUSEL_TITLES.map(slugify),
-  featuredSlugs: FEATURED_TITLES.map(slugify),
   studioSection: {
     title: 'Progettiamo spazi che rendono visibile una visione.',
     text: "Tony Pignatelli Studio è uno studio indipendente di set design, scenografia e progettazione degli spazi. Lavoriamo a partire da un'idea, da un brief o da una direzione creativa per trasformarla in uno spazio concreto, coerente e riconoscibile.",
@@ -177,21 +164,6 @@ export const homePageFixture: Omit<HomePageData, 'carousel' | 'featured'> & { ca
   },
   ctaQuestion: 'Qual è lo spazio che vuoi raccontare?',
 };
-
-export const stripClientFixtures: ClientEntry[] = [
-  'BMW',
-  'Disney',
-  'Ferrari',
-  'Google',
-  'Lamborghini',
-  'LEGO',
-  'Miele',
-  'Missoni',
-  'Moleskine',
-  'Rinascente',
-  'Vans',
-  'Xiaomi',
-].map((name) => ({ name }));
 
 export const servicesPageFixture: ServicesPageData = servicesPageInitial;
 

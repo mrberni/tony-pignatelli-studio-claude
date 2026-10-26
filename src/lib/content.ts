@@ -17,7 +17,6 @@ const source: typeof fixtures = isSanityConfigured ? sanity : fixtures;
 export const getSiteSettings = source.getSiteSettings;
 export const getProjects = source.getProjects;
 export const getHomePage = source.getHomePage;
-export const getStripClients = source.getStripClients;
 export const getStudioPage = source.getStudioPage;
 export const getStudioClients = source.getStudioClients;
 export const getServicesPage = source.getServicesPage;
@@ -46,9 +45,4 @@ export async function getNeighbors(
 /** Tutti i progetti, dal più recente (pagina /progetti). */
 export async function getProjectSummaries(): Promise<ProjectSummary[]> {
   return (await getProjects()).map(toSummary);
-}
-
-/** "Progetti selezionati" in home: l'elenco scelto nello Studio (pagina Home), nell'ordine impostato, al massimo 8. */
-export async function getFeaturedProjects(): Promise<ProjectSummary[]> {
-  return (await getHomePage()).featured.slice(0, 8);
 }
