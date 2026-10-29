@@ -1,27 +1,28 @@
 # Fase 5 — Relazione di verifica
 
-Misure del 14 ottobre 2026 sul sito pubblicato (`https://tps-claude.bernardoalmeida3.workers.dev`, contenuti di `production`: 63 progetti con foto), dopo tutte le modifiche di layout, animazioni e nitidezza delle foto (PR fino alla 32), con Lighthouse in Chrome headless da un PC (mobile = profilo predefinito, con DPR 1,75 e CPU rallentata; desktop = `--preset=desktop`). Per Home e Progetti su mobile, tre misure: il valore in tabella è quello mediano, tra parentesi le tre.
+Misure del 29 ottobre 2026 sul sito pubblicato (`https://tps-claude.bernardoalmeida3.workers.dev`, contenuti di `production`: 67 progetti con foto), dopo la ristrutturazione della home (sezione Progetti con filtri e tutti i progetti, menu fisso, brand scorrevoli, domanda finale centrata) e le animazioni, con Lighthouse in Chrome headless da un PC (mobile = profilo predefinito, con DPR 1,75 e CPU rallentata; desktop = `--preset=desktop`). Su mobile tre misure per pagina: in tabella la mediana, tra parentesi le tre. La pagina `/progetti` non esiste più (la sezione Progetti è nella home, quindi inclusa nella misura della Home).
 
 | Pagina | Dispositivo | Prestazioni | Accessibilità | Best Practices | SEO* | LCP (ms) | CLS | Peso (KB) | Richieste |
 |---|---|---|---|---|---|---|---|---|---|
-| Home | mobile | 95 (95/95/95) | 100 | 100 | 69 | 2790 | 0 | 518 | 22 |
-| Home | desktop | 99 | 100 | 100 | 69 | 844 | 0 | 1070 | 24 |
-| Progetti | mobile | 98 (98/97/99) | 100 | 100 | 69 | 2316 | 0 | 504 | 21 |
-| Progetti | desktop | 100 | 100 | 100 | 69 | 737 | 0 | 965 | 33 |
-| Singolo progetto (Lego Stadium) | mobile | 97 | 100 | 100 | 69 | 2618 | 0 | 249 | 14 |
-| Singolo progetto (Lego Stadium) | desktop | 100 | 100 | 100 | 69 | 753 | 0 | 223 | 14 |
-| Studio | mobile | 99 | 100 | 100 | 69 | 1839 | 0 | 60 | 7 |
-| Studio | desktop | 100 | 100 | 100 | 69 | 554 | 0 | 60 | 7 |
-| Contatti | mobile | 100 (100/100/100) | 100 | 100 | 66 | 1597 | 0 | 51 | 6 |
-| Contatti | desktop | 100 | 100 | 100 | 66 | 648 | 0.002 | 185 | 10 |
+| Home (con la sezione Progetti) | mobile | 96 (95/96/97) | 100 | 100 | 69 | 2701 | 0 | 462 | 21 |
+| Home (con la sezione Progetti) | desktop | 99 | 100 | 100 | 69 | 931 | 0 | 1334 | 33 |
+| Singolo progetto (Lego Stadium) | mobile | 98 (97/98/98) | 100 | 100 | 69 | 2379 | 0 | 250 | 14 |
+| Singolo progetto (Lego Stadium) | desktop | 99 | 100 | 100 | 69 | 884 | 0 | 223 | 14 |
+| Studio | mobile | 100 (100/100/100) | 100 | 100 | 69 | 1881 | 0 | 60 | 7 |
+| Studio | desktop | 100 | 100 | 100 | 69 | 650 | 0 | 60 | 7 |
+| Servizi | mobile | 100 (100/100/100) | 100 | 100 | 66 | 873 | 0 | 49 | 6 |
+| Servizi | desktop | 100 | 100 | 100 | 66 | 270 | 0 | 50 | 6 |
+| Contatti | mobile | 100 (100/100/100) | 100 | 100 | 66 | 905 | 0 | 51 | 6 |
+| Contatti | desktop | 100 | 100 | 100 | 66 | 563 | 0.002 | 278 | 10 |
 
 * **SEO**: l'unica prova fallita è «Pagina bloccata dall'indicizzazione» (`is-crawlable`), voluta: tutti gli indirizzi `*.workers.dev` hanno l'intestazione `X-Robots-Tag: noindex` (vedi CLAUDE.md, «SEO e indicizzazione»). Sul dominio vero la regola non si applica e il punteggio va rifatto: nelle misure su build locale, senza l'intestazione, era 100.
 
-Obiettivi di HANDOFF §9.4 (mobile: Prestazioni ≥ 95, Accessibilità 100, Best Practices ≥ 95, SEO 100): **rispettati su tutte le pagine misurate** (il SEO, spiegato sopra, solo per il `noindex` voluto su `workers.dev`). Accessibilità e Best Practices a 100 ovunque, CLS 0 (0,002 in Contatti desktop), blocco del thread (TBT) 0 ms. Peso della home su mobile: circa 520 KB. Home mobile è a 95: al limite dell'obiettivo (tre misure, tutte 95).
+Obiettivi di HANDOFF §9.4 (mobile: Prestazioni ≥ 95, Accessibilità 100, Best Practices ≥ 95, SEO 100): **rispettati su tutte le pagine misurate** (il SEO, spiegato sopra, solo per il `noindex` voluto su `workers.dev`). Home mobile: 95/96/97, la più bassa ma dentro l'obiettivo, con tutti i 67 progetti nell'HTML (le foto si caricano solo quando si avvicinano). Accessibilità e Best Practices a 100 ovunque, CLS 0 (0,002 in Contatti desktop), blocco del thread (TBT) tra 0 e 12 ms. Peso della Home: circa 460 KB su mobile e 1,3 MB su desktop (più foto in vista).
 
 Cronologia delle correzioni di prestazioni di questa fase:
 - Progetti mobile: il caricamento immediato delle prime 9 foto (94) è stato ridotto alle prime 3. La correzione della nitidezza delle foto ritagliate (PR 29) aveva poi fatto salire il peso (Progetti 89–92, Home 94); su telefono le schede ora non si ritagliano più (PR 32) e Progetti mobile torna a 97–99.
 - Contatti mobile: tra 92 e 99 in sei misure (rumore di rete, ma con un costo reale: lo script anti-spam di Cloudflare, circa 135 KB, partiva subito). Ora si carica solo quando il modulo entra in vista o lo si tocca (PR 34): peso iniziale da 183 a 51 KB, Prestazioni 100/100/100.
+- Home: la ristrutturazione (tutti i progetti nella home, brand scorrevoli) non ha peggiorato i numeri: mobile 95–97 con 67 progetti nella pagina.
 
 ## Controlli automatici sul sito generato (71 pagine)
 
@@ -49,7 +50,7 @@ Note: con il layout a colonne la tabulazione scorre per colonne (dall'alto in ba
 
 ## Difetti noti e lavoro rimasto
 
-1. **Foto**: 103 foto sotto gli 800 px di larghezza (limite di Wix); la foto dello Studio è 600×397 px e va sostituita.
+1. **Foto a bassa risoluzione** (controllo del 22 ottobre su `production`): su 636 foto di galleria, 44 sono sotto i 1000 px sul lato lungo (da sostituire) e 152 tra 1000 e 1599 px; 28 copertine su 66 sono sotto i 2000 px (le copertine occupano tutta la larghezza); la foto dello Studio è 600×397 px. I progetti più colpiti: EICMA - 2018, Rinascente - Food, IO Donna, Paul & Shark - Cortina, Disney - Frozen, Missoni, EICMA - Rinascente. Da ripetere dopo la sostituzione delle foto.
 2. **Testi dei progetti** (`intro`, `description`, `services`): ancora da scrivere.
 3. **Modulo contatti**: funziona (Worker, Turnstile, Resend) solo sull'indirizzo di produzione; consegna soltanto a `bernardo@tonypignatellistudio.com` finché il dominio non è verificato in Resend (poi `CONTACT_FROM` e `CONTACT_TO=tony@…`, e il dominio vero nel widget Turnstile). Le anteprime dei branch non vedono i segreti e non inviano.
 4. **Privacy e Cookie**: bozze complete con i dati del titolare, da far rivedere a un consulente; resta tra parentesi una verifica (se Turnstile salva dati nel browser) e quella sui contratti dei fornitori extra UE. Le pagine sono ancora `noindex`.
