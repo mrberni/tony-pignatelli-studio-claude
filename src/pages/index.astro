@@ -5,10 +5,11 @@ import BrandMarquee from '../components/BrandMarquee.astro';
 import ProjectList from '../components/ProjectList.astro';
 import SectionTLC from '../components/SectionTLC.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getHomePage, getSiteSettings, getStudioPage } from '../lib/content';
+import { getHomePage, getSiteSettings, getStudioClients, getStudioPage } from '../lib/content';
 import { telHref } from '../lib/site';
 
 const [settings, home, studio] = await Promise.all([getSiteSettings(), getHomePage(), getStudioPage()]);
+const brands = await getStudioClients(studio.clientNames);
 
 const organization = {
   '@context': 'https://schema.org',
@@ -43,7 +44,7 @@ const organization = {
     linkLabel="Scopri i servizi"
   />
 
-  <BrandMarquee names={studio.clientNames} />
+  <BrandMarquee names={brands.map((brand) => brand.name)} />
 
   <Cta question={home.ctaQuestion} />
 </BaseLayout>
