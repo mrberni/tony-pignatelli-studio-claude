@@ -505,7 +505,7 @@ Testi esatti dei mockup, da usare come valori iniziali nei singleton Sanity. Il 
 
 ### Home
 - Link hero: **Esplora i progetti ↗**
-- **Lo studio** — H2: *Progettiamo spazi che rendono visibile una visione.* Testo: *Tony Pignatelli Studio è uno studio indipendente di set design, scenografia e progettazione degli spazi. Lavoriamo a partire da un'idea, da un brief o da una direzione creativa per trasformarla in uno spazio concreto, coerente e riconoscibile.* Link: **Conosci lo studio ↗**
+- **Lo studio** — H2: *Progettiamo spazi che rendono concreta una visione.* Testo: *Tony Pignatelli Studio è uno studio indipendente di set design, scenografia e progettazione degli spazi. Lavoriamo a partire da un'idea, da un brief o da una direzione creativa per sviluppare uno spazio concreto, coerente e riconoscibile.* Link: **Conosci lo studio ↗**
 - **Progetti selezionati** — link: **Tutti i progetti ↗**
 - **Servizi** — H2: *Dal concept alla realizzazione.* Testo: *Concept design, set design e scenografia per eventi, brand experience, allestimenti e progetti speciali.* Link: **Scopri i servizi ↗**
 - **Brand & partner** (solo etichetta; i loghi vengono dai clienti).

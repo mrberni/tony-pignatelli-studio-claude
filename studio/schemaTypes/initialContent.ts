@@ -23,8 +23,8 @@ export const siteSettingsInitial = {
 
 export const homePageInitial = {
   studioSection: {
-    title: 'Progettiamo spazi che rendono visibile una visione.',
-    text: "Tony Pignatelli Studio è uno studio indipendente di set design, scenografia e progettazione degli spazi. Lavoriamo a partire da un'idea, da un brief o da una direzione creativa per trasformarla in uno spazio concreto, coerente e riconoscibile.",
+    title: 'Progettiamo spazi che rendono concreta una visione.',
+    text: "Tony Pignatelli Studio è uno studio indipendente di set design, scenografia e progettazione degli spazi. Lavoriamo a partire da un'idea, da un brief o da una direzione creativa per sviluppare uno spazio concreto, coerente e riconoscibile.",
   },
   servicesSection: {
     title: 'Dal concept alla realizzazione.',
