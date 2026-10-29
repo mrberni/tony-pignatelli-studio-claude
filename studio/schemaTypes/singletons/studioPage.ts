@@ -42,7 +42,7 @@ export const studioPage = defineType({
       title: 'Elenco "Clienti"',
       type: 'array',
       description:
-        'I nomi che compaiono nella sezione Clienti di questa pagina. È un elenco separato dai clienti collegati ai progetti. Trascina per riordinare.',
+        "I nomi che compaiono nella sezione Clienti di questa pagina e tra i brand scorrevoli della home, nell'ordine di questo elenco. Anche i clienti creati in «Clienti» compaiono da soli (in coda, in ordine alfabetico, se non sono già qui): usa questo elenco solo per scegliere l'ordine o per nomi senza un progetto. Trascina per riordinare.",
       of: [defineArrayMember({ type: 'string' })],
       validation: (rule) => rule.unique().error('Lo stesso nome compare due volte.'),
     }),

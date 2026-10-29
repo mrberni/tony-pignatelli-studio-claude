@@ -216,9 +216,29 @@ export async function getHomePage(): Promise<HomePageData> {
 
 // --- Elenchi di clienti (solo nomi)
 
-/** Elenco "Clienti" della pagina Studio: i nomi scritti nello Studio, nell'ordine scelto. */
+/** Chiave per riconoscere lo stesso nome scritto in modo diverso (maiuscole, accenti, punteggiatura). */
+const nameKey = (name: string): string =>
+  name.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+/**
+ * Tutti i brand: prima i nomi scritti nell'elenco "Clienti" della pagina Studio (nell'ordine scelto),
+ * poi i clienti creati come documenti (in ordine alfabetico) che non sono già nell'elenco.
+ * Così un cliente nuovo compare da solo in home e nella pagina Studio.
+ */
 export async function getStudioClients(names: string[]): Promise<ClientEntry[]> {
-  return names.map((name) => ({ name }));
+  const docs = await query<Array<{ name: string }>>(
+    `*[_type == "client" && defined(name)] | order(lower(name) asc){ name }`,
+  );
+  const seen = new Set<string>();
+  const all: ClientEntry[] = [];
+  for (const name of [...names, ...docs.map((doc) => doc.name)]) {
+    const clean = name.trim();
+    const key = nameKey(clean);
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    all.push({ name: clean });
+  }
+  return all;
 }
 
 // --- Studio, Servizi, Contatti
