@@ -1,7 +1,10 @@
 ---
 import type { ClientEntry } from '../lib/types';
 
-/** Elenco "Clienti" della pagina Studio: i nomi in testo, su 6 colonne (3 su tablet, 2 su telefono). */
+/**
+ * Elenco "Clienti" della pagina Studio: i nomi in testo, su 6 colonne (3 su tablet, 2 su telefono).
+ * L'ordine alfabetico scende lungo le colonne (come un elenco), non lungo le righe.
+ */
 interface Props { clients: ClientEntry[] }
 const { clients } = Astro.props;
 ---
@@ -16,16 +19,16 @@ const { clients } = Astro.props;
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: var(--space-4);
+    column-count: 6;
+    column-gap: var(--space-4);
     font-size: var(--fs-body);
     line-height: 1.5;
   }
+  .clients li { break-inside: avoid; padding-bottom: var(--space-4); }
   @media (max-width: 1023px) {
-    .clients { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .clients { column-count: 3; }
   }
   @media (max-width: 640px) {
-    .clients { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .clients { column-count: 2; }
   }
 </style>
