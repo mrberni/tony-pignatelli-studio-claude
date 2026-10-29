@@ -7,7 +7,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getSiteSettings, getStudioClients, getStudioPage } from '../lib/content';
 
 const [settings, page] = await Promise.all([getSiteSettings(), getStudioPage()]);
-const clients = await getStudioClients(page.clientNames);
+// Elenco dei brand in ordine alfabetico (senza badare a maiuscole e accenti)
+const clients = (await getStudioClients(page.clientNames)).sort((a, b) =>
+  a.name.localeCompare(b.name, 'it', { sensitivity: 'base', ignorePunctuation: true }),
+);
 
 const title = `${page.seo?.title ?? 'Studio'} — ${settings.studioName}`;
 const description = page.seo?.description ?? page.intro.text1;
