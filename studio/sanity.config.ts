@@ -1,7 +1,6 @@
 import { itITLocale } from '@sanity/locale-it-it';
 import { defineConfig, type WorkspaceOptions } from 'sanity';
 import { structureTool } from 'sanity/structure';
-import { moveToTop } from './actions/moveToTop';
 import { projectId } from './env';
 import { schemaTypes } from './schemaTypes';
 import { SINGLETON_TYPES } from './schemaTypes/constants';
@@ -27,7 +26,7 @@ const workspace = (name: string, title: string, dataset: string): WorkspaceOptio
       if (singletonTypes.has(schemaType)) {
         return actions.filter(({ action }) => action && singletonActions.has(action));
       }
-      return schemaType === 'project' ? [...actions, moveToTop] : actions;
+      return actions;
     },
     newDocumentOptions: (items) => items.filter(({ templateId }) => !singletonTypes.has(templateId)),
   },

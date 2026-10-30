@@ -1,25 +1,7 @@
-import { defineArrayMember, defineField, defineType, type ValidationContext } from 'sanity';
-import { apiVersion } from '../../env';
+import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list';
+import { defineArrayMember, defineField, defineType } from 'sanity';
 import { slugify } from '../../lib/slugify';
 import { CATEGORIES, SECTORS, SUGGESTED_SERVICES, labelOf } from '../constants';
-
-const publishedId = (id: string | undefined) => (id ?? '').replace(/^drafts\./, '');
-
-/** Gli altri progetti (bozze comprese) che soddisfano `filter`, escluso quello aperto. */
-function fetchOtherProjects(
-  context: ValidationContext,
-  filter: string,
-  params: Record<string, unknown> = {},
-): Promise<Array<{ _id: string; title?: string }>> {
-  const id = publishedId(context.document?._id);
-  return context
-    .getClient({ apiVersion })
-    .withConfig({ perspective: 'raw' })
-    .fetch(
-      `*[_type == "project" && ${filter} && !(_id in [$id, "drafts." + $id])]{_id, title}`,
-      { ...params, id },
-    );
-}
 
 export const project = defineType({
   name: 'project',
@@ -84,31 +66,11 @@ export const project = defineType({
       group: 'main',
       description: 'Facoltativo. Esempio: "Milano". Compare alla voce "Luogo" nella pagina del progetto.',
     }),
-    defineField({
-      name: 'order',
-      title: 'Ordine',
-      type: 'number',
-      group: 'main',
-      description:
-        '1 = il lavoro più recente. Decide la posizione nell\'elenco dei progetti e i link "Precedente" e "Successivo".',
-      validation: (rule) => [
-        rule
-          .required()
-          .integer()
-          .min(1)
-          .error('Inserisci un numero intero, da 1 in su.'),
-        rule
-          .custom(async (value, context) => {
-            if (typeof value !== 'number') return true;
-            const others = await fetchOtherProjects(context, 'order == $order', { order: value });
-            const titles = [...new Set(others.map((doc) => doc.title || 'Senza titolo'))];
-            return titles.length === 0
-              ? true
-              : `Questo numero è già usato da: ${titles.join(', ')}. Due progetti con lo stesso numero finiscono in ordine casuale.`;
-          })
-          .warning(),
-      ],
-    }),
+    // Posizione nell'elenco: si cambia trascinando i progetti in «Progetti» (primo = più in alto in home).
+    // Nuovi progetti: in cima. Il campo è nascosto.
+    orderRankField({ type: 'project', newItemPosition: 'before' }),
+    // Vecchio numero d'ordine: non più usato (l'ordine è `orderRank`); resta nascosto per i documenti già esistenti.
+    defineField({ name: 'order', title: 'Ordine (vecchio numero)', type: 'number', hidden: true, readOnly: true }),
     defineField({
       name: 'coverImage',
       title: 'Foto di copertina',
@@ -174,16 +136,16 @@ export const project = defineType({
     }),
   ],
   orderings: [
-    { title: 'Ordine (più recente prima)', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] },
+    orderRankOrdering,
     { title: 'Titolo (A–Z)', name: 'titleAsc', by: [{ field: 'title', direction: 'asc' }] },
   ],
   preview: {
-    select: { title: 'title', category: 'category', sector: 'sector', order: 'order', media: 'coverImage' },
-    prepare({ title, category, sector, order, media }) {
+    select: { title: 'title', category: 'category', sector: 'sector', media: 'coverImage' },
+    prepare({ title, category, sector, media }) {
       const meta = [labelOf(CATEGORIES, category), labelOf(SECTORS, sector)].filter(Boolean).join(' · ');
       return {
         title: title || 'Senza titolo',
-        subtitle: [typeof order === 'number' ? `${order}.` : '', meta].filter(Boolean).join(' '),
+        subtitle: meta,
         media,
       };
     },

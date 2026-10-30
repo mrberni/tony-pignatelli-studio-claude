@@ -1,6 +1,6 @@
 /** Sorgente Sanity: query GROQ al momento del build (documenti pubblicati). */
 import { query, sanityDataset } from './sanity';
-import { byOrder, toSummary } from './project-utils';
+import { toSummary } from './project-utils';
 import type {
   CategoryValue,
   ContactPageData,
@@ -112,7 +112,9 @@ interface RawProject {
   title: string;
   category: CategoryValue;
   sector: SectorValue;
-  order: number;
+  order?: number | null;
+  /** Posizione scelta trascinando i progetti nello Studio (stringa che si ordina alfabeticamente). */
+  orderRank?: string | null;
   city?: string | null;
   intro?: string | null;
   description?: string | null;
@@ -124,7 +126,7 @@ interface RawProject {
 }
 
 const PROJECT_FIELDS = `{
-  "slug": slug.current, title, category, sector, order, city, intro, description, services,
+  "slug": slug.current, title, category, sector, order, orderRank, city, intro, description, services,
   "client": client->name,
   seo{title, description, "imageUrl": image.asset->url},
   "cover": coverImage ${IMAGE},
@@ -158,7 +160,7 @@ function toProject(raw: RawProject): Project {
     title: raw.title,
     category: raw.category,
     sector: raw.sector,
-    order: raw.order,
+    order: raw.order ?? 0,
     client: text(raw.client),
     cover: toPhoto(raw.cover, raw.title),
     gallery: (raw.gallery ?? [])
@@ -177,9 +179,17 @@ function toProject(raw: RawProject): Project {
 
 let projectsPromise: Promise<Project[]> | undefined;
 /** Una sola query per build, condivisa da tutte le pagine. */
+/**
+ * L'ordine è quello scelto trascinando i progetti nello Studio (`orderRank`): il primo è il più recente.
+ * I progetti senza posizione (non dovrebbero esistere) vanno in fondo, secondo il vecchio numero.
+ * `order` del sito è la posizione nell'elenco (1, 2, 3…): serve a «Precedente» e «Successivo».
+ */
 export function getProjects(): Promise<Project[]> {
-  projectsPromise ??= query<RawProject[]>(`*[_type == "project" && defined(slug.current)] | order(order asc) ${PROJECT_FIELDS}`)
-    .then((rows) => byOrder(rows.map(toProject)));
+  projectsPromise ??= query<RawProject[]>(`*[_type == "project" && defined(slug.current)] ${PROJECT_FIELDS}`).then((rows) => {
+    const ranked = rows.filter((row) => row.orderRank).sort((a, b) => (a.orderRank ?? '') < (b.orderRank ?? '') ? -1 : 1);
+    const unranked = rows.filter((row) => !row.orderRank).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    return [...ranked, ...unranked].map((row, index) => ({ ...toProject(row), order: index + 1 }));
+  });
   return projectsPromise;
 }
 

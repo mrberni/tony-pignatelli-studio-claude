@@ -1,3 +1,4 @@
+import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list';
 import type { StructureBuilder, StructureResolver } from 'sanity/structure';
 
 /** Un solo documento per tipo: si apre direttamente, senza elenco né "crea nuovo". */
@@ -7,18 +8,12 @@ const singleton = (S: StructureBuilder, type: string, title: string) =>
     .title(title)
     .child(S.document().schemaType(type).documentId(type).title(title));
 
-export const structure: StructureResolver = (S) =>
+export const structure: StructureResolver = (S, context) =>
   S.list()
     .title('Contenuti')
     .items([
-      S.listItem()
-        .id('projects')
-        .title('Progetti')
-        .child(
-          S.documentTypeList('project')
-            .title('Progetti')
-            .defaultOrdering([{ field: 'order', direction: 'asc' }]),
-        ),
+      // Elenco trascinabile: l'ordine qui è l'ordine nel sito (primo = più in alto in home)
+      orderableDocumentListDeskItem({ type: 'project', id: 'projects', title: 'Progetti', S, context }),
       S.listItem()
         .id('clients')
         .title('Clienti')

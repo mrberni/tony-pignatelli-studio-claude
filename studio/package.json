@@ -12,6 +12,7 @@
   "dependencies": {
     "@sanity/icons": "^5.2.3",
     "@sanity/locale-it-it": "^1.1.36",
+    "@sanity/orderable-document-list": "^2.0.28",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "sanity": "^6.17.0",
