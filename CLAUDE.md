@@ -36,6 +36,9 @@ La pagina `/progetti` non esiste più: la sezione **Progetti** è nella home (`#
 ## Ordine dei progetti (trascinamento)
 L'ordine dei progetti si cambia **trascinandoli** in Studio → «Progetti» (plugin `@sanity/orderable-document-list`, installato nel pacchetto `studio/`): il primo è il più in alto in home; un progetto nuovo compare in cima. L'ordine sta nel campo nascosto `orderRank` (LexoRank); il sito (`getProjects` in `content-sanity.ts`) ordina per quello e ricava `order` = posizione (1, 2, 3…) per «Precedente / Successivo». Il vecchio campo `order` (numero) resta nascosto e non conta; i progetti senza `orderRank` vanno in fondo. Posizione iniziale / ripristino: `pnpm order:init -- --dataset staging [--reset]` (segue il vecchio `order`; `production` richiede `--confirm-production`). Lo Studio va ripubblicato con `pnpm studio:deploy` (chiedere conferma).
 
+## Categoria «Concept»
+I disegni di progetti **non realizzati** sono progetti con categoria `concept` (Studio: «Concept (progetti non realizzati)»; sito: filtro «Concept» in home, che compare solo se esiste almeno un progetto Concept). Schede e pagine riportano «Concept · Non realizzato · settore». Gruppi di disegni dello stesso progetto = un progetto con più immagini in galleria.
+
 ## Video nelle gallerie dei progetti
 La galleria (`project.gallery`) accetta foto e video: nello Studio, «Aggiungi elemento» → Video (tipo `video`: file .mp4 + immagine di anteprima). Il file va su Sanity (asset `file`, servito da cdn.sanity.io, senza transcodifica: meglio .mp4 H.264 sotto i 30 MB). Nel sito il video è la sua anteprima con un segno di riproduzione; si avvia nel visore a tutto schermo (il file si scarica solo allora), **sempre muto e in ripetizione**, senza controlli del browser (niente audio attivabile): solo Pausa / Riproduci. Lo schema va pubblicato con `pnpm studio:deploy` (chiedere conferma).
 

@@ -1,4 +1,4 @@
-export type CategoryValue = 'eventi' | 'vetrine' | 'set-design';
+export type CategoryValue = 'eventi' | 'vetrine' | 'set-design' | 'concept';
 
 export type SectorValue =
   | 'automotive'
