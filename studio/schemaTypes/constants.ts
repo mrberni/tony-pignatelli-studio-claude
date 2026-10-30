@@ -2,6 +2,7 @@ export const CATEGORIES = [
   { title: 'Eventi', value: 'eventi' },
   { title: 'Vetrine', value: 'vetrine' },
   { title: 'Set design', value: 'set-design' },
+  { title: 'Concept (progetti non realizzati)', value: 'concept' },
 ] as const;
 
 export const SECTORS = [

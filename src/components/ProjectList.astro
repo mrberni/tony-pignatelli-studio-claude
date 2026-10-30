@@ -12,7 +12,9 @@ import ProjectCard from './ProjectCard.astro';
  * ridispone. Disposizione in `lib/masonry.ts`.
  */
 const projects = await getProjectSummaries();
-const categories = Object.entries(CATEGORY_LABELS) as [CategoryValue, string][];
+// Solo le categorie che hanno almeno un progetto (un filtro vuoto non serve)
+const present = new Set(projects.map((project) => project.category));
+const categories = (Object.entries(CATEGORY_LABELS) as [CategoryValue, string][]).filter(([value]) => present.has(value));
 const sectors = Object.entries(SECTOR_LABELS) as [SectorValue, string][];
 
 const slots = layoutMasonry(projects.length);
