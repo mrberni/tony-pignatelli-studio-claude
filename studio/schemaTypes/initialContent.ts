@@ -60,7 +60,7 @@ export const studioPageInitial = {
   brandToSpace: {
     lead: "Partiamo dall'identità del brand, dal prodotto e dal contesto per costruire un linguaggio visivo coerente e riconoscibile.",
     text2:
-      "Per noi una vetrina, un pop-up, un evento o un set sono forme diverse dello stesso problema: come trasformare un messaggio in un'esperienza fisica.",
+      "Per noi una vetrina, un pop-up, un evento o un set sono forme diverse della stessa sfida: come trasformare un messaggio in un'esperienza fisica.",
     text3:
       "L'obiettivo è creare spazi capaci di attirare, sorprendere e raccontare una storia, mantenendo equilibrio tra estetica, identità ed efficacia commerciale.",
   },
