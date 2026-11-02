@@ -577,7 +577,7 @@ Testi esatti dei mockup, da usare come valori iniziali nei singleton Sanity. Il 
 - Vigorsol
 - Yoox
 - Zeybra
-- **Dal brand allo spazio** — Lead: *Partiamo dall'identità del brand, dal prodotto e dal contesto per costruire un linguaggio visivo coerente e riconoscibile.* Testo 2: *Per noi una vetrina, un pop-up, un evento o un set sono forme diverse dello stesso problema: come trasformare un messaggio in un'esperienza fisica.* Testo 3: *L'obiettivo è creare spazi capaci di attirare, sorprendere e raccontare una storia, mantenendo equilibrio tra estetica, identità ed efficacia commerciale.*
+- **Dal brand allo spazio** — Lead: *Partiamo dall'identità del brand, dal prodotto e dal contesto per costruire un linguaggio visivo coerente e riconoscibile.* Testo 2: *Per noi una vetrina, un pop-up, un evento o un set sono forme diverse della stessa sfida: come trasformare un messaggio in un'esperienza fisica.* Testo 3: *L'obiettivo è creare spazi capaci di attirare, sorprendere e raccontare una storia, mantenendo equilibrio tra estetica, identità ed efficacia commerciale.*
 - **Il nostro metodo** — Intro: *Ogni progetto parte dall'ascolto e arriva al cantiere passando per quattro fasi.*
   1. **Ascolto** — *Analizziamo brand, pubblico, prodotto e contesto, e chiariamo obiettivi, tempi e budget.*
   2. **Concept** — *Trasformiamo gli obiettivi in un'idea: sketch, moodboard, prime ipotesi di spazio.*
