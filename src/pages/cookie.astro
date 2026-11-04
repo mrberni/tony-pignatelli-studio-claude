@@ -7,7 +7,7 @@ const settings = await getSiteSettings();
 ---
 <!-- BOZZA: testo preparato da Claude, non è consulenza legale. Va rivisto da un consulente e aggiornato se si aggiungono strumenti (statistiche, verifica anti-spam, ecc.). -->
 <BaseLayout title="Cookie — Tony Pignatelli Studio" noindex>
-  <LegalText title="Cookie" updated="9 ottobre 2026">
+  <LegalText title="Cookie" updated="4 novembre 2026">
     <p>I cookie sono piccoli file che un sito salva sul tuo dispositivo. Questa pagina spiega se e come li usa questo sito.</p>
 
     <h2>Cosa usa questo sito</h2>
@@ -18,7 +18,7 @@ const settings = await getSiteSettings();
     <p>Anche senza cookie, aprire il sito comporta richieste tecniche ai server che lo distribuiscono (Cloudflare per le pagine, Sanity per le immagini), che ricevono l'indirizzo IP necessario a rispondere. Trovi i dettagli nella pagina <a href="/privacy">Privacy</a>.</p>
 
     <h2>Verifica anti-spam nella pagina Contatti</h2>
-    <p>Solo nella pagina Contatti viene caricata la verifica anti-spam Cloudflare Turnstile, che serve a distinguere le persone dai programmi automatici e non a profilarti. [Da verificare con la documentazione di Cloudflare se salva dati nel browser e, in tal caso, descriverli qui.]</p>
+    <p>Solo nella pagina Contatti, quando il modulo si avvicina alla vista o lo tocchi, viene caricata la verifica anti-spam Cloudflare Turnstile. Serve a distinguere le persone dai programmi automatici, non a profilarti, e per farlo esamina segnali tecnici del browser (per esempio indirizzo IP e tipo di browser). Secondo la documentazione di Cloudflare non usa cookie per memorizzare informazioni su di te e non legge ciò che scrivi nel modulo. Nei nostri controlli, né le pagine del sito né il caricamento della verifica impostano cookie. [Da far confermare al consulente: la documentazione di Cloudflare non descrive in modo esplicito se la verifica usi altre forme di memoria del browser.]</p>
 
     <h2>Se in futuro cambierà</h2>
     <p>Se aggiungeremo strumenti che usano cookie o tecnologie simili (per esempio le statistiche), aggiorneremo questa pagina e, dove la legge lo richiede, chiederemo prima il tuo consenso.</p>
