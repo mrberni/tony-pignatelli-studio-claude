@@ -3,6 +3,14 @@
   "name": "tps-claude",
   "compatibility_date": "2026-10-01",
   "main": "worker/index.ts",
+  // Destinatario e mittente del modulo contatti (non sono segreti: l'indirizzo è pubblico sul sito).
+  // I segreti RESEND_API_KEY e TURNSTILE_SECRET_KEY restano nel pannello di Cloudflare.
+  "vars": {
+    "CONTACT_TO": "tony@tonypignatellistudio.com",
+    "CONTACT_FROM": "Tony Pignatelli Studio <modulo@tonypignatellistudio.com>"
+  },
+  // Le variabili aggiunte a mano nel pannello non vengono più cancellate a ogni pubblicazione
+  "keep_vars": true,
   "build": {
     "command": "pnpm build"
   },
