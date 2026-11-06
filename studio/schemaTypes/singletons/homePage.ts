@@ -28,11 +28,11 @@ export const homePage = defineType({
       title: 'Carousel in cima alla home',
       type: 'array',
       description:
-        'Da 4 a 5 progetti. Scorrono in automatico, nell\'ordine di questo elenco: trascina per cambiarlo. Di ogni progetto si vede la foto di copertina.',
+        'Da 4 a 6 progetti. Scorrono in automatico, nell\'ordine di questo elenco: trascina per cambiarlo. Di ogni progetto si vede la foto di copertina.',
       of: [defineArrayMember({ type: 'reference', to: [{ type: 'project' }] })],
       validation: (rule) => [
         rule.min(4).error('Servono almeno 4 progetti nel carousel.'),
-        rule.max(5).error('Il carousel può contenere al massimo 5 progetti.'),
+        rule.max(6).error('Il carousel può contenere al massimo 6 progetti.'),
         rule.unique().error('Lo stesso progetto compare due volte nel carousel.'),
       ],
     }),
