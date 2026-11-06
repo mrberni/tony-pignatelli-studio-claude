@@ -198,7 +198,7 @@ Per ogni pagina: i mockup danno struttura e misure; i testi sono nell'Appendice 
 Sezioni, dall'alto:
 1. **Header**.
 2. **Hero con carousel** a tutta larghezza, altezza 620px (desktop).
-   - Contenuto: i 4–5 progetti di `homePage.carousel`, nell'ordine scelto. Ogni slide: foto di copertina a pieno riquadro (`object-fit: cover`), in basso a sinistra la riga `meta` (categoria · settore, colore `#B9C0C3`) e il titolo del progetto in H2 bianco (max 22ch); in basso a destra il link **"Esplora i progetti ↗"** verso `/progetti` (bianco). **Non** si mostra il cliente.
+   - Contenuto: i 4–6 progetti di `homePage.carousel`, nell'ordine scelto. Ogni slide: foto di copertina a pieno riquadro (`object-fit: cover`), in basso a sinistra la riga `meta` (categoria · settore, colore `#B9C0C3`) e il titolo del progetto in H2 bianco (max 22ch); in basso a destra il link **"Esplora i progetti ↗"** verso `/progetti` (bianco). **Non** si mostra il cliente.
    - Avanza da sola ogni 5 secondi, a ciclo.
    - **Niente frecce visibili.** Il terzo sinistro e il terzo destro della foto (30% di larghezza ciascuno, a tutta altezza) sono due aree cliccabili: al passaggio del mouse il cursore diventa un cerchio bianco da 48px con una freccia ← o →; il click va al lavoro precedente/successivo. Le due aree sono `<button>` trasparenti con `aria-label` ("Lavoro precedente", "Lavoro successivo"), raggiungibili da tastiera.
    - Puntini indicatori (8px, tondi) in basso a sinistra (32px dal bordo, 16px dal fondo), attivo bianco pieno, altri bianchi al 35%; sono cliccabili.
@@ -289,7 +289,7 @@ Anteprima in elenco: titolo, "Categoria · Settore", copertina. Ordinamento pred
 | `showInLogoStrip` | boolean | "Mostra nella striscia Brand & partner" |
 
 ### 7.3 `homePage` (singleton)
-`carousel`: array di riferimenti a `project`, **minimo 4, massimo 5**, ordinabile · `studioSection` {`title`, `text`} · `servicesSection` {`title`, `text`} · `ctaQuestion` (string). I "Progetti selezionati" non si scelgono qui: derivano da `featured`.
+`carousel`: array di riferimenti a `project`, **minimo 4, massimo 6** (era 5), ordinabile · `studioSection` {`title`, `text`} · `servicesSection` {`title`, `text`} · `ctaQuestion` (string). I "Progetti selezionati" non si scelgono qui: derivano da `featured`.
 
 ### 7.4 Altri singleton
 - `siteSettings`: nome studio, email, telefono, indirizzo, URL Instagram, URL LinkedIn, SEO di default (titolo, descrizione, immagine OG), `projectCtaQuestion`, URL delle pagine Privacy e Cookie, indirizzo di destinazione del modulo.
