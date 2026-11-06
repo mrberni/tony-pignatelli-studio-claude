@@ -33,7 +33,7 @@ const { slides } = Astro.props;
           <div class="container hero__caption-inner">
             <div class="hero__text">
               <p class="meta hero__meta">{metaLine(slide)}</p>
-              <h2 class="h2 hero__title">{slide.title}</h2>
+              <h2 class="h2 hero__title"><a href={`/progetti/${slide.slug}`} class="hero__title-link">{slide.title}</a></h2>
             </div>
             <TextLink href="/#progetti" class="hero__link">Esplora i progetti</TextLink>
           </div>
@@ -129,6 +129,9 @@ const { slides } = Astro.props;
   .hero__meta { color: #b9c0c3; margin-bottom: var(--space-2); }
   .hero__title { color: #fefeff; max-width: 22ch; }
   .hero__caption :global(.hero__link) { pointer-events: auto; color: #fefeff; white-space: nowrap; }
+  /* Il titolo porta alla pagina del progetto: il testo non intercetta i click, il link sì */
+  .hero__title-link { pointer-events: auto; color: inherit; text-decoration: none; }
+  .hero__title-link:hover, .hero__title-link:focus-visible { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
 
   /* Aree laterali cliccabili: il cursore diventa un cerchio bianco con freccia */
   .hero__zone {
