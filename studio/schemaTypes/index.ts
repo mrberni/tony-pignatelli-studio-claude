@@ -1,3 +1,4 @@
+import { agency } from './documents/agency';
 import { client } from './documents/client';
 import { project } from './documents/project';
 import { photo } from './objects/photo';
@@ -12,6 +13,7 @@ import { studioPage } from './singletons/studioPage';
 export const schemaTypes = [
   project,
   client,
+  agency,
   homePage,
   studioPage,
   servicesPage,

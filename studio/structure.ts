@@ -22,6 +22,14 @@ export const structure: StructureResolver = (S, context) =>
             .title('Clienti')
             .defaultOrdering([{ field: 'name', direction: 'asc' }]),
         ),
+      S.listItem()
+        .id('agencies')
+        .title('Agenzie')
+        .child(
+          S.documentTypeList('agency')
+            .title('Agenzie')
+            .defaultOrdering([{ field: 'name', direction: 'asc' }]),
+        ),
       S.divider(),
       singleton(S, 'homePage', 'Pagina Home'),
       singleton(S, 'studioPage', 'Pagina Studio'),

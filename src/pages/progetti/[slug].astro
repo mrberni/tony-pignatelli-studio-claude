@@ -50,6 +50,7 @@ const creativeWork = {
 
 const info = [
   { label: 'Cliente', values: [project.client] },
+  ...(project.agency ? [{ label: 'Agenzia', values: [project.agency] }] : []),
   ...(project.city ? [{ label: 'Luogo', values: [project.city] }] : []),
   ...(project.services.length > 0 ? [{ label: 'Servizi', values: project.services }] : []),
 ];

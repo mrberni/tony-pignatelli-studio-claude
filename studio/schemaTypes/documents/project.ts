@@ -60,6 +60,15 @@ export const project = defineType({
       validation: (rule) => rule.required().error('Scegli o crea un cliente.'),
     }),
     defineField({
+      name: 'agency',
+      title: 'Agenzia',
+      type: 'reference',
+      group: 'main',
+      to: [{ type: 'agency' }],
+      description:
+        "Facoltativo: l'agenzia di eventi per cui lo studio ha realizzato il lavoro. Visibile solo nella pagina del progetto, accanto al cliente. Se non è in elenco, creala da qui con \"Create new\".",
+    }),
+    defineField({
       name: 'city',
       title: 'Città',
       type: 'string',
