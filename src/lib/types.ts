@@ -44,6 +44,8 @@ export interface ProjectSummary {
 
 export interface Project extends ProjectSummary {
   client: string;
+  /** Agenzia di eventi (facoltativa): compare solo nella pagina del progetto. */
+  agency?: string;
   city?: string;
   gallery: GalleryItem[];
   intro?: string;

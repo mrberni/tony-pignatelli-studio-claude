@@ -120,6 +120,7 @@ interface RawProject {
   description?: string | null;
   services?: string[] | null;
   client?: string | null;
+  agency?: string | null;
   seo?: { title?: string | null; description?: string | null; imageUrl?: string | null } | null;
   cover?: RawImage | null;
   gallery?: RawGalleryItem[] | null;
@@ -128,6 +129,7 @@ interface RawProject {
 const PROJECT_FIELDS = `{
   "slug": slug.current, title, category, sector, order, orderRank, city, intro, description, services,
   "client": client->name,
+  "agency": agency->name,
   seo{title, description, "imageUrl": image.asset->url},
   "cover": coverImage ${IMAGE},
   "gallery": gallery[]{
@@ -162,6 +164,7 @@ function toProject(raw: RawProject): Project {
     sector: raw.sector,
     order: raw.order ?? 0,
     client: text(raw.client),
+    ...(raw.agency ? { agency: raw.agency } : {}),
     cover: toPhoto(raw.cover, raw.title),
     gallery: (raw.gallery ?? [])
       .filter((item) => item?.src)
